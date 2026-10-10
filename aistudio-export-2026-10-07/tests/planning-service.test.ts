@@ -66,7 +66,7 @@ for (const fixture of fixtures.cases) {
     assert.equal(result.decision.branch, fixture.expected.branch);
     assert.equal(result.status, fixture.expected.status);
     assert.equal(result.execution_authorized, false);
-    assert.deepEqual(result.prompt_versions, { facts: "opscrew-facts-1.1.0", planner: "opscrew-planner-1.0.1", reviewer: "opscrew-reviewer-1.0.0" });
+    assert.deepEqual(result.prompt_versions, { facts: "opscrew-facts-1.1.0", planner: "opscrew-planner-1.0.1", reviewer: "opscrew-reviewer-1.0.1" });
     assert.equal(result.plan !== null, result.decision.case_eligible);
     assert.equal(result.review!.verdict, "PASS");
     assert.equal(result.binding.owner_id, "local-preview");
