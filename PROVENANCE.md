@@ -1,5 +1,13 @@
 # Google Build provenance
 
+## Teammate and code-review continuation — October 12, 2026
+
+The teammate's commits through `6091ed3868bcb1d889a82e3b4b700497c1154058` extend this same fresh Google Build-origin application. [PR #5](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/5) was closed without a GitHub merge, but its complete commit history is contained in the [PR #4](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/4) branch. The contribution adds shared input validation, security headers, strict typing, an exact-citation Reviewer instruction/version, deployment exclusions, real-resource tooling and historical teammate-authored cloud/emulator summaries.
+
+The subsequent local code review corrects the real-resource runner's final result, failure retention, immutable-output preflight, bounded transport, private IAM/Firebase headers, provider accounting and unknown-command traceability. It removes a one-off raw diagnostic script and rewrites inaccurate operational/reporting claims. These are disclosed local edits, not a new Google Build export. The [code review](docs/acceptance/PR04-code-review-2026-10-12.md) and [release manifest](RELEASE_MANIFEST.json) bind current local checks. Original cloud JSON and earlier source evidence remain unchanged; neither this reviewer nor local emulators attest the teammate's deployed source/image identity. No live model, new identity, cloud write, billing action or portal submission was performed during this review.
+
+## Original Google Build origin
+
 Created: 2026-10-07 (Asia/Shanghai).
 
 Application: https://aistudio.google.com/apps/e8a0fb37-f747-45d2-b376-b832ac7fe09f

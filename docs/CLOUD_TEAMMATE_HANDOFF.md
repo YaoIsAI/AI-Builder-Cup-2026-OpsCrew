@@ -1,5 +1,20 @@
 # OpsCrew cloud teammate handoff
 
+## October 12 review update
+
+Read [current PR #4 code review](acceptance/PR04-code-review-2026-10-12.md) and [corrected cloud usage report](DEPLOYMENT_AND_USAGE_REPORT.md) before using the earlier instructions below. Teammate-authored cloud summaries are preserved as historical partial evidence; they do not bind the final reviewed source to a currently verified image/revision. Do not return public traffic to an older revision that bypasses trusted identity or persistent admission. The actual saved-case G3 and full operational G4 still require fresh evidence.
+
+The maintained real-resource runner is `scripts/check-g3-real.mjs`. It requires explicit `--live`, a real Firebase project and separate public Web key in the process environment, and for local-server mode an authorized model key and no emulator routing. For a private Cloud Run service, supply `OPSCREW_CLOUD_RUN_ID_TOKEN` in memory; the runner uses it only in `X-Serverless-Authorization`, with the visitor token separately in `Authorization`. Private success does not prove signed-out public entry. Complete human account/budget authorization before any real run; this review ran only injected offline tests.
+
+From the application directory, an example for an already authorized public endpoint is:
+
+```powershell
+# Set the approved real Firebase process environment first; do not print tokens/keys.
+node scripts/check-g3-real.mjs --live --base-url https://opscrew-883881551915.us-central1.run.app --output CLOUD-G3-NEW.json
+```
+
+Choose a new JSON **basename**, with no directory component. The runner reserves the report exclusively under `docs/acceptance` before any identity/model/write request, checkpoints each request, and preserves failures/unknown write results with original recovery identifiers. Do not change the original command or treat an unknown result as a safe retry. One workflow can consume up to six provider attempts and creates real synthetic data plus anonymous identities; it is not one provider call. The runner does not automatically certify all G3/G4 scenarios or independent G5.
+
 Prepared 2026-10-11. Owner A maintains reviewed application/provenance, synthetic policy, local acceptance and submission material. Teammate B owns approved Google Cloud/Firebase setup, image build, deployment and actual resource testing. Both review final evidence before submission. The owner assigned cloud operations to the teammate after local preparation; account/resource operations are outside the local completion claim.
 
 ## Starting inputs

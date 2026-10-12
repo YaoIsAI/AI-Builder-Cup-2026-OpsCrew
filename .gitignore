@@ -35,7 +35,7 @@ OPSCREW_FULL_DELIVERY_PLAN_*.md
 PROJECT_NOTES*.md
 *SOP*.md
 
-# AI-assistant working files (coding/test helper only; keep the public repo Google-only)
+# Local assistant configuration; application origin and local edits are disclosed in PROVENANCE.md
 .claude/
 CLAUDE.md
 CLAUDE.local.md

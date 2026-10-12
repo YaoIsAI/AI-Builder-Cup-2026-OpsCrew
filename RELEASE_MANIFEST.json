@@ -1,22 +1,22 @@
 {
-  "schema_version": "opscrew-precloud-release-1.0.0",
+  "schema_version": "opscrew-reviewed-release-1.1.0",
   "prepared_date": "2026-10-12",
   "timezone": "Asia/Shanghai",
-  "stage": "PRECLOUD_REVIEW",
+  "stage": "LOCAL_REVIEW_PASSED_PENDING_REMOTE_MERGE",
   "repository": "https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew",
   "review_branch": "feat/precloud-readiness",
   "s3_main_base_commit": "dd0fb3f8cff460b725588447be1d94556ee7f8bb",
-  "implementation_commit": "22be5948fe20fd3b14eaeffac11ae1a31ade414c",
+  "implementation_commit": null,
   "commit_binding_policy": "After the implementation commit, record that SHA in a manifest-only commit. Deploy the exact accepted PR head or merged main SHA and record it independently in new CLOUD evidence; this document cannot contain its own final commit hash.",
   "runtime_source_binding": {
-    "canonical_sources_sha256": "833c353f2fee85d7207d5ff5a44d36ab52fafa11e96f650a1f1005f22edac3de",
+    "canonical_sources_sha256": "35f0f112162996f5a26036a35998d7f53316a89c97f9c30327b0380c4a22d05c",
     "byte_policy": "UTF-8 text, CRLF replaced with LF only; raw file SHA-256 also retained. Canonical JSON sorts keys without changing arrays.",
     "files": {
       "package.json": "6c8e1c9ec5d8db1a623a2ae4582416378f6574ec936001358584cb520f3f264d",
       "package-lock.json": "56f765d3d0010e341a736a4239cad42872bfa641dcf4026e8efbf441a0453c79",
-      "server.ts": "b44a11c3decf3ed48552370f856fc1606ea56f5b85847124588f7429bce4dd57",
-      "server/runtime-config.ts": "c2612bd6bcf6d1fb5b78163b6c83cff647293e69cb8d8a8e37cdf637889ea9e0",
-      "server/planning-service.ts": "fbf1888be93d3833e5db650df4103c2755fa6e2e3d609e262cef871718eab1ae",
+      "server.ts": "b95a1e2e922074f74b2eadf6cfa3f677d7c51480e39ed61ccd270fddd06e6318",
+      "server/runtime-config.ts": "6464c828e78bd8f738fb891ef168bece8857f1d1d4878266ec388d8a81a1dfd3",
+      "server/planning-service.ts": "fb41bf596439f78b377d5858aa95fb6abe2e47f95ba1d231ae529409785be93a",
       "server/planning-contracts.ts": "4f59d0b0af2ed01c8e46afd7699219419f53a1147a1646f0a3e8dd78aa9ee71c",
       "server/case-service.ts": "e02bbc486f45b5ad78094b750c79468b7fc48c925cbaa0d2c7721500889d278d",
       "server/case-routes.ts": "70d8b913f7b3add03e19382e6e304be238db8a6132a26f18142bfaff7187353c",
@@ -26,7 +26,7 @@
       "src/domain/policy.ts": "6a7609217c182579a0b72a451bfb61abfa3433cd6bbc743ed5e07f7aff25c678",
       "src/domain/workflow.ts": "4d79b119c6bc88c3e2113bebf100edb6da6785b6bd63feab072d2d896078dcba",
       "src/App.tsx": "b08465e33cb1533167eb8cef914e283eae5bda3bf53848931b643c1b7dc78a2a",
-      "src/components/CaseConfirmation.tsx": "ca67fbbf040c7995a283897a6057e851b9878146f4e5283acddfa656cae86830",
+      "src/components/CaseConfirmation.tsx": "1ca6f51b5f66f38e746ea78bcce55bccb063df01201f24283730d81f72a9a3d5",
       "src/components/WorkflowReview.tsx": "a7a231b3adf0110a7a940719362a741de8067273154eb8da5be0cbe669485d35",
       "src/lib/case-client.ts": "beabbb519e4b267a74d3ae2d2579923272f4365d266756014c6d4a071b4c77be",
       "src/lib/firebase-session.ts": "a37a8479130dcf57fce0c9df12ce884293b2a62a591a40dbc0bcd44dfd1b932a",
@@ -42,7 +42,7 @@
       "Dockerfile": "7c07a7a4229159a850582b7d6ce66323caaf5d132ba771559517a19bec364fd8",
       ".dockerignore": "199530e0d27c2b097d893b99971f4d3d4f2cacc35f067098ddf8f8dedde4288e",
       "vite.config.ts": "a7aa711292e5ad7eb10f7a17f5f34fbbf75c7b7c24d59cb0212c60bc493c3208",
-      "tsconfig.json": "6624845b5855cb0c547da44d56785371aaf4f77920440f93b685484456952468",
+      "tsconfig.json": "021b9c55e081891e88a21855b6056174d75ee63a8c716f0d4e3fc19536d2da06",
       "index.html": "abd1bfe158806da8fbef1f48661c6f0f7cb1985768dfc15df867daf772de9f63"
     }
   },
@@ -73,17 +73,17 @@
     }
   },
   "acceptance": {
-    "report": "docs/acceptance/PRECLOUD-readiness-2026-10-11.md",
-    "offline_tests": "216/216",
+    "report": "docs/acceptance/PR04-code-review-2026-10-12.md",
+    "local_validation": "docs/acceptance/PR04-local-validation-2026-10-12.json",
+    "offline_tests": "232/232",
     "auth_firestore_emulator_groups": "27/27",
     "semantic_assertions": "350/350",
-    "production_http": "9/9",
-    "artifact_groups": "12/12 including the 9 HTTP groups",
-    "live_public_case_rechecks": "3/3 passed; all 3 initial network failures retained",
-    "linux_container_build": "NOT_RUN",
-    "production_audit_findings": 0,
-    "independent_heldout": "PENDING_TEAMMATE",
-    "real_cloud_g3_g4": "PENDING_TEAMMATE"
+    "production_http": "9/9 included in artifact groups",
+    "artifact_groups": "12/12",
+    "linux_container_build": "NOT_RUN_BY_REVIEWER",
+    "historical_live_evidence": "Teammate-reported partial Cloud Run summaries; all failures preserved; not a new reviewer live run or current source-to-image attestation",
+    "current_real_cloud_g3_g4": "PENDING_ACCEPTED_SOURCE_AND_COMPLETE_RESOURCE_EVIDENCE",
+    "independent_heldout": "PENDING_CUSTODIAN"
   },
   "deployment": {
     "source_commit": null,
@@ -91,7 +91,8 @@
     "image_digest": null,
     "cloud_run_revision": null,
     "url": null,
-    "reason": "No cloud operation performed in local preparation"
+    "reason": "Teammate historical deployment metadata exists, but this reviewer could not independently attest current source/image/revision/service state. Actual Cloud G3/G4 remains pending.",
+    "reported_historical_url": "https://opscrew-883881551915.us-central1.run.app"
   },
   "submission": {
     "proposal_status": "English precloud review draft; actual public names/product/video pending",
@@ -100,5 +101,25 @@
     "submitted_receipt": null,
     "g6": "PENDING_REAL_CLOUD_AND_FINAL_MATERIALS",
     "g7": "PENDING_ACTUAL_SUBMISSION"
-  }
+  },
+  "previous_release": {
+    "implementation_commit": "22be5948fe20fd3b14eaeffac11ae1a31ade414c",
+    "canonical_sources_sha256": "833c353f2fee85d7207d5ff5a44d36ab52fafa11e96f650a1f1005f22edac3de",
+    "source_snapshot": "docs/acceptance/PRECLOUD-freeze-2026-10-11.json",
+    "acceptance": "docs/acceptance/PRECLOUD-readiness-2026-10-11.md",
+    "note": "Historical reviewed precloud identity; retained without rewriting original reports."
+  },
+  "reviewed_teammate_head": "6091ed3868bcb1d889a82e3b4b700497c1154058",
+  "operational_source_binding": {
+    "byte_policy": "UTF-8, CRLF normalized to LF for tools/config/formal regression source",
+    "files": {
+      ".gcloudignore": "1834d2df8f1428ee67f934c028c45d5205dd4f70bf7a48451f4701eb798df43f",
+      ".node-version": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53",
+      "scripts/check-g3-real.mjs": "9d0aaaea348ca4a62e2d470ce945f1ebbd6aa900f246bb13c5c3cc7623164271",
+      "scripts/cloud-release.ps1": "3cde350353a8c37191ab99c034f7edf1a7268d1894e59c5bc98a2f58f3350ded",
+      "scripts/smoke-runtime-artifact.mjs": "97451b792caee700c07a1ff1ade72b93a7124bed32fa290b892d45b3eb613f0a",
+      "tests/g3-real-runner.test.ts": "1852e669947912ab92b7234670195ce2159c57fa8bd8603d0529d4a06a67d7fa"
+    }
+  },
+  "material_status": "Existing October11 English proposal is a historical precloud review draft; final names/product/video and new accepted-release figures must be updated before G6."
 }

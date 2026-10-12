@@ -1,5 +1,9 @@
 # Build log
 
+## Teammate PR review — October 12, 2026
+
+The exact teammate head `6091ed3868bcb1d889a82e3b4b700497c1154058` was compared against the previous reviewed `8793865`; PR #5's closed history is included in PR #4. Runtime input/CSP/strict-typing/Reviewer changes introduced no blocking defect in independent review. Review found and corrected acceptance-tool false PASS/failure-loss/output-preflight/private-header/accounting issues and an inaccurate deployment guide. Historical cloud JSON was preserved, a one-off raw diagnostic was removed, and source identity/claim boundaries were refreshed. See [review findings and verification](acceptance/PR04-code-review-2026-10-12.md). Current cloud state could not be independently read through this machine's network; no model, identity, billing or business-write request was made by this review.
+
 ## Precloud continuation, October 11–12, 2026
 
 S3 was actually merged through PR #3 at `dd0fb3f8cff460b725588447be1d94556ee7f8bb`. The continuation branch `feat/precloud-readiness` adds persistent workflow/call admission, UTC quotas and leases, 90-second total request deadlines, bounded readiness, durable late-create ordering, SDK request compatibility, production-only native packaging, a private digest-pinned cloud release helper and explicit quota information. The runtime is frozen at canonical source digest `833c353f2fee85d7207d5ff5a44d36ab52fafa11e96f650a1f1005f22edac3de`.

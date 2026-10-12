@@ -1,5 +1,11 @@
 # Evaluation status
 
+## October 12 teammate review
+
+The current reviewed runtime is different from the original October 11 snapshot. Latest methods and executed outcomes are in [PR #4 code review](acceptance/PR04-code-review-2026-10-12.md), [current 350-assertion offline report](acceptance/PR04-offline-evaluation-2026-10-12.json) and [fresh 27-group emulator report](acceptance/S03-emulator-validation-2026-10-12-pr04.json). The updated [release manifest](../RELEASE_MANIFEST.json) preserves previous identity and binds the current source. Earlier real-model results below are historical for their exact source/prompt versions; they are not new runs on the changed Reviewer prompt. Teammate cloud summaries and incomplete accounting remain separate in [the corrected operational report](DEPLOYMENT_AND_USAGE_REPORT.md). Real current-source cloud acceptance and independent G5 remain pending.
+
+## October 11 historical checkpoint
+
 As of the local test and model reports dated **October 11, 2026**, OpsCrew has passed local engineering and controlled safety checks. These results do not certify deployment or independent model quality. Browser and material reviews performed on October 12 are separate evidence and do not change these statistics. Detailed methods and custody rules are in [Precloud evaluation](PRECLOUD_EVALUATION.md) and the [preregistered protocol](EVALUATION_PROTOCOL.md).
 
 | Check | Result | Scope and evidence |
