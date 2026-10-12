@@ -33,7 +33,8 @@ async function command(arguments_, cwd, timeout = 180_000) {
 }
 
 try {
-  assert.equal(Number(process.versions.node.split(".")[0]), 24, "Use Node 24.");
+  const nodeMajor = Number(process.versions.node.split(".")[0]);
+  assert(nodeMajor >= 22, "Use Node 22 or Node 24.");
   const npmCli = process.env.npm_execpath;
   assert(npmCli && path.isAbsolute(npmCli), "Run this script through npm run smoke:artifact.");
   artifact = await mkdtemp(path.join(tmpdir(), "opscrew-runtime-"));
