@@ -6,7 +6,7 @@
   "repository": "https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew",
   "review_branch": "feat/precloud-readiness",
   "s3_main_base_commit": "dd0fb3f8cff460b725588447be1d94556ee7f8bb",
-  "implementation_commit": null,
+  "implementation_commit": "eb7493b9de398b7901aa8332af911392803409ba",
   "commit_binding_policy": "After the implementation commit, record that SHA in a manifest-only commit. Deploy the exact accepted PR head or merged main SHA and record it independently in new CLOUD evidence; this document cannot contain its own final commit hash.",
   "runtime_source_binding": {
     "canonical_sources_sha256": "35f0f112162996f5a26036a35998d7f53316a89c97f9c30327b0380c4a22d05c",
