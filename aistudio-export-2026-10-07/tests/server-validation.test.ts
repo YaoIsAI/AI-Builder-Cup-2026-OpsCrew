@@ -386,6 +386,44 @@ test("5. Ground employee_identifier in form or narrative, reject ungrounded mode
   assert.equal(conflictWithNullWinner.contradictions.length, 1);
 });
 
+test("Analyze endpoint enforces the same field whitelist and length caps as the workflow endpoint", async () => {
+  let calls = 0;
+  const app = createApp({
+    apiKeyOverride: "offline-test-key-not-used-on-network",
+    routeTimeoutMs: 500,
+    generateContentFn: async () => { calls++; return { text: "{}" }; },
+  });
+  const server: Server = await new Promise((resolve) => {
+    const s = app.listen(0, "127.0.0.1", () => resolve(s));
+  });
+  try {
+    const address = server.address();
+    assert(address && typeof address === "object");
+    const baseUrl = `http://127.0.0.1:${address.port}`;
+    const post = (body: unknown) => fetch(`${baseUrl}/api/analyze`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    });
+    // Unknown fields, workflow-only fields, and oversized values all fail before any model call.
+    for (const body of [
+      { description: "x", owner_id: "someone" },
+      { description: "x", input_version: 1 },
+      { description: "x".repeat(4001) },
+      { description: "x", employee_identifier: "y".repeat(81) },
+    ]) {
+      const response = await post(body);
+      assert.equal(response.status, 400);
+      const json = await response.json();
+      assert.equal(json.error.code, "INVALID_ANALYZE_INPUT");
+    }
+    // The legacy valid body shape is still accepted (reaches the provider path).
+    const valid = await post({ description: "[SYNTHETIC] $12.00", amount_usd: "12.00", receipt_status: "available" });
+    assert.notEqual(valid.status, 400);
+    assert.equal(calls, 1);
+  } finally {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  }
+});
+
 test("6 & 7. Server allowlist, finite retries, and bounded JSON timeout response via offline HTTP server", async () => {
   // Check allowlist helper
   for (const allowed of ALLOWED_GEMINI_MODELS) {

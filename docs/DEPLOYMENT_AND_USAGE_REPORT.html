@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="OpsCrew source-checked cloud deployment review: retained historical evidence, exact usage contract and pending real-resource acceptance.">
+<title>OpsCrew cloud deployment and usage review</title>
+<style>
+:root{color-scheme:light;--ink:#172b38;--muted:#526573;--brand:#096d69;--line:#d6e1e7;--surface:#f4f8fa;--notice:#fff5d6}*{box-sizing:border-box}body{margin:0;background:var(--surface);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.65}header{background:#103d43;color:#fff;padding:22px max(24px,calc((100vw - 1060px)/2))}header p{margin:0}header a{color:#d4fff7}main{max-width:1120px;margin:24px auto 48px;padding:32px;background:#fff;border:1px solid var(--line);border-radius:12px}.notice{background:var(--notice);border-left:4px solid #b98513;padding:14px 18px;margin-bottom:24px}.notice p{margin:0}h1{font-size:clamp(1.75rem,4vw,2.4rem);line-height:1.25;margin:0 0 24px}h2{font-size:1.4rem;line-height:1.35;margin:36px 0 14px;border-top:1px solid var(--line);padding-top:22px}p{margin:14px 0}a{color:var(--brand);text-underline-offset:3px;overflow-wrap:anywhere}a:focus-visible,.table-scroll:focus-visible{outline:3px solid #267ba3;outline-offset:4px}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88em;overflow-wrap:anywhere;background:#edf4f5;border-radius:4px;padding:2px 4px}pre{background:#102b35;color:#e6f5f2;overflow-x:auto;padding:18px;border-radius:8px;font-size:.92rem;line-height:1.5}pre code{background:none;padding:0;color:inherit;overflow-wrap:normal;white-space:pre}.table-scroll{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse;text-align:left;min-width:660px}th,td{padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}th{background:#eaf3f4;font-size:.9rem;color:#204f56}tr:last-child td{border-bottom:0}td{font-size:.94rem}li{margin:10px 0}footer{max-width:1060px;margin:0 auto 32px;padding:0 24px;color:var(--muted);font-size:.9rem}@media(max-width:700px){header{padding:18px}main{margin:12px;border-radius:8px;padding:20px 16px}h2{font-size:1.2rem}th,td{padding:11px}table{min-width:600px}pre{padding:14px;font-size:.85rem}}@media print{body{background:#fff}header{background:#fff;color:#172b38;padding:0}header a{color:#096d69}main{margin:0;max-width:none;border:0;padding:20px 0}.table-scroll{overflow:visible}table{min-width:0}pre{white-space:pre-wrap;overflow:visible}pre code{white-space:pre-wrap;overflow-wrap:anywhere}h2{break-after:avoid}tr{break-inside:avoid}footer{padding:0}}
+</style>
+</head>
+<body>
+<header><p><strong>OpsCrew · AI Builder Cup 2026</strong> · <a href="DEPLOYMENT_AND_USAGE_REPORT.md">Markdown source</a></p></header>
+<main>
+<aside class="notice" aria-label="Review status"><p><strong>Source-checked review; cloud acceptance remains partial.</strong> Historical deployment claims are attributed to the teammate. Local network checks did not independently establish current cloud state.</p></aside>
+<h1 id="opscrew-cloud-deployment-and-usage-review">OpsCrew cloud deployment and usage review</h1>
+<p>Reviewed October 12, 2026 (Asia/Shanghai). Teammate source reviewed through <code>7fb9e03ed21c8e6a3eb01e5be2574ccec3dfae9a</code>, including the earlier <code>6091ed3868bcb1d889a82e3b4b700497c1154058</code>; previous precloud review head: <code>8793865657a5566e0ed34b31dac13a84d60ab88c</code>. Record subsequent review corrections and the final accepted Git SHA separately.</p>
+<p>This report corrects the earlier guide against the application and retained evidence. OpsCrew plans synthetic USD expense exceptions with Gemini FACTS, deterministic POLICY, PLANNER and a separately prompted REVIEWER. A current eligible recommendation requires explicit human confirmation before one owned exception case is saved and independently read back. It never approves reimbursement or payment.</p>
+<h2 id="1-deployment-evidence-and-limits">1. Deployment evidence and limits</h2>
+<p>The teammate reported <a href="https://opscrew-883881551915.us-central1.run.app">this public Cloud Run endpoint</a>. The reviewer&#x27;s read-only root, health, config and readiness requests obtained no HTTP response through the local network path. This means current service state could not be verified from this machine; it does not establish that the service is down or returns 503. No model call, login or business write was made. See the <a href="acceptance/PR04-cloud-readonly-review-2026-10-12.json">read-only review record</a>.</p>
+<p>All deployment values below are <strong>teammate-reported historical metadata</strong>. Current IAM, traffic, image provenance, resource limits, Secret Manager bindings and Firebase state were not independently verified. The reported image cannot be assumed to contain the reviewed source.</p>
+<div class="table-scroll" tabindex="0" aria-label="Scrollable evidence table"><table><thead><tr>
+<th scope="col">Reported item</th>
+<th scope="col">Historical value</th>
+<th scope="col">Verification boundary</th>
+</tr></thead><tbody>
+<tr><td>Project / region</td><td><code>project-b2db87f6-7a4e-4020-972</code> / <code>us-central1</code></td><td>Operator-selected; not asserted to be contest-mandated</td></tr>
+<tr><td>Service / reported active revision</td><td><code>opscrew</code> / <code>opscrew-00003-h5s</code></td><td>Previously reported as 100% traffic; current traffic unverified</td></tr>
+<tr><td>Later reported active revision</td><td><code>opscrew-00004-mtz</code></td><td>The October 12 teammate report claims 100% traffic, Firestore mode and a successful readiness response; current control-plane state and source/image binding were not independently verified</td></tr>
+<tr><td>Earlier tested revisions</td><td><code>opscrew-00001-pz4</code>, <code>opscrew-00002-mqc</code></td><td>Historical plan-only tests; not accepted rollback targets</td></tr>
+<tr><td>Cloud Build ID</td><td><code>e0c6a257-182c-48f1-a103-2457ed0cd65b</code></td><td>Build success and source-to-image binding unverified here</td></tr>
+<tr><td>Image digest</td><td><code>sha256:7d9fc94cb6babefacd7787b19f96138010103c92aed8fdacc87e064d9d4a1d45</code></td><td>Reported artifact in the project&#x27;s <code>cloud-run-source-deploy/opscrew</code> repository; no independently verified source SHA</td></tr>
+<tr><td>Runtime / resources</td><td>Node 24; min instances 0; max instances 1; concurrency 4; CPU 1; memory 512 MiB; platform timeout 120 seconds</td><td>Reported settings, not a current console export or spending guarantee</td></tr>
+<tr><td>Default model</td><td><code>gemini-3.1-flash-lite</code></td><td>Historical requested model ID; actual returned provider model version not established by these summaries</td></tr>
+<tr><td>Secret</td><td><code>gemini-api-key:latest</code></td><td>Reported mutable alias; not an immutable numeric-version binding</td></tr>
+<tr><td>Firebase business backend</td><td>Earlier reports left case creation pending; the October 12 report claims a six-step real Auth/workflow/confirmation/create/readback/history chain</td><td>No new immutable response/attempt journal accompanies that claim; owner isolation, idempotent retries, rules/indexes, IAM and the exact deployed source remain unverified by this review</td></tr>
+</tbody></table></div>
+<h2 id="2-retained-test-evidence">2. Retained test evidence</h2>
+<p>Historical reports are preserved without rewriting outcomes. They are teammate-authored summaries, not independent executions by this reviewer.</p>
+<div class="table-scroll" tabindex="0" aria-label="Scrollable evidence table"><table><thead><tr>
+<th scope="col">Evidence</th>
+<th scope="col">Recorded result</th>
+<th scope="col">Limit of the claim</th>
+</tr></thead><tbody>
+<tr><td><a href="acceptance/G4-cloud-workflow-live-2026-10-11.json">G4 single-workflow summary</a></td><td>One public EVIDENCE_REQUEST plan/review attempt; review PASS; execution unauthorized; three role steps total 4,144 reported tokens</td><td><code>real_gemini_calls: 1</code> uses a workflow-level count despite three role steps. Exact provider attempts, returned model version, source/image binding and saved-case chain are not established</td></tr>
+<tr><td><a href="acceptance/G4-public-acceptance-2026-10-11.json">G4 public acceptance summary</a></td><td>Initial five branches pass; S04 has two Reviewer contract errors. After the prompt repair at <code>71ed689</code>, S04 and S05 are reported passing; S05 includes a FACTS 503 and retry. Reports 11 negative checks, browser checks and a health-only traffic drill</td><td>The final 6/6 combines results across revisions; no full six-case rerun on one final revision is recorded. The reported 11 real calls lack a full role/attempt journal and clear counting definition. Full G3/G4 and independent G5 are not passed</td></tr>
+<tr><td><a href="acceptance/S03-emulator-validation-2026-10-10-night-verify.json">Night emulator report</a></td><td>25/25 groups at clean <code>51fd83207c4026a5c8760305f3a6c43f08632eb4</code>; injected public fixtures; zero real Gemini calls and zero production Firebase writes</td><td>Historical S3 evidence, not current 27-group acceptance or real-cloud verification</td></tr>
+<tr><td><a href="acceptance/PRECLOUD-readiness-2026-10-11.md">Prior precloud acceptance</a></td><td>Source-bound preparation: 216 offline tests, 27 emulator groups and 350 offline assertions</td><td>Binds the previous snapshot. Changed runtime code needs fresh review checks; public fixtures and offline assertions are not independent held-out tests</td></tr>
+<tr><td>October 12 teammate report in commits <code>9cb9c53</code> and <code>ce77d83</code></td><td>Reports active revision <code>opscrew-00004-mtz</code> and successful anonymous signup, workflow, confirmation, case create, independent GET and history</td><td>Retained as a teammate-reported result, not discarded. No newly saved full response journal, case/run identifiers, idempotency replay, all failed attempts or accepted-source/image attestation was added. The illustrative commands do not establish a reproduced full G3/G4 pass</td></tr>
+</tbody></table></div>
+<p>At the reviewed source, prompt versions are FACTS <code>opscrew-facts-1.1.0</code>, PLANNER <code>opscrew-planner-1.0.1</code> and REVIEWER <code>opscrew-reviewer-1.0.1</code>; policy is <code>synthetic-expense-usd-1.0.0</code>. Preserve earlier failures and record fresh dated results for each newly accepted release.</p>
+<h2 id="3-requirements-for-a-working-cloud-demo">3. Requirements for a working cloud demo</h2>
+<p>Follow the <a href="CLOUD_TEAMMATE_HANDOFF.md">cloud handoff</a> and <a href="PRECLOUD_DEPLOYMENT.md">deployment instructions</a>. Firebase terms acceptance may be necessary for the authorized operator; it does not by itself configure all services.</p>
+<ol>
+<li>Verify the approved project, billing/credits, runtime identity and resource scope. Record accepted Git SHA, lockfile identity, build ID, image digest, numeric secret version and actual revision.</li>
+<li>Configure Firebase Web registration, Anonymous Auth, default Firestore, deny-all direct-client rules and required indexes. Use <code>OPSCREW_FIREBASE_MODE=firestore</code>, public Firebase Web settings and scoped Admin permissions. The public Web key must be separate from the server Gemini secret.</li>
+<li>Deploy reviewed production code with persistent shared admission. Verify visitor-token validation and Firestore access, then execute the real-resource checklist. An older public release allowing unauthenticated calls or bypassing persistent quotas is not an accepted demo fallback.</li>
+<li>After accepted resource tests, approve judge-facing public access and verify signed-out desktop/mobile behavior. Business APIs still require trusted visitor identity.</li>
+</ol>
+<p><code>/api/health</code> is liveness. <code>/api/ready</code> checks model configuration, trusted-identity/storage configuration and a bounded Firestore read, with zero model calls. Readiness does not prove Auth IAM, Gemini access, indexes or complete case acceptance. Production rejects missing trusted identity or persistent Firestore admission before model processing; when the backend is configured, token validation can reject missing or invalid visitor tokens before that guard.</p>
+<h2 id="4-usage-after-the-approved-backend-is-ready">4. Usage after the approved backend is ready</h2>
+<p>The following is the intended UI flow, not a claim that the current endpoint passed it. Use synthetic data only.</p>
+<ol>
+<li>Select <code>Start visitor session</code>. Use separate browser profiles for owner-isolation tests; anonymous ownership belongs to the browser session.</li>
+<li>Select a preset or enter consistent USD facts. Keep <code>gemini-3.1-flash-lite</code> for the reviewed model release unless making a separately recorded release.</li>
+<li>Select <code>Analyze, plan &amp; review</code>. Inspect extracted facts, deterministic decision, original policy citations, plan and separate review. BLOCKED, NEEDS_INFO and NO_ACTION_REQUIRED cannot create cases.</li>
+<li>For a current eligible plan with passing review, select <code>Prepare human confirmation</code>. Inspect owner, versions, digests and expiry; the authorization checkbox starts unchecked.</li>
+<li>Explicitly check authorization, then select <code>Confirm &amp; create synthetic case</code>. Verified success requires independent case readback and never represents reimbursement approval or payment.</li>
+<li>Select <code>Refresh history</code>, then <code>Open &amp; verify case</code>. Reload and verify persistence. After a lost write response, select <code>Recover previous submission</code> using the existing command; do not invent a new idempotency key for an unknown result.</li>
+</ol>
+<p>The six UI presets are labeled <code>Synthetic 01</code> through <code>Synthetic 06</code>; these labels are distinct from public DEV fixture identifiers.</p>
+<div class="table-scroll" tabindex="0" aria-label="Scrollable evidence table"><table><thead><tr>
+<th scope="col">Public fixture</th>
+<th scope="col">Actual checked-in input</th>
+<th scope="col">Expected branch / case behavior</th>
+</tr></thead><tbody>
+<tr><td>DEV-01</td><td>USD 148.50; receipt available; known employee; consistent facts</td><td>NO_ACTION_REQUIRED; no case</td></tr>
+<tr><td>DEV-04</td><td>USD 38.00; receipt missing; known employee; consistent facts</td><td>EVIDENCE_REQUEST; case after passing review and explicit confirmation</td></tr>
+<tr><td>DEV-10</td><td>Form USD 38.00 versus narrative USD 50.00; receipt missing</td><td>BLOCKED; no case</td></tr>
+</tbody></table></div>
+<p>Read the <a href="../aistudio-export-2026-10-07/fixtures/development-cases.json">exact public fixtures</a>. These are development examples, not blind-test data.</p>
+<h2 id="5-api-contract">5. API contract</h2>
+<p>These checks make no model call or business write. They are examples, not claimed successful outputs:</p>
+<pre aria-label="bash"><code>curl --fail-with-body https://opscrew-883881551915.us-central1.run.app/api/health
+curl --fail-with-body https://opscrew-883881551915.us-central1.run.app/api/config
+curl --fail-with-body https://opscrew-883881551915.us-central1.run.app/api/ready</code></pre>
+<p>A private release also needs Cloud Run IAM authorization. Keep its token in <code>X-Serverless-Authorization</code> and the distinct Firebase visitor token in <code>Authorization</code>. Never include either token in reports or screenshots.</p>
+<p>Current source response structure:</p>
+<ul>
+<li><code>/api/health</code>: <code>ok</code>, <code>service</code>, <code>stage</code>, <code>case_backend_mode</code>; no timestamp field.</li>
+<li><code>/api/config</code>: default/allowed model IDs, timeout/attempt settings, <code>api_key_configured</code>, <code>case_backend</code>, <code>policy_version</code>, <code>model_enabled</code> and <code>model_admission</code>. Public Firebase configuration is under <code>case_backend.firebase</code> when enabled. The server-key field is only a boolean, never the Gemini key value.</li>
+<li><code>/api/ready</code>: success includes <code>ready: true</code>, backend mode and <code>model_calls: 0</code>; failures return safe errors. Do not infer readiness from health.</li>
+</ul>
+<p>The allowlist is <code>gemini-3.8-flash</code>, <code>gemini-3.1-flash-lite</code> and <code>gemini-flash-latest</code>. Default remains <code>gemini-3.1-flash-lite</code>. An allowed ID does not independently prove project availability or a returned provider version.</p>
+<p><code>POST /api/workflow</code> accepts a flat request. This illustrative DEV-04 body was not executed by this report:</p>
+<pre aria-label="json"><code>{
+  &quot;description&quot;: &quot;[SYNTHETIC] Parking fee $38.00 for SYNTH-EMP-100. Receipt lost.&quot;,
+  &quot;amount_usd&quot;: &quot;38.00&quot;,
+  &quot;receipt_status&quot;: &quot;missing&quot;,
+  &quot;employee_identifier&quot;: &quot;SYNTH-EMP-100&quot;,
+  &quot;model_id&quot;: &quot;gemini-3.1-flash-lite&quot;,
+  &quot;input_version&quot;: 1
+}</code></pre>
+<p>Execute only after authorized budget review and with a valid visitor token. <code>input_version</code> must be a positive safe integer. Receipt status is <code>available</code>, <code>missing</code> or <code>unknown</code>; unknown amount can be an empty string and unknown employee can be null. <code>/api/analyze</code> accepts the same intake fields except <code>input_version</code>, performing facts analysis rather than the full plan/review workflow. Nested <code>expense</code>, <code>amount</code>, <code>category</code>, <code>receipt_attached</code> and <code>employee_id</code> are unsupported. The strict whitelist enforces description length 4,000 and employee identifier length 80.</p>
+<h2 id="6-actual-deterministic-policy">6. Actual deterministic policy</h2>
+<p>This summarizes <code>synthetic-expense-usd-1.0.0</code>. Exact citation text in <a href="../aistudio-export-2026-10-07/src/domain/policy.ts">policy source</a> and <a href="POLICY_AND_CONTRACTS.md">policy/contracts</a> is authoritative.</p>
+<div class="table-scroll" tabindex="0" aria-label="Scrollable evidence table"><table><thead><tr>
+<th scope="col">Clause</th>
+<th scope="col">Actual rule</th>
+</tr></thead><tbody>
+<tr><td>SYN-001</td><td>Synthetic USD scope; nonnegative safe integer cents; unsupported currency or invalid contract values rejected</td></tr>
+<tr><td>SYN-002</td><td>A case requires known amount, employee and receipt status; unknown required facts require clarification. Description and extra free-text missing-information notes are not mandatory case fields</td></tr>
+<tr><td>SYN-003</td><td>Any unresolved contradiction blocks creation; preserve conflicting sources without choosing a winner</td></tr>
+<tr><td>SYN-004</td><td>A missing receipt with otherwise known, consistent facts permits EVIDENCE_REQUEST; request an itemized receipt or explanation</td></tr>
+<tr><td>SYN-005</td><td>Amount strictly greater than USD 200 requires MANUAL_REVIEW; exactly USD 200 does not cross the threshold. Missing receipt also becomes an evidence requirement</td></tr>
+<tr><td>SYN-006</td><td>Known consistent facts, available receipt and amount at most USD 200 require NO_ACTION_REQUIRED and no case</td></tr>
+<tr><td>SYN-007</td><td>Only <code>create_exception_case</code> in the synthetic sandbox, after owner/version/rule checks and explicit human confirmation. Never reimbursement approval or payment</td></tr>
+<tr><td>SYN-008</td><td>Exact clause ID/version/original-text citations; changed bindings invalidate prior review/approval; embedded instructions remain untrusted data</td></tr>
+</tbody></table></div>
+<p>The code contains no USD 500 review threshold, USD 25 receipt threshold, advance reconciliation, personal-spend split, currency-conversion action or prohibited-category rule. The earlier guide&#x27;s claims were incorrect. A synthetic employee identifier is an expense fact and does not have to equal the Firebase owner UID.</p>
+<h2 id="7-limits-costs-secrets-and-recovery">7. Limits, costs, secrets and recovery</h2>
+<p>USD 40 was a reported budget goal. No independently verified billing export or configured spending cap establishes it as a hard ceiling. Instance limits, quotas and deadlines reduce exposure but do not guarantee total costs. Alerts-only budgets do not automatically stop billing; verify any service-supported spending cap separately. See <a href="https://docs.cloud.google.com/billing/docs/how-to/budgets">Google Cloud budget documentation</a>.</p>
+<p>Source defaults reserve up to six provider attempts per complete workflow: global concurrency 2, visitor concurrency 1, global 6 runs/minute and 60/day, visitor 2/minute and 12/day. Firestore counters persist across instances and reset on UTC calendar days. Failed, cancelled and unknown usage is not refunded. These are source defaults, not independently observed settings of the deployed revision. Infrastructure concurrency 4 is different from model admission concurrency.</p>
+<p>A full HTTP workflow is bounded to 90 seconds; fact analysis has a 45-second route bound and a 40-second SDK call bound. Planning roles have 30-second call bounds within the shared workflow budget. The reported 120-second platform timeout does not replace these limits.</p>
+<p>Store the Gemini key server-side in Secret Manager, using an approved numeric version recorded with the accepted image/revision. <code>latest</code> is mutable and is not pinned. Authorized operators must verify actual configuration and access; this review does not certify image layers or all cloud bindings. See <a href="https://docs.cloud.google.com/run/docs/configuring/services/secrets">Cloud Run secret configuration</a>.</p>
+<p>The correct pause flag is <code>OPSCREW_MODEL_ENABLED=false</code>, not <code>MODEL_ENABLED=false</code>. Use the reviewed release procedure for an authorized pause drill in a new revision, retaining all other settings. Pausing makes new-model readiness fail while owned case readback should remain available; use the documented liveness startup probe for the drill. Record actual pause/restore revisions and observations. Restore <code>OPSCREW_MODEL_ENABLED=true</code> only after review. This report performs no cloud update.</p>
+<p>Rollback targets must have accepted compatible schema, numeric secret binding, trusted Auth and persistent shared quotas. Historical <code>00001</code>/<code>00002</code> public plan-only releases are not recommended fallback targets. A health-only traffic drill does not establish full workflow recovery.</p>
+<h2 id="8-remaining-delivery-gates">8. Remaining delivery gates</h2>
+<p>G1 through G7 are team engineering gates, not asserted official contest rules. Official submission requirements are in the <a href="../SUBMISSION_CHECKLIST.md">submission checklist</a>.</p>
+<div class="table-scroll" tabindex="0" aria-label="Scrollable evidence table"><table><thead><tr>
+<th scope="col">Team gate</th>
+<th scope="col">Evidence boundary</th>
+<th scope="col">Remaining acceptance</th>
+</tr></thead><tbody>
+<tr><td>G1 engineering</td><td>Prior source-bound checks; current changes under review</td><td>Fresh appropriate checks for final accepted SHA</td></tr>
+<tr><td>G2 policy/model</td><td>Versioned policy/prompts and teammate-reported historical planning</td><td>Final source, requested/returned model and complete bounded attempt records</td></tr>
+<tr><td>G3 real resources</td><td>PARTIAL teammate-reported six-step chain; emulators are not production evidence</td><td>Source-bound responses and identifiers, real Auth isolation, confirmation, idempotency, independent GET/history, client denial, rules/indexes and failures</td></tr>
+<tr><td>G4 cloud operations</td><td>PARTIAL historical teammate summaries; current deployment unverified</td><td>Source/image/revision/secret binding, ready release, persistent limits, cold start, pause/restore and accepted rollback</td></tr>
+<tr><td>G5 independent evaluation</td><td>PENDING; 350 prior offline assertions and public DEV examples are not hidden tests</td><td>Independently sealed eight cases; four risk categories with three repeats; three consecutive full main-demo runs; all failures retained</td></tr>
+<tr><td>G6 final materials</td><td>PENDING; editable English deck, review PDF and 165-second recording plan are preparation</td><td>Verified names/product/video links, real cloud recording under 180 seconds and final review</td></tr>
+<tr><td>G7 submission</td><td>PENDING; no Submitted receipt</td><td>Actual portal Submitted state, receipt/ID/time and accessible final links</td></tr>
+</tbody></table></div>
+<p>For new cloud tests, record accepted Git SHA, lock hash, build ID, image digest, revision, runtime identity, project/region, numeric secret version and nonsecret outcomes. Retain full model-attempt telemetry when available, every first failure and rerun, and independent readback for saved-case claims. Do not export credentials or relabel public development examples as hidden tests.</p>
+<p>An <a href="DEPLOYMENT_AND_USAGE_REPORT.html">HTML reading copy</a> contains the same report. Historical JSON remains unchanged; newly executed release acceptance belongs in new dated evidence files.</p>
+<h2 id="9-october-12-build-integration">9. October 12 build integration</h2>
+<p>The teammate&#x27;s latest build change replaces the deprecated <code>__dirname</code> alias with an ESM-compatible root and splits React/Firebase/icon dependencies into vendor chunks. The reviewer observed a successful Vite 8.3.3 build of 1,677 modules in 2.91 seconds with no warnings: the application entry is 79.28 kB, alongside separately loaded vendor/runtime chunks. This is a local observation, not a cloud build timing or a claim that the total shipped code is only 79.28 kB. Function-style <code>manualChunks</code> and <code>rollupOptions</code> remain compatible in Vite 8 but are deprecated; future migration is separate from the current accepted build.</p>
+<p>Both production smoke tools retain Node 24, matching the package engines, <code>.node-version</code> and Docker contract. The proposed <code>&gt;=22</code> guard also admitted early Node 22 and other unvalidated majors, so it was not accepted as a claim of runtime compatibility. The maintained production check now verifies every emitted JavaScript chunk, including split dependencies. See the <a href="acceptance/PR04-code-review-2026-10-12.md">integration review</a> for actual fresh checks and their source binding. No production traffic, runtime identity, billing or cloud resource was changed by this integration.</p>
+</main>
+<footer>Review dated October 12, 2026. Historical evidence is retained; final source and real-resource acceptance must be recorded independently.</footer>
+</body>
+</html>

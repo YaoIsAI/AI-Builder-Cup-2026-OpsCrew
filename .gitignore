@@ -22,3 +22,23 @@ nul
 # Local Firebase emulator state and downloaded tool/runtime caches
 .firebase/
 .tools/
+
+# Private presentation render/finalizer workspace
+.materials-build/
+
+# Operator-specific release configuration
+**/cloud-release.local.json
+
+# Team internal planning and local setup docs (kept local, excluded from public repo)
+COMPETITION_ASSESSMENT_*.md
+OPSCREW_FULL_DELIVERY_PLAN_*.md
+PROJECT_NOTES*.md
+*SOP*.md
+
+# Local assistant configuration; application origin and local edits are disclosed in PROVENANCE.md
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# Team-internal resource guide with private emails, GCP project and billing IDs
+AI-Builder-Cup-2026-Gemini-API使用指南.md

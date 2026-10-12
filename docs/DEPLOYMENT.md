@@ -1,5 +1,7 @@
 # OpsCrew deployment preparation
 
+The current pre-cloud S4 deployment runbook is [PRECLOUD_DEPLOYMENT.md](PRECLOUD_DEPLOYMENT.md), with [CLOUD_TEAMMATE_HANDOFF.md](CLOUD_TEAMMATE_HANDOFF.md) for the teammate's ordered acceptance. The material below is the historical S1/S2 preparation, retained for provenance; use the current runbook for Firebase, persistence, quotas, readiness and image configuration.
+
 Prepared for S1 on 2026-10-09. Local development is approved. The first new paid resource, billing change, or chargeable cloud deployment still requires the project owner's confirmation of the actual project, region, resource configuration, and budget. The commands below are a runbook for that approved future action; they have not been executed as part of this preparation.
 
 S2 update: the user explicitly deferred cloud deployment. The local app now includes facts, planning and separate review with a 90-second workflow deadline. The proposed future platform timeout below is updated to 120 seconds to leave transport margin; this configuration has not been deployed or verified. G2 local functional acceptance passed through genuine captured responses; repeated live reliability remains to be evaluated; see [S2 acceptance](acceptance/S02-plan-and-review.md).

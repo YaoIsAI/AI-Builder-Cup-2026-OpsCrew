@@ -8,8 +8,10 @@ import {
 import type { ApprovalSnapshot, ExceptionCase, ExceptionPlan, VersionBinding } from "../src/domain/contracts.ts";
 import { assertPlanMatchesPolicy, evaluatePolicy, verifyPolicyCitations } from "../src/domain/policy.ts";
 import type { WorkflowResponse } from "./planning-contracts.ts";
+import { ModelAdmissionService } from "./model-admission.ts";
+import type { ModelAdmissionPolicy, ModelAdmissionTicket } from "./model-admission.ts";
 
-export type RecordKind = "runs" | "heads" | "confirmations" | "approvals" | "cases" | "audit" | "idempotency";
+export type RecordKind = "runs" | "heads" | "confirmations" | "approvals" | "cases" | "audit" | "idempotency" | "usage" | "admissions";
 export interface CaseTransaction {
   get<T>(kind: RecordKind, id: string): Promise<T | null>;
   set<T>(kind: RecordKind, id: string, value: T): void;
@@ -92,8 +94,11 @@ export interface DurableRun {
   case_id: string | null;
   created_at: string;
   updated_at: string;
+  request_id?: string;
+  analysis_deadline_at?: string;
+  analysis_completed_at?: string;
 }
-interface CurrentHead { owner_id: string; run_id: string; input_version: number }
+interface CurrentHead { owner_id: string; run_id: string; input_version: number; request_sequence?: number }
 export interface ConfirmationIntent {
   approval_id: string;
   binding: VersionBinding;
@@ -145,12 +150,16 @@ function assertBinding(current: VersionBinding, candidate: VersionBinding): void
 
 export class CaseService {
   readonly store: CaseStore;
+  readonly modelAdmission: ModelAdmissionService;
   private readonly now: () => number;
   private readonly id: () => string;
   private readonly approvalTtlMs: number;
-  constructor(options: {store: CaseStore; now?: () => number; id?: () => string; approvalTtlMs?: number}) {
+  private readonly deadlineNow: () => number;
+  constructor(options: {store: CaseStore; now?: () => number; id?: () => string; approvalTtlMs?: number; admissionPolicy?: ModelAdmissionPolicy; admissionNow?: () => number}) {
     this.store = options.store; this.now = options.now ?? Date.now; this.id = options.id ?? randomUUID;
     this.approvalTtlMs = options.approvalTtlMs ?? 10 * 60_000;
+    this.deadlineNow = options.admissionNow ?? this.now;
+    this.modelAdmission = new ModelAdmissionService({store: options.store, now: this.deadlineNow, policy: options.admissionPolicy});
     if (!Number.isSafeInteger(this.approvalTtlMs) || this.approvalTtlMs < 1 || this.approvalTtlMs > 30 * 60_000) throw new Error("Invalid confirmation expiry.");
   }
   private timestamp() { return new Date(this.now()).toISOString(); }
@@ -177,21 +186,35 @@ export class CaseService {
     if (!decision.case_eligible || decision.allowed_action !== ALLOWED_ACTION) throw new CaseServiceError("POLICY_BLOCKED", "The deterministic policy does not allow case creation.", 409);
     return {plan, binding};
   }
-  async createRun(uid: string, intake: Record<string, unknown>, requestedInputVersion = 1): Promise<DurableRun> {
+  async createRun(uid: string, intake: Record<string, unknown>, requestedInputVersion = 1, reservation?: ModelAdmissionTicket): Promise<DurableRun> {
     ownerId(uid);
     if (!Number.isSafeInteger(requestedInputVersion) || requestedInputVersion < 1) throw new CaseServiceError("INVALID_INPUT_VERSION", "Input version must be a positive safe integer.");
     // Root validates the intake before creating a run. Persistence independently bounds JSON size.
     const input = JSON.parse(canonicalJson(intake)) as Record<string, unknown>;
     if (Buffer.byteLength(canonicalJson(input), "utf8") > 24_000) throw new CaseServiceError("INPUT_TOO_LARGE", "The synthetic input is too large.", 413);
-    const runId = safeId(this.id(), "run_id"), timestamp = this.timestamp();
-    return this.store.runTransaction(async (transaction) => {
-      const head = await transaction.get<CurrentHead>("heads", this.headId(uid));
-      const inputVersion = (head?.input_version ?? 0) + 1;
-      if (!Number.isSafeInteger(inputVersion)) throw new CaseServiceError("VERSION_EXHAUSTED", "A new session is required.", 409);
-      const run: DurableRun = { schema_version: "1.0.0", run_id: runId, owner_id: uid, input_version: inputVersion, status: "DRAFT", input, workflow_response: null, case_id: null, created_at: timestamp, updated_at: timestamp };
-      transaction.set("runs", runId, run); transaction.set("heads", this.headId(uid), {owner_id: uid, run_id: runId, input_version: inputVersion});
-      return run;
-    });
+    // Reserve separately: a late reservation can consume allowance but cannot change a head.
+    // A creation transaction reads the durable reservation sequence, so an older late RPC
+    // conflicts/retries against a newer reservation instead of replacing its current plan.
+    const ticket = reservation ?? await this.modelAdmission.reserve(uid, safeId(this.id(), "request_id"), sha256(input));
+    const runId = `run_${sha256({uid, request_id: ticket.request_id})}`, timestamp = this.timestamp();
+    try {
+      return await this.store.runTransaction(async (transaction) => {
+        const existing = await transaction.get<DurableRun>("runs", runId);
+        const head = await transaction.get<CurrentHead>("heads", this.headId(uid));
+        if (existing) {
+          assertOwner(existing, uid);
+          if (existing.request_id !== ticket.request_id || sha256(existing.input) !== sha256(input)) throw new CaseServiceError("ADMISSION_CONFLICT", "The server request identity was reused for different input.", 409);
+          return existing; // Exact create replay never allocates another revision or moves a head.
+        }
+        await this.modelAdmission.assertCurrentCreation(transaction, uid, ticket, sha256(input));
+        if (head?.request_sequence !== undefined && head.request_sequence >= ticket.sequence) throw new CaseServiceError("STALE_VERSION", "A newer request already replaced this analysis.", 409);
+        const inputVersion = (head?.input_version ?? 0) + 1;
+        if (!Number.isSafeInteger(inputVersion)) throw new CaseServiceError("VERSION_EXHAUSTED", "A new session is required.", 409);
+        const run: DurableRun = { schema_version: "1.0.0", run_id: runId, owner_id: uid, input_version: inputVersion, status: "DRAFT", input, workflow_response: null, case_id: null, created_at: timestamp, updated_at: timestamp, request_id: ticket.request_id, analysis_deadline_at: ticket.analysis_deadline_at };
+        transaction.set("runs", runId, run); transaction.set("heads", this.headId(uid), {owner_id: uid, run_id: runId, input_version: inputVersion, request_sequence: ticket.sequence});
+        return run;
+      });
+    } finally { if (!reservation) await this.modelAdmission.release(ticket); }
   }
   async completeRun(uid: string, runId: string, result: WorkflowResponse): Promise<WorkflowResponse> {
     ownerId(uid); safeId(runId, "run_id");
@@ -200,6 +223,7 @@ export class CaseService {
       const run = await transaction.get<DurableRun>("runs", runId); assertOwner(run, uid);
       await this.assertCurrent(transaction, uid, run);
       if (run.status !== "DRAFT") throw new CaseServiceError("STALE_VERSION", "This analysis was cancelled or already completed.", 409);
+      if (result.ok && run.analysis_deadline_at && Date.parse(run.analysis_deadline_at) <= this.deadlineNow()) throw new CaseServiceError("WORKFLOW_DEADLINE", "The analysis expired before its result could be persisted.", 504);
       const response = structuredClone(result);
       response.run_id = runId;
       if (response.workflow) {
@@ -210,7 +234,8 @@ export class CaseService {
       }
       if (Buffer.byteLength(canonicalJson(response), "utf8") > 180_000) throw new CaseServiceError("RESULT_TOO_LARGE", "The workflow result is too large to persist.", 502);
       const status = response.ok && response.workflow ? response.workflow.status : "ERROR";
-      const completed: DurableRun = {...run, status, workflow_response: response, updated_at: this.timestamp()};
+      const completedAt = this.timestamp();
+      const completed: DurableRun = {...run, status, workflow_response: response, updated_at: completedAt, analysis_completed_at: new Date(this.deadlineNow()).toISOString()};
       if (status === "REVIEWABLE") this.reviewable(completed);
       transaction.set("runs", runId, completed);
       return response;

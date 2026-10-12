@@ -197,6 +197,7 @@ export default function App() {
   const [modelId, setModelId] = useState<string>("gemini-3.1-flash-lite");
   const [configuredModel, setConfiguredModel] = useState<string | null>(null);
   const [serverTimeoutMs, setServerTimeoutMs] = useState<number>(DEFAULT_WORKFLOW_TIMEOUT_MS);
+  const [sandboxLimits, setSandboxLimits] = useState<{ daily: number; minute: number; concurrent: number } | null>(null);
   const [caseBackend, setCaseBackend] = useState<CaseBackendConfig | null>(null);
   const visitorSession = useFirebaseSession(caseBackend);
 
@@ -249,6 +250,12 @@ export default function App() {
         }
         if (typeof data.workflow_timeout_ms === "number" && data.workflow_timeout_ms > 0) {
           setServerTimeoutMs(Math.min(DEFAULT_WORKFLOW_TIMEOUT_MS, data.workflow_timeout_ms));
+        }
+        const limits = data.model_admission?.limits;
+        if (data.model_admission?.enabled && Number.isInteger(limits?.ownerDailyRequests) &&
+            limits.ownerDailyRequests > 0 && Number.isInteger(limits?.ownerMinuteRequests) &&
+            limits.ownerMinuteRequests > 0 && Number.isInteger(limits?.ownerConcurrent) && limits.ownerConcurrent > 0) {
+          setSandboxLimits({ daily: limits.ownerDailyRequests, minute: limits.ownerMinuteRequests, concurrent: limits.ownerConcurrent });
         }
       })
       .catch(() => {
@@ -857,6 +864,11 @@ export default function App() {
                   Model availability and usage depend on this Google project. Retrying starts
                   a new run and can consume additional model quota.
                 </p>
+                {sandboxLimits && <p className="mt-2 text-xs text-slate-600">
+                  Sandbox allowance: up to {sandboxLimits.minute} runs per minute and {sandboxLimits.daily} runs per
+                  visitor per UTC day. Shared capacity also applies. Failed or canceled runs may consume allowance.
+                  Up to {sandboxLimits.concurrent} {sandboxLimits.concurrent === 1 ? "run" : "runs"} per visitor can be active.
+                </p>}
               </div>
 
               {/* Submit Button */}

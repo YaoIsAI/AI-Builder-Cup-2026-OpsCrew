@@ -1,0 +1,10 @@
+{
+  "build_duration_seconds": 7.32,
+  "offline_tests": "216 / 216",
+  "lint": "PASS",
+  "basis": "Root observed complete tool results, 2026-10-11. Artifact groups include freshly pruned native layout, not a Linux container. See final runtime evidence for binding.",
+  "offline_test_duration_ms": 31653.599,
+  "emulator_checks": "27 / 27",
+  "packaging_checks": "9 HTTP + 12 artifact groups",
+  "build_modules": 1677
+}

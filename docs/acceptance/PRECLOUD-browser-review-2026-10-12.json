@@ -1,0 +1,44 @@
+{
+  "schema_version": "opscrew-precloud-browser-review-1.0.0",
+  "review_date": "2026-10-12",
+  "mode": "fixed-production-bundle-with-genuine-local-auth-firestore-and-injected-offline-browser-fixture",
+  "canonical_sources_sha256": "833c353f2fee85d7207d5ff5a44d36ab52fafa11e96f650a1f1005f22edac3de",
+  "real_gemini_calls": 0,
+  "production_firebase_writes": 0,
+  "scenario": "UI Synthetic 05, missing receipt, USD 38, SYNTH-EMP-3310",
+  "case_id": "case_218e5602f3cf4098a4284a3e1806ad589989245c5464122537ea87ceea004d02",
+  "approval_id": "approval_94898c4d-af22-42e3-ae05-4c030e490195",
+  "created_at": "2026-10-12T00:22:47.339Z",
+  "checks": {
+    "analysis_disabled_before_auth": "PASS",
+    "current_plan_review": "PASS_INJECTED_MODEL",
+    "confirmation_checkbox_initially_off": "PASS",
+    "create_disabled_before_consent": "PASS",
+    "explicit_confirmation_and_independent_readback": "PASS",
+    "open_history_independent_verification": "PASS",
+    "input_edit_clears_current_plan_and_authorization": "PASS",
+    "reload_restores_same_uid": "PASS",
+    "reloaded_history_and_independent_open": "PASS",
+    "narrow_viewport_no_horizontal_overflow": "PASS",
+    "keyboard_focus_refresh_history": "PASS_VISUAL_RING"
+  },
+  "responsive_measurement": {
+    "requested_width": 390,
+    "requested_height": 844,
+    "document_client_width": 375,
+    "document_scroll_width": 375
+  },
+  "limitations": [
+    "Injected model is explicitly labeled and does not constitute real Gemini UI acceptance.",
+    "Default in-app preview screenshot is narrow; no new 1200-pixel desktop claim.",
+    "First cold readiness probe returned 503; a warmed probe passed.",
+    "This is local acceptance, not real-resource G3/G4."
+  ],
+  "screenshots": {
+    "PRECLOUD-ui-desktop-2026-10-12.png": "7680d4810e0f0f619d0d705615b34ff2e189e869dc331cba11a9f46fece30238",
+    "PRECLOUD-ui-mobile-2026-10-12.png": "2852e6e1e1191c3a73c0e0520034bb946a329ac864dc22e9f68d4369a90783d8"
+  },
+  "owned_preview_services": "STOPPED",
+  "temporary_viewport": "RESET",
+  "agent_created_tab": "CLOSED"
+}

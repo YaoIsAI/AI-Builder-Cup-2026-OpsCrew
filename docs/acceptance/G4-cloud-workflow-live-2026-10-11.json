@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "stage": "G4-partial",
+  "mode": "real-gemini-public-cloud-run",
+  "target": "https://opscrew-883881551915.us-central1.run.app",
+  "created_at": "2026-10-11T02:55:00Z",
+  "requested_model_id": "gemini-3.1-flash-lite",
+  "model_id": "gemini-3.1-flash-lite",
+  "http_status": 200,
+  "ok": true,
+  "decision_branch": "EVIDENCE_REQUEST",
+  "status": "REVIEWABLE",
+  "execution_authorized": false,
+  "review_verdict": "PASS",
+  "plan_case_type": "EVIDENCE_REQUEST",
+  "citations": [
+    "SYN-001",
+    "SYN-002",
+    "SYN-004",
+    "SYN-007",
+    "SYN-008"
+  ],
+  "steps": [
+    {
+      "role": "FACTS",
+      "outcome": "SUCCESS",
+      "duration_ms": 2407,
+      "total_tokens": 585
+    },
+    {
+      "role": "PLANNER",
+      "outcome": "SUCCESS",
+      "duration_ms": 3303,
+      "total_tokens": 1803
+    },
+    {
+      "role": "REVIEWER",
+      "outcome": "SUCCESS",
+      "duration_ms": 3304,
+      "total_tokens": 1756
+    }
+  ],
+  "total_tokens": 4144,
+  "scope_note": "Plan/review end-to-end on the public URL. Case creation chain (G3) is pending the Firebase console linkage step and the OPSCREW_FIREBASE_MODE=firestore flip.",
+  "real_gemini_calls": 1
+}

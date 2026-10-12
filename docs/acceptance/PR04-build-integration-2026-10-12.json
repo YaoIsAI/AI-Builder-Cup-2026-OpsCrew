@@ -1,0 +1,197 @@
+{
+  "schema_version": "opscrew-pr-build-integration-1.0.0",
+  "completed_at": "2026-10-12T11:37:31.685Z",
+  "timezone": "Asia/Shanghai",
+  "reviewed_teammate_head": "7fb9e03ed21c8e6a3eb01e5be2574ccec3dfae9a",
+  "previous_reviewer_commit": "7cbca064621c5091b9ac82c7ea9e2871db13e60d",
+  "source": {
+    "working_tree_dirty_during_checks": true,
+    "files": {
+      "package.json": "6c8e1c9ec5d8db1a623a2ae4582416378f6574ec936001358584cb520f3f264d",
+      "package-lock.json": "56f765d3d0010e341a736a4239cad42872bfa641dcf4026e8efbf441a0453c79",
+      "server.ts": "b95a1e2e922074f74b2eadf6cfa3f677d7c51480e39ed61ccd270fddd06e6318",
+      "server/runtime-config.ts": "6464c828e78bd8f738fb891ef168bece8857f1d1d4878266ec388d8a81a1dfd3",
+      "server/planning-service.ts": "fb41bf596439f78b377d5858aa95fb6abe2e47f95ba1d231ae529409785be93a",
+      "server/planning-contracts.ts": "4f59d0b0af2ed01c8e46afd7699219419f53a1147a1646f0a3e8dd78aa9ee71c",
+      "server/case-service.ts": "e02bbc486f45b5ad78094b750c79468b7fc48c925cbaa0d2c7721500889d278d",
+      "server/case-routes.ts": "70d8b913f7b3add03e19382e6e304be238db8a6132a26f18142bfaff7187353c",
+      "server/firebase-runtime.ts": "494211f6a2f106efed747e51084356f62847884aeb5860bd39cfbf2fc842bb4b",
+      "server/model-admission.ts": "7d0e8ac9d3903af0d75c0bfb1e04a2606b7c81b48cf56478e6961ae6afc51c14",
+      "src/domain/contracts.ts": "f886004efd3b260155c7e4d4cc6d20a76d734a07c9b37066910b0cbfa931af3a",
+      "src/domain/policy.ts": "6a7609217c182579a0b72a451bfb61abfa3433cd6bbc743ed5e07f7aff25c678",
+      "src/domain/workflow.ts": "4d79b119c6bc88c3e2113bebf100edb6da6785b6bd63feab072d2d896078dcba",
+      "src/App.tsx": "b08465e33cb1533167eb8cef914e283eae5bda3bf53848931b643c1b7dc78a2a",
+      "src/components/CaseConfirmation.tsx": "1ca6f51b5f66f38e746ea78bcce55bccb063df01201f24283730d81f72a9a3d5",
+      "src/components/WorkflowReview.tsx": "a7a231b3adf0110a7a940719362a741de8067273154eb8da5be0cbe669485d35",
+      "src/lib/case-client.ts": "beabbb519e4b267a74d3ae2d2579923272f4365d266756014c6d4a071b4c77be",
+      "src/lib/firebase-session.ts": "a37a8479130dcf57fce0c9df12ce884293b2a62a591a40dbc0bcd44dfd1b932a",
+      "src/index.css": "7aa67a643b1d6cee0b64c9719fa3e32e780e9a09a5ae8af476c53bbc23ec8b78",
+      "src/main.tsx": "30d02ee59cb6576973dea4368093b2dcae692a40668f288fdbc66a114873fcd3",
+      "fixtures/development-cases.json": "bb61b80d158f24dafc2e18274d0a5b9c02cf44296649e550bccb0aabd5fe00c7",
+      "firestore.rules": "1990874ed70e379d013db242e2210ff61537c305be1ec35171004ffb30853709",
+      "firestore.indexes.json": "0c634c030b88d477779f7078f059db1e27cf4f52f4f7458315af93d68ff3abd4",
+      "firebase.json": "bfd28943974b7623fc757f8677194303cf87b2ed1edb67593c4827dcdc56b311",
+      "scripts/evaluate-precloud.mjs": "4c0e8260617fd4ce594014fd09dae4a482ea3dbfd6622d7b4d2a3f0ff3012379",
+      "scripts/check-s3-emulator.mjs": "66c1682d7bfa87c47ccc642d11df292f3928fa9fd4472f312aa58b774cfd3e7c",
+      "scripts/smoke-production.mjs": "1a53bc8df738b59efa493ee5fa8980d8a31e8d0133c7d8b1420e78c303e83a68",
+      "Dockerfile": "7c07a7a4229159a850582b7d6ce66323caaf5d132ba771559517a19bec364fd8",
+      ".dockerignore": "199530e0d27c2b097d893b99971f4d3d4f2cacc35f067098ddf8f8dedde4288e",
+      "vite.config.ts": "f3e136cc7ecf19ff80480f07732a0f4a4ee42871acdc768508b98684c7667cc0",
+      "tsconfig.json": "021b9c55e081891e88a21855b6056174d75ee63a8c716f0d4e3fc19536d2da06",
+      "index.html": "abd1bfe158806da8fbef1f48661c6f0f7cb1985768dfc15df867daf772de9f63"
+    },
+    "raw_file_sha256": {
+      "package.json": "4b8c8082dfdf0932c3ff5a2a4e82488382d027ba15a75382f1a3e8dd0d8543fe",
+      "package-lock.json": "9eec8bcf49b5b6bfa642c8ccbedb4b279aea9f15504383c67f4bb8be99b6e53d",
+      "server.ts": "045b4c1bd9c78caaa88bb1a0446b9d1f746d5bc654a07bd50503bce472bdee55",
+      "server/runtime-config.ts": "5c198a443d7fc32bcf2c4c32fe738fd47d7dc74819bbd4ca243ec598a137bb01",
+      "server/planning-service.ts": "15519d8f5d075b7ff221b56e5f403639bbb96b15bbf8e3a7bb20135bab3b9c50",
+      "server/planning-contracts.ts": "4f59d0b0af2ed01c8e46afd7699219419f53a1147a1646f0a3e8dd78aa9ee71c",
+      "server/case-service.ts": "e02bbc486f45b5ad78094b750c79468b7fc48c925cbaa0d2c7721500889d278d",
+      "server/case-routes.ts": "70d8b913f7b3add03e19382e6e304be238db8a6132a26f18142bfaff7187353c",
+      "server/firebase-runtime.ts": "494211f6a2f106efed747e51084356f62847884aeb5860bd39cfbf2fc842bb4b",
+      "server/model-admission.ts": "7d0e8ac9d3903af0d75c0bfb1e04a2606b7c81b48cf56478e6961ae6afc51c14",
+      "src/domain/contracts.ts": "f886004efd3b260155c7e4d4cc6d20a76d734a07c9b37066910b0cbfa931af3a",
+      "src/domain/policy.ts": "6a7609217c182579a0b72a451bfb61abfa3433cd6bbc743ed5e07f7aff25c678",
+      "src/domain/workflow.ts": "4d79b119c6bc88c3e2113bebf100edb6da6785b6bd63feab072d2d896078dcba",
+      "src/App.tsx": "b08465e33cb1533167eb8cef914e283eae5bda3bf53848931b643c1b7dc78a2a",
+      "src/components/CaseConfirmation.tsx": "a1181dfa23b298a1e0d5309f39a8edf5092c6480125bc803a8f21abca1d39a6e",
+      "src/components/WorkflowReview.tsx": "a7a231b3adf0110a7a940719362a741de8067273154eb8da5be0cbe669485d35",
+      "src/lib/case-client.ts": "beabbb519e4b267a74d3ae2d2579923272f4365d266756014c6d4a071b4c77be",
+      "src/lib/firebase-session.ts": "a37a8479130dcf57fce0c9df12ce884293b2a62a591a40dbc0bcd44dfd1b932a",
+      "src/index.css": "7aa67a643b1d6cee0b64c9719fa3e32e780e9a09a5ae8af476c53bbc23ec8b78",
+      "src/main.tsx": "30d02ee59cb6576973dea4368093b2dcae692a40668f288fdbc66a114873fcd3",
+      "fixtures/development-cases.json": "bb61b80d158f24dafc2e18274d0a5b9c02cf44296649e550bccb0aabd5fe00c7",
+      "firestore.rules": "1990874ed70e379d013db242e2210ff61537c305be1ec35171004ffb30853709",
+      "firestore.indexes.json": "0c634c030b88d477779f7078f059db1e27cf4f52f4f7458315af93d68ff3abd4",
+      "firebase.json": "bfd28943974b7623fc757f8677194303cf87b2ed1edb67593c4827dcdc56b311",
+      "scripts/evaluate-precloud.mjs": "4c0e8260617fd4ce594014fd09dae4a482ea3dbfd6622d7b4d2a3f0ff3012379",
+      "scripts/check-s3-emulator.mjs": "66c1682d7bfa87c47ccc642d11df292f3928fa9fd4472f312aa58b774cfd3e7c",
+      "scripts/smoke-production.mjs": "627f0411f8d63cc2b8171ecc63446ff1f367cd1b2403988d94e36dfe7f4095b4",
+      "Dockerfile": "7c07a7a4229159a850582b7d6ce66323caaf5d132ba771559517a19bec364fd8",
+      ".dockerignore": "199530e0d27c2b097d893b99971f4d3d4f2cacc35f067098ddf8f8dedde4288e",
+      "vite.config.ts": "478a71bdb519bc47e75dee208113445bc21b9776d96d1a3d1661d161018a1e6d",
+      "tsconfig.json": "693686ce7aeb4b8aa704835be0867ffb5477c1ffe746e3ce52f1809a98429c48",
+      "index.html": "abd1bfe158806da8fbef1f48661c6f0f7cb1985768dfc15df867daf772de9f63"
+    },
+    "canonical_sources_sha256": "5acc8cafe5a41e3a1d773905072c23021d76508a4cf7ad4d04c6858fe42f2704",
+    "byte_policy": "UTF-8 text, CRLF replaced with LF only; raw file SHA-256 also retained. Canonical JSON sorts keys without changing arrays."
+  },
+  "operational_normalized_hashes": {
+    ".gcloudignore": "1834d2df8f1428ee67f934c028c45d5205dd4f70bf7a48451f4701eb798df43f",
+    ".node-version": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53",
+    "scripts/check-g3-real.mjs": "9d0aaaea348ca4a62e2d470ce945f1ebbd6aa900f246bb13c5c3cc7623164271",
+    "scripts/cloud-release.ps1": "3cde350353a8c37191ab99c034f7edf1a7268d1894e59c5bc98a2f58f3350ded",
+    "scripts/smoke-runtime-artifact.mjs": "97451b792caee700c07a1ff1ade72b93a7124bed32fa290b892d45b3eb613f0a",
+    "tests/g3-real-runner.test.ts": "1852e669947912ab92b7234670195ce2159c57fa8bd8603d0529d4a06a67d7fa"
+  },
+  "changes_from_previous_review": {
+    "changed_runtime_inventory_paths": [
+      "scripts/smoke-production.mjs",
+      "vite.config.ts"
+    ],
+    "unchanged_runtime_inventory_paths": 30,
+    "backend_frontend_domain_and_contract_sources": "UNCHANGED",
+    "accepted_build_change": "ESM root alias and vendor chunk splitting",
+    "smoke_guard": "Node 24 retained; broad >=22 proposal not accepted",
+    "smoke_asset_check": "All emitted JavaScript chunks served with nonempty JavaScript responses"
+  },
+  "fresh_executed_checks": {
+    "offline_tests": {
+      "passed": 232,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 36155.8111
+    },
+    "strict_types": "PASS",
+    "frontend_build": {
+      "outcome": "PASS",
+      "vite": "8.3.3",
+      "transformed_modules": 1677,
+      "duration_seconds": 2.91,
+      "warnings_observed": 0,
+      "assets": [
+        {
+          "name": "index-BUv-D9kv.css",
+          "bytes": 25609,
+          "sha256": "c83bece5ff44ab2f5a4c8b5ab50827e722dce2d66bb34a5d0353aa8ce00f1a0f"
+        },
+        {
+          "name": "index-mRLSII6W.js",
+          "bytes": 79286,
+          "sha256": "3e759460a6fe34faac2a18ba2860981a5ec2d6dd7b24423523d3bfffda83da88"
+        },
+        {
+          "name": "rolldown-runtime-hePW80VL.js",
+          "bytes": 716,
+          "sha256": "580ad8c58061a4dde99bde0a56905e382f0568516ee2f5b84dbfb52085709021"
+        },
+        {
+          "name": "vendor-firebase-DlPj4ys7.js",
+          "bytes": 158270,
+          "sha256": "7f5036f1e2a26b969bfd2bfb504baa48d16ac0e1b60ba8285e8bf46a9f7bcc42"
+        },
+        {
+          "name": "vendor-lucide-Cj3NYBL5.js",
+          "bytes": 11171,
+          "sha256": "3c62971347102b7bb5156ee320da42fe3d7f1667f0b038cc2801efdd9721d833"
+        },
+        {
+          "name": "vendor-react-DRsqitPa.js",
+          "bytes": 210996,
+          "sha256": "843ebdc839b74ef247e5ec7146cffd1af0ccb9ee6326fddf56a82f6677ee7b92"
+        }
+      ]
+    },
+    "native_production_artifact": {
+      "outcome": "PASS",
+      "groups_passed": 12,
+      "http_groups_passed": 9,
+      "javascript_chunks_served": 5,
+      "elapsed_ms": 93034,
+      "node": "24.14.0",
+      "mode": "fresh locked production-only install; credentials excluded; native Windows Node",
+      "container_build": "NOT_RUN"
+    },
+    "production_browser_mount": {
+      "outcome": "NOT_RUN_BROWSER_TOOL_UNAVAILABLE",
+      "limitations": "IAB unavailable; Comet coordinate geometry unavailable and recovery screenshot timed out. No successful test tab or screenshot; React mount and console errors were not observed.",
+      "owned_server_stopped": true,
+      "owned_port": 3194,
+      "remaining_listeners": 0
+    }
+  },
+  "carried_forward_unchanged_business_checks": {
+    "not_rerun_this_increment": true,
+    "reason": "Only build configuration and the production static-asset checker changed; all backend, frontend TSX, policy, fixture, persistence, provider and evaluation files match the prior reviewed hashes.",
+    "prior_source_sha256": "35f0f112162996f5a26036a35998d7f53316a89c97f9c30327b0380c4a22d05c",
+    "local_validation": "PR04-local-validation-2026-10-12.json",
+    "auth_firestore_emulator": {
+      "report": "S03-emulator-validation-2026-10-12-pr04.json",
+      "passed": 27,
+      "failed": 0
+    },
+    "semantic_assertions": {
+      "report": "PR04-offline-evaluation-2026-10-12.json",
+      "passed": 350,
+      "failed": 0
+    }
+  },
+  "cloud_boundary": {
+    "new_live_models": 0,
+    "new_identities": 0,
+    "production_business_writes": 0,
+    "cloud_configuration_changes": 0,
+    "teammate_latest_claim": "Revision opscrew-00004-mtz and six-step Firestore happy path; retained as partial reported evidence, without new immutable full response/attempt journal or accepted source/image binding"
+  },
+  "merge_checkpoint": {
+    "outcome": "LOCAL_REVIEW_APPROVED_PENDING_EXACT_REMOTE_HEAD_MERGE",
+    "user_explicitly_authorized_direct_review_and_merge": true,
+    "github_approval_submitted": false,
+    "github_ruleset_id": 24760417,
+    "configured_admin_exception": "RepositoryRole actor 5, bypass_mode always; current authenticated repository permission admin=true",
+    "ruleset_modified": false
+  },
+  "historical_evidence_policy": "Prior JSON and journals were not overwritten. A GitHub merged state and final merge SHA must be independently recorded after the actual merge."
+}

@@ -1,0 +1,169 @@
+{
+  "schema_version": "1.0.0",
+  "stage": "precloud",
+  "mode": "native-production-artifact-without-credentials",
+  "started_at": "2026-10-11T12:43:05.0114338Z",
+  "completed_at": "2026-10-11T12:44:46.9124686Z",
+  "source_commit": "dd0fb3f8cff460b725588447be1d94556ee7f8bb",
+  "source_worktree_dirty_at_start": true,
+  "source_unchanged": true,
+  "raw_file_sha256": [
+    {
+      "path": ".dockerignore",
+      "raw_sha256": "199530e0d27c2b097d893b99971f4d3d4f2cacc35f067098ddf8f8dedde4288e"
+    },
+    {
+      "path": "deploy/cloud-release.example.json",
+      "raw_sha256": "876c30be0fbdca4e10993363a5a4712c0426a7af1e6d9912baba45c7671a4761"
+    },
+    {
+      "path": "dist/assets/index-BBfZkPUs.js",
+      "raw_sha256": "f189c7b39872a918a2571356abafc4bbe0e036f8aa2bed21a585be8e140c2fe7"
+    },
+    {
+      "path": "dist/assets/index-BHFfGrTH.css",
+      "raw_sha256": "a5b5c0ca56b02960d5ddbecb71fa6fcebcee646a718e2904fea03fd1938caa4a"
+    },
+    {
+      "path": "dist/assets/index.esm-B80q7-L1.js",
+      "raw_sha256": "dfaaac45ada73e1641c1fe95b71a084b35ccdd0ffc6d75c877ab90c418e2e7ac"
+    },
+    {
+      "path": "dist/assets/index.esm-BM2pFQEV.js",
+      "raw_sha256": "795bd7e1ce338e81a5cc3bac5301b6b6e48655dcc546470ad126c5324a4aa8b0"
+    },
+    {
+      "path": "dist/assets/index.esm-BPckdV1J.js",
+      "raw_sha256": "d0347d978b6376eb84505be54d6fdc4ae3ee9fa99fbb20209439cee03bbe045a"
+    },
+    {
+      "path": "dist/index.html",
+      "raw_sha256": "a1b5b77604b560959279b4c888df4f11a6b0795bdca326425dca380349156c15"
+    },
+    {
+      "path": "Dockerfile",
+      "raw_sha256": "7c07a7a4229159a850582b7d6ce66323caaf5d132ba771559517a19bec364fd8"
+    },
+    {
+      "path": "firebase.json",
+      "raw_sha256": "bfd28943974b7623fc757f8677194303cf87b2ed1edb67593c4827dcdc56b311"
+    },
+    {
+      "path": "firestore.indexes.json",
+      "raw_sha256": "0c634c030b88d477779f7078f059db1e27cf4f52f4f7458315af93d68ff3abd4"
+    },
+    {
+      "path": "firestore.rules",
+      "raw_sha256": "1990874ed70e379d013db242e2210ff61537c305be1ec35171004ffb30853709"
+    },
+    {
+      "path": "package-lock.json",
+      "raw_sha256": "9eec8bcf49b5b6bfa642c8ccbedb4b279aea9f15504383c67f4bb8be99b6e53d"
+    },
+    {
+      "path": "package.json",
+      "raw_sha256": "4b8c8082dfdf0932c3ff5a2a4e82488382d027ba15a75382f1a3e8dd0d8543fe"
+    },
+    {
+      "path": "scripts/cloud-release.ps1",
+      "raw_sha256": "3cde350353a8c37191ab99c034f7edf1a7268d1894e59c5bc98a2f58f3350ded"
+    },
+    {
+      "path": "scripts/smoke-production.mjs",
+      "raw_sha256": "256d7f4025ac5b7c9f7c0782dc57901b9ef5e8507fa55e5dfbc58b3711ffa5d4"
+    },
+    {
+      "path": "scripts/smoke-runtime-artifact.mjs",
+      "raw_sha256": "97451b792caee700c07a1ff1ade72b93a7124bed32fa290b892d45b3eb613f0a"
+    },
+    {
+      "path": "server.ts",
+      "raw_sha256": "fa021f99a9e5e67922c4e52bd8aa7766a3d4285dd72ac2e426dd03ab3ea77aa0"
+    },
+    {
+      "path": "server/case-routes.ts",
+      "raw_sha256": "70d8b913f7b3add03e19382e6e304be238db8a6132a26f18142bfaff7187353c"
+    },
+    {
+      "path": "server/case-service.ts",
+      "raw_sha256": "e02bbc486f45b5ad78094b750c79468b7fc48c925cbaa0d2c7721500889d278d"
+    },
+    {
+      "path": "server/firebase-runtime.ts",
+      "raw_sha256": "494211f6a2f106efed747e51084356f62847884aeb5860bd39cfbf2fc842bb4b"
+    },
+    {
+      "path": "server/model-admission.ts",
+      "raw_sha256": "7d0e8ac9d3903af0d75c0bfb1e04a2606b7c81b48cf56478e6961ae6afc51c14"
+    },
+    {
+      "path": "server/planning-contracts.ts",
+      "raw_sha256": "4f59d0b0af2ed01c8e46afd7699219419f53a1147a1646f0a3e8dd78aa9ee71c"
+    },
+    {
+      "path": "server/planning-service.ts",
+      "raw_sha256": "fbf1888be93d3833e5db650df4103c2755fa6e2e3d609e262cef871718eab1ae"
+    },
+    {
+      "path": "server/runtime-config.ts",
+      "raw_sha256": "c2612bd6bcf6d1fb5b78163b6c83cff647293e69cb8d8a8e37cdf637889ea9e0"
+    },
+    {
+      "path": "src/domain/contracts.ts",
+      "raw_sha256": "f886004efd3b260155c7e4d4cc6d20a76d734a07c9b37066910b0cbfa931af3a"
+    },
+    {
+      "path": "src/domain/index.ts",
+      "raw_sha256": "1705d1da841c7d32fc122febdf519425aa05e3acd81e737f8aa3fa2540d49aaa"
+    },
+    {
+      "path": "src/domain/policy.ts",
+      "raw_sha256": "6a7609217c182579a0b72a451bfb61abfa3433cd6bbc743ed5e07f7aff25c678"
+    },
+    {
+      "path": "src/domain/workflow.ts",
+      "raw_sha256": "4d79b119c6bc88c3e2113bebf100edb6da6785b6bd63feab072d2d896078dcba"
+    }
+  ],
+  "command": "npm run --silent smoke:artifact",
+  "npm_ci_lifecycle_scripts": "skipped",
+  "artifact": {
+    "ok": true,
+    "mode": "native-production-artifact-without-credentials",
+    "node": "24.14.0",
+    "package_version": "0.1.0",
+    "container_build": "NOT_RUN",
+    "checks": [
+      "exact Docker runtime source layout copied",
+      "fresh lockfile-based production-only dependency install (lifecycle scripts skipped)",
+      "server SDK imports work without Vite, tsx, Firebase CLI, or TypeScript",
+      "root HTML served from dist",
+      "built JavaScript asset served",
+      "nested SPA refresh served",
+      "production health JSON",
+      "non-sensitive configuration JSON without credentials",
+      "readiness fails closed without real persistence and a model key",
+      "production analysis fails closed without persistent model admission",
+      "production workflow fails without facts, plan or model attempts",
+      "unknown API route returns JSON 404"
+    ],
+    "elapsed_ms": 80416
+  },
+  "checks_passed": 12,
+  "production_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "audit_command": "npm audit --omit=dev --json",
+  "owned_temporary_directory_cleanup": "PASS",
+  "new_owned_directories_remaining": 0,
+  "real_gemini_calls": 0,
+  "production_firebase_writes": 0,
+  "linux_container_build": "NOT_RUN",
+  "actual_cloud_acceptance": "PENDING_TEAMMATE",
+  "independent_heldout_g5": "PENDING_CUSTODIAN"
+}

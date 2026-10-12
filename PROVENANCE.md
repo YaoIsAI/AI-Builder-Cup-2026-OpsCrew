@@ -1,5 +1,13 @@
 # Google Build provenance
 
+## Teammate and code-review continuation — October 12, 2026
+
+The teammate's commits through `7fb9e03ed21c8e6a3eb01e5be2574ccec3dfae9a` extend this same fresh Google Build-origin application. [PR #5](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/5) was closed without a GitHub merge, but its complete commit history is contained in the [PR #4](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/4) branch. The contribution adds shared input validation, security headers, strict typing, an exact-citation Reviewer instruction/version, deployment exclusions, real-resource tooling and historical teammate-authored cloud/emulator summaries.
+
+The subsequent local code review corrects the real-resource runner's final result, failure retention, immutable-output preflight, bounded transport, private IAM/Firebase headers, provider accounting and unknown-command traceability. It removes a one-off raw diagnostic script and rewrites inaccurate operational/reporting claims. These are disclosed local edits, not a new Google Build export. The [code review](docs/acceptance/PR04-code-review-2026-10-12.md) and [release manifest](RELEASE_MANIFEST.json) bind current local checks. Original cloud JSON and earlier source evidence remain unchanged; neither this reviewer nor local emulators attest the teammate's deployed source/image identity. No live model, new identity, cloud write, billing action or portal submission was performed during this review.
+
+## Original Google Build origin
+
 Created: 2026-10-07 (Asia/Shanghai).
 
 Application: https://aistudio.google.com/apps/e8a0fb37-f747-45d2-b376-b832ac7fe09f
@@ -16,6 +24,9 @@ Real successful runtime envelopes are saved in [runtime evidence](docs/runtime-e
 
 The AI Studio editor URL and development preview are not a formal public contest deployment. No GitHub push, Publish, billing activation or recharge was executed during the initial creation/acceptance phase.
 
+## Precloud continuation and source origin (2026-10-11)
+
+S3 was accepted and merged through PR #3 into main at `dd0fb3f8cff460b725588447be1d94556ee7f8bb`. The current precloud continuation is locally authored on that Google Build foundation. It adds persistent shared model admission, request ordering and absolute HTTP deadlines, model parameter compatibility, production runtime/deployment instructions, evaluation tooling and new English proposal/recording material. No earlier non-Google application code, proposal deck or video is reused. The owner-supplied official blank submission template and owner-reported Gemini-generated logo are the retained material assets. Public local emulator/development tests do not establish independent held-out, cloud or submitted acceptance. [Current precloud acceptance](docs/acceptance/PRECLOUD-readiness-2026-10-11.md) records exact results and limitations. Sections below preserve historical checkpoints.
 ## Local packaging and GitHub handoff — 2026-10-07
 
 The user subsequently authorized a new public repository at `sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew`. This repository contains only the Google Build prototype and its handoff documentation; the older local application is excluded.

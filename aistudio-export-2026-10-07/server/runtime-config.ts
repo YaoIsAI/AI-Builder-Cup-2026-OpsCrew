@@ -1,4 +1,5 @@
 // Shared runtime configuration. No credential values are exported to the client.
+import type { ThinkingLevel } from "@google/genai";
 export const PORT = Number(process.env.PORT) || 3000;
 
 export const ALLOWED_GEMINI_MODELS: readonly string[] = [
@@ -14,14 +15,20 @@ export const DEFAULT_GEMINI_MODEL = (() => {
     : "gemini-3.1-flash-lite";
 })();
 
-export const GEMINI_SDK_TIMEOUT_MS = 25_000;
+export const GEMINI_SDK_TIMEOUT_MS = 40_000;
 export const GEMINI_MAX_ATTEMPTS = 2;
-export const ROUTE_ABORT_TIMEOUT_MS = 30_000;
+export const ROUTE_ABORT_TIMEOUT_MS = 45_000;
 export const WORKFLOW_ABORT_TIMEOUT_MS = 90_000;
 export const PLANNING_CALL_TIMEOUT_MS = 30_000;
 export const PLANNING_TOTAL_TIMEOUT_MS = 60_000;
 export const PROMPT_VERSIONS = Object.freeze({
   facts: "opscrew-facts-1.1.0",
   planner: "opscrew-planner-1.0.1",
-  reviewer: "opscrew-reviewer-1.0.0",
+  reviewer: "opscrew-reviewer-1.0.1",
 });
+
+/** Newer Flash releases deprecate sampling controls; the accepted 3.1 settings stay intact. */
+export function geminiGenerationControls(model: string, legacyTemperature: number) {
+  return model === "gemini-3.1-flash-lite" ? {temperature: legacyTemperature}
+    : {thinkingConfig: {thinkingLevel: "LOW" as ThinkingLevel}};
+}

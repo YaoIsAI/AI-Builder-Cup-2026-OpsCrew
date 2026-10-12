@@ -1,5 +1,23 @@
 # Delivery workboard
 
+## Teammate code review — October 12, 2026
+
+The teammate's PR #5 commits are already in PR #4; the latest teammate head `7fb9e03` adds build optimization and a reported six-step Firestore cloud path. Runtime hardening and the Reviewer prompt change passed independent review; real-resource runner and operational-guide errors were corrected before publication. Current local source differs from the original precloud freeze; see [latest code review and checks](acceptance/PR04-code-review-2026-10-12.md) and [current inventory](../RELEASE_MANIFEST.json). Earlier figures below stay historical. The teammate's cloud reports describe historical partial planning and a later claimed six-step happy path without a complete source-bound response journal; complete G3/G4, independently sealed G5, final G6 and Submitted G7 remain pending. This reviewer made no live model/identity/business request; current cloud read-only requests obtained no HTTP response through the local network, so service state was not independently verified.
+
+## Current precloud handoff (2026-10-11)
+
+S3 is merged into main through PR #3, merge `dd0fb3f`. The continuation on `feat/precloud-readiness` passed local engineering acceptance and is published in [PR #4](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/4) for teammate review and cloud work. Local disposable-artifact cleanup remains pending owner action after automatic deletion approval was rejected; see [publication/cleanup status](acceptance/PRECLOUD-delivery-review-2026-10-12.md). Exact methods and outcomes are in [precloud acceptance](acceptance/PRECLOUD-readiness-2026-10-11.md), [evaluation](PRECLOUD_EVALUATION.md), [current deployment runbook](PRECLOUD_DEPLOYMENT.md), and [cloud handoff](CLOUD_TEAMMATE_HANDOFF.md). Historical sections below retain their original dates and results.
+
+- Local engineering: 216/216 offline tests, lint/build, 27/27 authentic Firebase emulator groups, 12/12 fresh pruned runtime groups. Production audit: zero findings; development findings remain disclosed.
+- Semantic/fault evaluation: 12 public cases, four predefined high-risk scenarios each three times, six fault operations, 350 assertions. Injected outputs establish contract behavior, not model quality or independent custody.
+- New real local Gemini: DEV-01/04/10 passed after local proxy repair. Three earlier unavailable results are retained. Known tokens 11,544 plus three unknown attempts, cost unknown.
+- English official-template proposal PDF/editable PPTX and 165-second recording plan prepared. Draft names/product/video statuses require verified owner/cloud data before submission.
+- Teammate executes actual Linux image build, real Cloud/Firebase G3/G4, separate-machine held-out custody/first live evaluation and actual cloud stability. Owner and teammate finalize G6 materials/public links, then G7 actual Submitted receipt.
+- No cloud resource, account configuration, billing activation, portal submit or public video publication was performed in this local stage.
+
+## Historical board snapshot (October 10)
+
+
 Updated: 2026-10-10 (Asia/Shanghai). The user approved the delivery plan and USD 40 management target on October 8. S0/S1 local preparation and engineering checks passed; their external prerequisites remain unresolved. The user authorized S2 on October 9 and explicitly deferred cloud deployment. G2 local functional acceptance passed across disclosed real-model checkpoints; S2 is now merged into `main` at `c967803051966533f4c6f99cafb057dd3da087f0`, with the accepted S2 tree `d02d547`. The user then authorized S3. S3 local development and acceptance passed with genuine local Firebase emulators, injected model fixtures and browser verification. **G3 remains pending** because the required authorized real Firebase write/readback has not run. S3 source is handed off for review on `feat/s3-confirmation-cases`; the full stage also retains an explicitly blocked temporary-file cleanup gate. Historical failures and checkpoints remain preserved. See [scope](../SCOPE.md), [submission checklist](../SUBMISSION_CHECKLIST.md), and [evaluation protocol](EVALUATION_PROTOCOL.md).
 
 ## Ownership

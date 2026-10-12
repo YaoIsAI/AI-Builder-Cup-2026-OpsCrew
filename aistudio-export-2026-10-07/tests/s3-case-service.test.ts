@@ -7,6 +7,7 @@ import { CaseService, CaseServiceError, MemoryCaseStore, projectBinding, sha256 
 import type { CaseStore, ConfirmCommand, DurableRun, RecordKind } from "../server/case-service.ts";
 import type { WorkflowResponse } from "../server/planning-contracts.ts";
 import { createFirebaseRuntime } from "../server/firebase-runtime.ts";
+import { DEFAULT_MODEL_ADMISSION_POLICY } from "../server/model-admission.ts";
 
 const UID = "synthetic-owner-one", OTHER = "synthetic-owner-two";
 const INTAKE = {synthetic_only: true, description: "Synthetic lunch expense USD 42 with a missing receipt.", amount_usd: 42, amount_minor_input: 4200, receipt_status: "missing", employee_identifier: "SYN-EMP-01"};
@@ -27,7 +28,10 @@ export function acceptedWorkflow(facts: ExpenseFacts = FACTS): WorkflowResponse 
 }
 function setup(store: CaseStore = new MemoryCaseStore()) {
   let now = Date.parse("2026-10-10T05:00:00.000Z"), count = 0;
-  const service = new CaseService({store, now: () => now, id: () => `synthetic-id-${++count}`, approvalTtlMs: 60_000});
+  // Case-safety fixtures deliberately exercise three superseding runs in one minute.
+  // Quota rejection itself is tested against production defaults in precloud-admission.test.ts.
+  const service = new CaseService({store, now: () => now, id: () => `synthetic-id-${++count}`, approvalTtlMs: 60_000,
+    admissionPolicy: {...DEFAULT_MODEL_ADMISSION_POLICY, ownerMinuteRequests: 6, ownerMinuteCalls: 36}});
   return {service, store, tick: (ms: number) => { now += ms; }};
 }
 async function seed(service: CaseService, uid = UID, response = acceptedWorkflow()) {

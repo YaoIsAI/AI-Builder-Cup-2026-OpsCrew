@@ -1,75 +1,61 @@
-# OpsCrew — Expense Exception Plan & Review
+# OpsCrew: Expense Exception Plan & Review
 
-A Google AI Studio Build prototype extended locally to produce reviewable plans from **synthetic USD expense intake**. The server extracts facts, runs a separately prompted Gemini Planner and Reviewer, and checks every proposed fact, action and policy citation against fixed rules. S3 adds optional Firebase visitor authentication, owned persistent plans, explicit human confirmation, atomic case creation and independent readback. A case is a synthetic handling record; no reimbursement is approved or paid.
+OpsCrew is a fresh Google AI Studio Build application extended locally for AI Builder Cup 2026. It turns **synthetic USD expense intake** into a reviewable handling plan using Gemini fact extraction, a separately prompted Planner and Reviewer, and fixed policy checks. A person explicitly confirms the current plan before the server saves a case and independently reads it back. The app performs no reimbursement approval or payment.
 
-The application was generated in a blank Google Build app without importing the earlier local application's source. Read [PROVENANCE.md](PROVENANCE.md) for the export history and subsequent local changes. The [AI Studio app](https://aistudio.google.com/apps/e8a0fb37-f747-45d2-b376-b832ac7fe09f) and its development preview are not a formal public contest deployment.
+S3 is merged into GitHub main through [PR #3](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/3), merge `dd0fb3f8cff460b725588447be1d94556ee7f8bb`. The continuation tracked in [PR #4](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/4) adds persistent model admission, bounded deadlines, safe late-write ordering, production packaging and submission preparation. The teammate's October 12 updates add shared intake validation, production security headers, strict TypeScript and an exact-citation Reviewer prompt. Review corrections fix real-resource evidence accounting and the deployment guide. See [the latest code review](docs/acceptance/PR04-code-review-2026-10-12.md); [earlier precloud acceptance](docs/acceptance/PRECLOUD-readiness-2026-10-11.md) remains historical.
 
-The approved local continuation now includes S0/S1 foundations, S2 planning/review and S3 confirmation/cases. See [S3 setup and recovery](docs/S3_CONFIRMATION_CASES.md), [S3 acceptance and limits](docs/acceptance/S03-confirmation-and-cases.md), [scope](SCOPE.md), [delivery workboard](docs/DELIVERY_WORKBOARD.md), [policy/contracts](docs/POLICY_AND_CONTRACTS.md), and [deployment preparation](docs/DEPLOYMENT.md). Real Firebase and public Google Cloud deployment gates remain pending.
+The next operator is the teammate. Begin with [the ordered cloud handoff](docs/CLOUD_TEAMMATE_HANDOFF.md), [deployment instructions](docs/PRECLOUD_DEPLOYMENT.md) and [reviewed cloud usage report](docs/DEPLOYMENT_AND_USAGE_REPORT.md). The teammate reported historical public planning and a later six-step Firestore path on revision `opscrew-00004-mtz`; source-to-image binding and complete real G3/G4 resource acceptance remain unverified. Independent held-out/live stability, final public video/product links and actual portal submission remain team gates. Local tests, liveness and historical runs on older revisions cannot pass them.
 
-Current acceptance: [S0 prerequisites](docs/acceptance/S00-scope-and-prerequisites.md), [S1 foundation](docs/acceptance/S01-engineering-foundation.md), [S2 plan/review](docs/acceptance/S02-plan-and-review.md), and [S3 confirmation/cases](docs/acceptance/S03-confirmation-and-cases.md). S3 local acceptance on October 10 passed **173 offline tests, 25 Auth/Firestore emulator check groups and eight production HTTP checks**, together with type checking and the build. Browser checks covered explicit confirmation, independently verified persistence, restored case history, mobile layout and keyboard focus. Production dependency audit reported zero findings; development tooling still has disclosed findings. **G3 remains pending real Firebase identity, real Gemini and Firestore write/readback.**
+## Source origin and contest scope
 
-The earlier **G2 local functional acceptance passed** across genuine no-action, missing-receipt, over-threshold and blocked-conflict captures. Those captures span two bounded timeout profiles; earlier failures remain visible and live stability is still S4/S5 work. S2 is now included in main at c967803; S3 is handed off on its separate feature branch for review. Account, actual container and cloud gates remain pending; cloud deployment is explicitly deferred.
+The team created a blank Google Build app on October 7, without importing code from the earlier non-Google local prototype. Subsequent local changes are disclosed in [provenance](PROVENANCE.md), [scope](SCOPE.md) and [build log](docs/BUILD_LOG.md). The [AI Studio app](https://aistudio.google.com/apps/e8a0fb37-f747-45d2-b376-b832ac7fe09f) is the creation/editor reference. The final contest prototype requires an actual working Cloud Run/Firebase deployment and English source/docs/presentation. See [official requirements](https://aibuildercup.com/themes.html) and [submission checklist](SUBMISSION_CHECKLIST.md).
 
 ## Repository layout
 
-- `aistudio-export-2026-10-07/` — exported application and offline tests; run npm commands here.
-- [PROVENANCE.md](PROVENANCE.md) — source origin and local-change record.
-- [Runtime evidence](docs/runtime-evidence-2026-10-07.json) — recorded AI Studio runtime results; historical evidence, not a guarantee about a new local run.
-- [CONTRIBUTING.md](CONTRIBUTING.md) — teammate workflow and PR checks.
+- `aistudio-export-2026-10-07/`: application, locked dependencies, formal tests, deployment scripts and public synthetic fixtures. Run npm commands here.
+- `docs/`: contracts, stage acceptance, current cloud handoff and immutable redacted evidence.
+- `submission/`: editable official-template proposal, matching PDF, recording plan and optional material builder.
+- `RELEASE_MANIFEST.json`: source/material identity and explicit pending cloud/video/portal fields.
 
-This outer README is the current local setup guide. The dated application directory retains its original export name; subsequent local changes are recorded in Git and provenance.
+Only this Google Build continuation is published. Secrets, dependency directories, generated bundles and private authoring previews are excluded from Git. Formal regression tests and source-bound acceptance results are necessary project outputs.
 
-## Local setup
+## Reproduce local checks
 
-The handoff environment uses **Node.js 24.14.0 and npm 11.9.0**. Use the committed lockfile with `npm ci`.
+Use Node 24 and npm 11. The author tested Node 24.14.0/npm 11.9.0. Pull the **reviewed precloud commit**, rather than assuming an older main has these changes:
 
 ```powershell
 git clone https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew.git
 cd AI-Builder-Cup-2026-OpsCrew
-git switch --track origin/feat/s3-confirmation-cases
+git switch --track origin/feat/precloud-readiness
 cd aistudio-export-2026-10-07
 npm ci
-Copy-Item .env.example .env
-```
-
-On macOS/Linux, use `cp .env.example .env` for the last command. Edit the new `.env` locally:
-
-```dotenv
-GEMINI_API_KEY="YOUR_OWN_KEY"
-GEMINI_MODEL="gemini-3.1-flash-lite"
-```
-
-Use your own Gemini key only if you will run live analysis. Keep it in `.env` on the server; never add it to source, screenshots, PRs, browser code, or a `VITE_` variable. Offline checks need no key. The current server and initial UI default are `gemini-3.1-flash-lite`; configure it explicitly for reproducibility. A model appearing in the allowlist does not establish account availability or a free billing tier.
-
-Start the full local app:
-
-```powershell
-npm run dev
-```
-
-Open [localhost:3000](http://localhost:3000). Use the synthetic presets, confirm the selected model is `gemini-3.1-flash-lite`, then run analysis if live API access is configured. Input edits invalidate older results. Planning and review produce recommendations with `execution_authorized: false`. Loading the page alone does not prove a Gemini call succeeded. `npm run preview` serves only the built frontend; it is not the full server/API workflow.
-
-Cloud deployment preparation is documented separately; actual deployment and the first new paid configuration remain pending.
-
-## Check a change
-
-From `aistudio-export-2026-10-07/`:
-
-```powershell
 npm test
 npm run lint
 npm run build
 npm run smoke:production
+npm run smoke:artifact
+npm run evaluate:precloud -- --offline --output docs/acceptance/PRECLOUD-teammate-offline-NEW.json
 ```
 
-`npm test` runs offline policy, validator, planning-service and HTTP tests without a real key or live Gemini call. `npm run lint` runs TypeScript checking. `npm run build` checks the production frontend build. Record these results separately from any optional live Gemini test.
+Choose a new evidence filename. Offline evaluation makes no real Gemini call and uses injected identity/model output with MemoryCaseStore. Authentic Firebase emulator testing is separate; see [S3 emulator instructions](docs/S3_CONFIRMATION_CASES.md) and [current evaluation methods](docs/PRECLOUD_EVALUATION.md). `smoke:artifact` performs a fresh production-only lockfile install and validates the native Node runtime folder layout used by the Dockerfile. It does not run a Linux container. The teammate must execute an actual image build and deployment.
 
-`npm run smoke:production` requires the built `dist` directory. It starts its own native Node production server with no Gemini credential, checks HTTP behavior, and stops that process. It makes no live Gemini request. `GET /api/health` is a local/container liveness check; it does not claim model or database readiness.
+## Run the application locally
 
-The handoff checks passed on 2026-10-07: 6 offline tests, TypeScript checking, and the frontend build. See [local validation](docs/local-validation-2026-10-07.md) for exact results and the disclosed dependency packaging fix.
+```powershell
+Copy-Item .env.example .env
+npm run dev
+```
 
-For a live check after resolving the API prerequisite, use the permanent [opt-in runner](aistudio-export-2026-10-07/scripts/check-workflow-live.mjs) and a new evidence filename as described in the S2 acceptance report. The runner requires an environment-only key and explicit `--live`. Use synthetic data and retain actual failures; offline fixtures never stand in for live model output.
+Open http://localhost:3000. Configure a personally authorized `GEMINI_API_KEY` only on the server, never in a `VITE_` variable, screenshot, report or PR. Set `GEMINI_MODEL=gemini-3.1-flash-lite` for the accepted release. Model availability and pricing depend on the operator's project. Public production model routes require trusted Firebase identity and persistent Firestore admission. `npm run preview` serves only static frontend assets and is not the full API app.
 
-## Team handoff
+Default quotas reserve up to six provider attempts per workflow: global concurrency 2, visitor concurrency 1, global 6 runs/minute and 60/day, visitor 2/minute and 12/day. Counters reset by UTC calendar day and persist across instances. Unknown/failed usage is not refunded. The model kill switch stops new analysis while preserving owned case readback. Quotas and budget alerts do not guarantee a currency spending cap.
 
-The AI lead handles approved development and integration. The captain handles account/paid-resource steps, and the teammate reviews policy labels and cross-accepts the app. Follow [CONTRIBUTING.md](CONTRIBUTING.md); use a fork and PR, or a feature branch if invited to the repository.
+`GET /api/health` is liveness. `GET /api/ready` checks configuration and a bounded Firestore read, makes zero model calls, and does not prove Auth IAM, Gemini access, indexes or complete resource acceptance. Follow the real-resource scenario checklist rather than relying on a green probe.
+
+## Team and submission handoff
+
+Owner A reviews policy, local evidence and submission claims. Teammate B operates authorized Google Cloud/Firebase resources and returns real deployment/test evidence. Both verify final links and materials. Account consent, billing activation, eligibility and portal declarations require the authorized human. Keep private identity/financial documents outside this public repository.
+
+The proposal is a **precloud review draft** with honest pending product/video links and captain GitHub alias. Complete the final names and cloud evidence after verification. [Recording plan](submission/RECORDING_PLAN.md) targets 165 seconds and requires encoded duration strictly below 180 seconds. Internal freeze is October 16 and submission October 17; verify the actual portal deadline. [Official timeline](https://aibuildercup.com/index.html)
+
+For PRs, follow [CONTRIBUTING.md](CONTRIBUTING.md). Do not change the accepted model, prompts, policy, quota limits or deployment settings during evaluation without creating a new release and retaining earlier evidence.
