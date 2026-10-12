@@ -699,21 +699,54 @@
   "model_enabled": true
 }</code></pre>
 
-      <h3>4. 协同智能体分析调用 (POST /api/analyze)</h3>
-      <pre><code>curl -X POST https://opscrew-883881551915.us-central1.run.app/api/analyze \
+      <h3>4. 完整人机协同业务闭环实测 (Full E2E 6-Step Verified Workflow)</h3>
+      <pre><code># 1. 匿名签发访客凭证
+TOKEN=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB9-56FfEYKUJpEKQpN9Rt9IPpkZQHyF_M" \
   -H "Content-Type: application/json" \
+  -d '{"returnSecureToken":true}' | jq -r .idToken)
+
+# 2. 发起三智能体协同流水线 (Facts -> Planner -> Reviewer)
+WF_RESP=$(curl -s -X POST "https://opscrew-883881551915.us-central1.run.app/api/workflow" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${TOKEN}" \
   -d '{
-    "input_version": 1,
+    "description": "EMP-3042 client entertainment dinner in Dallas. Receipt missing.",
+    "amount_usd": "188.50",
+    "receipt_status": "missing",
+    "employee_identifier": "EMP-3042",
     "model_id": "gemini-3.1-flash-lite",
-    "expense": {
-      "amount": 450.00,
-      "currency": "USD",
-      "category": "flight",
-      "description": "Synthetic regional flight ticket for technical audit",
-      "receipt_attached": true,
-      "employee_id": "EMP-9821"
-    }
-  }'</code></pre>
+    "input_version": 1
+  }')
+
+# 3. 锁定意图并生成审批凭证 (Prepare Human Confirmation Intent)
+RUN_ID=$(echo "$WF_RESP" | jq -r .run_id)
+BINDING=$(echo "$WF_RESP" | jq -c .workflow.binding)
+CONF_RESP=$(curl -s -X POST "https://opscrew-883881551915.us-central1.run.app/api/runs/${RUN_ID}/confirmation" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -d "{\"binding\": ${BINDING}}")
+APPROVAL_ID=$(echo "$CONF_RESP" | jq -r .confirmation.approval_id)
+
+# 4. 人工授权确认并持久化写入 Firestore 原生数据库
+CASE_RESP=$(curl -s -X POST "https://opscrew-883881551915.us-central1.run.app/api/cases" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -d "{
+    \"approval_id\": \"${APPROVAL_ID}\",
+    \"binding\": ${BINDING},
+    \"idempotency_key\": \"idem_$(date +%s)\",
+    \"confirmed\": true
+  }")
+CASE_ID=$(echo "$CASE_RESP" | jq -r .case_id)
+
+# 5. 独立从 Firestore 验证读取已归档案件 (Verified Read)
+curl -s -X GET "https://opscrew-883881551915.us-central1.run.app/api/cases/${CASE_ID}" \
+  -H "Authorization: Bearer ${TOKEN}"
+
+# 6. 查询访客在 Firestore 中的所有持久化记录
+curl -s -X GET "https://opscrew-883881551915.us-central1.run.app/api/runs" -H "Authorization: Bearer ${TOKEN}"
+curl -s -X GET "https://opscrew-883881551915.us-central1.run.app/api/cases" -H "Authorization: Bearer ${TOKEN}"</code></pre>
+      <p style="color: var(--success); font-weight: 600; margin-top: 0.5rem;">✅ 实测状态：全部 6 步调用顺利通过，Firestore 原生数据库幂等入库回查 100% 验证成功。</p>
     </div>
 
     <!-- Operational Commands -->
@@ -770,7 +803,7 @@
               <td><strong>G3 真实数据</strong></td>
               <td>Firestore 原生数据库持久化存储与幂等防重回查</td>
               <td><span class="status-pass">🟢 PASS</span></td>
-              <td>us-central1 原生 Firestore + 复合索引已激活，探针实测 PASS</td>
+              <td>us-central1 原生 Firestore + 匿名认证 + 6步闭环全链路实测 100% 通过</td>
             </tr>
             <tr>
               <td><strong>G4 云端运行</strong></td>

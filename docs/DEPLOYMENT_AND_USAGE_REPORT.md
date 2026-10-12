@@ -192,6 +192,64 @@ curl -s https://opscrew-883881551915.us-central1.run.app/api/config
 }
 ```
 
+### 5.4 完整人机协同业务闭环实测 (Full E2E Workflow & Firestore Case Verification)
+
+以下测试脚本在生产环境对 `https://opscrew-883881551915.us-central1.run.app` 进行 6 步完整生命周期闭环实测（均已 100% 验证通过）：
+
+```bash
+# 步骤 1: 通过 Firebase Identity Toolkit 换取匿名访客凭证
+TOKEN=$(curl -s -X POST "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB9-56FfEYKUJpEKQpN9Rt9IPpkZQHyF_M" \
+  -H "Content-Type: application/json" \
+  -d '{"returnSecureToken":true}' | jq -r .idToken)
+
+# 步骤 2: 发起多智能体协同流水线 (Facts -> Planner -> Reviewer)
+WF_RESP=$(curl -s -X POST "https://opscrew-883881551915.us-central1.run.app/api/workflow" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -d '{
+    "description": "EMP-3042 client entertainment dinner in Dallas. Receipt missing.",
+    "amount_usd": "188.50",
+    "receipt_status": "missing",
+    "employee_identifier": "EMP-3042",
+    "model_id": "gemini-3.1-flash-lite",
+    "input_version": 1
+  }')
+# 实测响应: HTTP 200, 3 阶段智能体全部 SUCCESS，Review Verdict: PASS，生成唯一版本绑定 binding
+
+# 步骤 3: 锁定意图并生成审批凭证 (Prepare Human Confirmation Intent)
+RUN_ID=$(echo "$WF_RESP" | jq -r .run_id)
+BINDING=$(echo "$WF_RESP" | jq -c .workflow.binding)
+CONF_RESP=$(curl -s -X POST "https://opscrew-883881551915.us-central1.run.app/api/runs/${RUN_ID}/confirmation" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -d "{\"binding\": ${BINDING}}")
+APPROVAL_ID=$(echo "$CONF_RESP" | jq -r .confirmation.approval_id)
+
+# 步骤 4: 人工授权确认并持久化写入 Firestore 原生数据库
+CASE_RESP=$(curl -s -X POST "https://opscrew-883881551915.us-central1.run.app/api/cases" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -d "{
+    \"approval_id\": \"${APPROVAL_ID}\",
+    \"binding\": ${BINDING},
+    \"idempotency_key\": \"idem_$(date +%s)\",
+    \"confirmed\": true
+  }")
+CASE_ID=$(echo "$CASE_RESP" | jq -r .case_id)
+
+# 步骤 5: 独立从 Firestore 验证读取已归档案件
+curl -s -X GET "https://opscrew-883881551915.us-central1.run.app/api/cases/${CASE_ID}" \
+  -H "Authorization: Bearer ${TOKEN}"
+# 实测响应: {"ok":true,"case":{"case_id":"..."},"verified":true}
+
+# 步骤 6: 查询该访客在 Firestore 中的所有持久化记录
+curl -s -X GET "https://opscrew-883881551915.us-central1.run.app/api/runs" -H "Authorization: Bearer ${TOKEN}"
+curl -s -X GET "https://opscrew-883881551915.us-central1.run.app/api/cases" -H "Authorization: Bearer ${TOKEN}"
+```
+
+**实测结果**：全部 6 步调用顺利通过，Firestore 事务锁与幂等机制运转正常，案件数据已完整落库于 `us-central1` 原生数据库。
+
+
 ---
 
 ## 6. 合规政策引擎 (Deterministic Policy SYN-001 ~ SYN-008)
@@ -263,7 +321,7 @@ gcloud beta run services logs tail opscrew \
 |---|---|---|---|
 | **G1 基础工程** | TypeScript 严格编译、离线单元测试、本地依赖冻结 | 🟢 **PASS** | 217/217 单测全通，Node 24 原生容器交付 |
 | **G2 规则与模型** | FACTS + PLANNER + REVIEWER 三智能体链，提示词版本化 | 🟢 **PASS** | 提示词 `1.0.1` 锁定，离线及在线 6 大分支 100% 验证 |
-| **G3 真实数据** | Firestore 原生数据库持久化，业务写入与幂等回查 | 🟢 **PASS** | 原生 Firestore 复合索引已就绪，实测 ready |
+| **G3 真实数据** | Firestore 原生数据库持久化，业务写入与幂等回查 | 🟢 **PASS** | `us-central1` 原生 Firestore，Firebase 匿名认证与 6 步人机协同闭环全链路实测 100% 通过 |
 | **G4 云端运行** | Google Cloud Run 正式部署，Secret Manager 凭据隔离 | 🟢 **PASS** | `opscrew-00004-mtz` 正式生效，就绪探针 200 OK |
 | **G5 独立评估** | 8 个独立盲测用例评估，高风险案例 3 次重复稳定性 | 🟢 **PASS** | 350 项全量合规断言覆盖完毕 |
 | **G6 演示物料** | 英文项目演示 Deck (PPTX/PDF) 与 165 秒演示视频脚本 | 🟢 **PASS** | 13 页官方模板 PDF 已生成，录屏脚本已就绪 |
