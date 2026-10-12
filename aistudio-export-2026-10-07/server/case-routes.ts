@@ -4,6 +4,7 @@ import { DomainValidationError, requireRecord, validateVersionBinding } from "..
 import { CaseService, CaseServiceError } from "./case-service.ts";
 import type { ConfirmCommand } from "./case-service.ts";
 import type { VerifySessionToken } from "./firebase-runtime.ts";
+import { ModelAdmissionError } from "./model-admission.ts";
 
 /** A timed-out commit has an unknown outcome; clients retain and replay the exact command. */
 export async function withCaseDeadline<T>(operation: Promise<T>, timeoutMs = 30_000): Promise<T> {
@@ -29,6 +30,10 @@ export async function verifiedOwner(request: Request, verifyIdToken: VerifySessi
   }
 }
 export function sendCaseError(response: Response, error: unknown): void {
+  if (error instanceof ModelAdmissionError) {
+    if (error.status === 429) response.setHeader("Retry-After", String(error.retryAfterSeconds));
+    response.status(error.status).json({ok: false, http_status: error.status, error: {code: error.code, message: error.message}, ...(error.status === 429 ? {retry_after_seconds: error.retryAfterSeconds} : {})}); return;
+  }
   if (error instanceof CaseServiceError) {
     response.status(error.status).json({ok: false, http_status: error.status, error: {code: error.code, message: error.message}}); return;
   }

@@ -154,7 +154,7 @@ async function runChecks(baseUrl) {
   const health = await requestJson(baseUrl, "/api/health", 200);
   assert.equal(health.ok, true);
   assert.equal(health.service, "opscrew");
-  assert.equal(health.stage, "S3");
+  assert.equal(health.stage, "S4");
   checks.push("production health JSON");
 
   const config = await requestJson(baseUrl, "/api/config", 200);
@@ -165,7 +165,13 @@ async function runChecks(baseUrl) {
   assert(!Object.hasOwn(config, "api_key"), "Configuration must not return a key.");
   checks.push("non-sensitive configuration JSON without credentials");
 
-  const missingKey = await requestJson(baseUrl, "/api/analyze", 500, {
+  const readiness = await requestJson(baseUrl, "/api/ready", 503);
+  assert.equal(readiness.ok, false);
+  assert.equal(readiness.ready, false);
+  assert.equal(readiness.error?.code, "SANDBOX_NOT_READY");
+  checks.push("readiness fails closed without real persistence and a model key");
+
+  const missingKey = await requestJson(baseUrl, "/api/analyze", 503, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
@@ -176,21 +182,21 @@ async function runChecks(baseUrl) {
     }),
   });
   assert.equal(missingKey.ok, false);
-  assert.equal(missingKey.error?.code, "MISSING_API_KEY");
-  assert.equal(missingKey.http_status, 500);
+  assert.equal(missingKey.error?.code, "MODEL_LIMITS_UNAVAILABLE");
+  assert.equal(missingKey.http_status, 503);
   assert.equal(missingKey.upstream_status, null);
   assert(!Object.hasOwn(missingKey, "facts"), "Missing credentials must not produce fabricated facts.");
-  checks.push("missing-key analysis fails before any Gemini call");
+  checks.push("production analysis fails closed without persistent model admission");
 
-  const missingWorkflowKey = await requestJson(baseUrl, "/api/workflow", 500, {
+  const missingWorkflowKey = await requestJson(baseUrl, "/api/workflow", 503, {
     method: "POST", headers: { "content-type": "application/json" },
     body: JSON.stringify({ description: "[SYNTHETIC] EMP-1042 spent $38.00; receipt missing.", amount_usd: "38.00", receipt_status: "missing", employee_identifier: "EMP-1042" }),
   });
-  assert.equal(missingWorkflowKey.error?.code, "MISSING_API_KEY");
+  assert.equal(missingWorkflowKey.error?.code, "MODEL_LIMITS_UNAVAILABLE");
   assert.equal(missingWorkflowKey.facts, null);
   assert.equal(missingWorkflowKey.workflow, null);
   assert.deepEqual(missingWorkflowKey.steps, []);
-  checks.push("missing-key workflow fails without facts, plan or model attempts");
+  checks.push("production workflow fails without facts, plan or model attempts");
 
   const notFound = await requestJson(baseUrl, "/api/smoke-route-that-does-not-exist", 404);
   assert.equal(notFound.ok, false);

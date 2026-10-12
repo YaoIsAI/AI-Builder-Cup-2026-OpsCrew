@@ -1,0 +1,7 @@
+# Preserve exported evidence bytes and keep document/image diffs binary.
+*.pdf binary
+*.pptx binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary

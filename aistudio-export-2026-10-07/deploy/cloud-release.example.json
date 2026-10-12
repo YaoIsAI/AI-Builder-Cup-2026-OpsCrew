@@ -1,0 +1,17 @@
+{
+  "projectId": "REPLACE_WITH_PROJECT_ID",
+  "region": "REPLACE_WITH_CONFIRMED_REGION",
+  "serviceName": "opscrew",
+  "artifactRepository": "opscrew",
+  "buildBucket": "REPLACE_WITH_PRIVATE_BUILD_BUCKET",
+  "builderServiceAccount": "REPLACE_WITH_BUILDER_SERVICE_ACCOUNT_EMAIL",
+  "runtimeServiceAccount": "REPLACE_WITH_RUNTIME_SERVICE_ACCOUNT_EMAIL",
+  "geminiSecretName": "opscrew-gemini-api-key",
+  "geminiSecretVersion": "REPLACE_WITH_NUMERIC_SECRET_VERSION",
+  "geminiModel": "gemini-3.1-flash-lite",
+  "firebase": {
+    "webApiKey": "REPLACE_WITH_SEPARATE_PUBLIC_FIREBASE_WEB_KEY",
+    "authDomain": "REPLACE_WITH_FIREBASE_AUTH_DOMAIN",
+    "appId": "REPLACE_WITH_FIREBASE_WEB_APP_ID"
+  }
+}

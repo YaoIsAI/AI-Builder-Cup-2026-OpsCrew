@@ -5,18 +5,19 @@ FROM node:24-bookworm-slim AS build
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --no-audit --no-fund
 
 COPY . .
 RUN npm run build \
-    && npm prune --omit=dev \
+    && npm prune --omit=dev --no-audit --no-fund \
     && npm cache clean --force
 
 FROM node:24-bookworm-slim AS runtime
 
 ENV NODE_ENV=production \
     PORT=8080 \
-    GEMINI_MODEL=gemini-3.1-flash-lite
+    GEMINI_MODEL=gemini-3.1-flash-lite \
+    OPSCREW_FIREBASE_MODE=disabled
 WORKDIR /app
 
 COPY --from=build --chown=node:node /app/package.json /app/package-lock.json ./

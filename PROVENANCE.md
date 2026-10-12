@@ -16,6 +16,9 @@ Real successful runtime envelopes are saved in [runtime evidence](docs/runtime-e
 
 The AI Studio editor URL and development preview are not a formal public contest deployment. No GitHub push, Publish, billing activation or recharge was executed during the initial creation/acceptance phase.
 
+## Precloud continuation and source origin (2026-10-11)
+
+S3 was accepted and merged through PR #3 into main at `dd0fb3f8cff460b725588447be1d94556ee7f8bb`. The current precloud continuation is locally authored on that Google Build foundation. It adds persistent shared model admission, request ordering and absolute HTTP deadlines, model parameter compatibility, production runtime/deployment instructions, evaluation tooling and new English proposal/recording material. No earlier non-Google application code, proposal deck or video is reused. The owner-supplied official blank submission template and owner-reported Gemini-generated logo are the retained material assets. Public local emulator/development tests do not establish independent held-out, cloud or submitted acceptance. [Current precloud acceptance](docs/acceptance/PRECLOUD-readiness-2026-10-11.md) records exact results and limitations. Sections below preserve historical checkpoints.
 ## Local packaging and GitHub handoff — 2026-10-07
 
 The user subsequently authorized a new public repository at `sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew`. This repository contains only the Google Build prototype and its handoff documentation; the older local application is excluded.

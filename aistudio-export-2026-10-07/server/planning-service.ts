@@ -6,7 +6,7 @@ import {
 } from "../src/domain/contracts.ts";
 import type { ExpenseFacts, PolicyDecision, ProposedCase, VersionBinding } from "../src/domain/contracts.ts";
 import { assertPlanMatchesPolicy, evaluatePolicy, policyCitations, SYNTHETIC_USD_POLICY } from "../src/domain/policy.ts";
-import { ALLOWED_GEMINI_MODELS, PROMPT_VERSIONS, PLANNING_CALL_TIMEOUT_MS, PLANNING_TOTAL_TIMEOUT_MS } from "./runtime-config.ts";
+import { ALLOWED_GEMINI_MODELS, PROMPT_VERSIONS, PLANNING_CALL_TIMEOUT_MS, PLANNING_TOTAL_TIMEOUT_MS, geminiGenerationControls } from "./runtime-config.ts";
 import type {
   PlanningGenerateContentArgs, PlanningGenerateContentFn, PlanningGenerateContentResult,
   PlanningReviewResult, PlanningStep, TokenUsage,
@@ -94,7 +94,7 @@ async function defaultGenerateContent(args: PlanningGenerateContentArgs): Promis
     config: {
       abortSignal: args.abortSignal,
       systemInstruction: args.systemInstruction,
-      temperature: 0,
+      ...geminiGenerationControls(args.model, 0),
       maxOutputTokens: 2_048,
       responseMimeType: "application/json",
       responseJsonSchema: args.responseJsonSchema,

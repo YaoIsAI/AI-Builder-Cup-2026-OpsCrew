@@ -8,9 +8,10 @@ import { initializeApp, deleteApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { createApp } from "../server.ts";
-import { CaseService, FirestoreCaseStore } from "../server/case-service.ts";
+import { CaseService, FirestoreCaseStore, sha256 } from "../server/case-service.ts";
 import { POLICY_VERSION } from "../src/domain/contracts.ts";
 import { PROMPT_VERSIONS } from "../server/runtime-config.ts";
+import { DEFAULT_MODEL_ADMISSION_POLICY, ModelAdmissionService } from "../server/model-admission.ts";
 
 const appDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const acceptanceDirectory = resolve(appDirectory, "../docs/acceptance");
@@ -90,7 +91,7 @@ function alteredToken(token, overrides) {
 }
 
 async function sourceSnapshot() {
-  const sources = ["package.json", "package-lock.json", "server.ts", "server/case-service.ts", "server/case-routes.ts", "server/firebase-runtime.ts", "server/runtime-config.ts", "scripts/check-s3-emulator.mjs", "fixtures/development-cases.json", "firebase.json", "firestore.rules", "firestore.indexes.json"];
+  const sources = ["package.json", "package-lock.json", "server.ts", "server/case-service.ts", "server/case-routes.ts", "server/firebase-runtime.ts", "server/runtime-config.ts", "server/model-admission.ts", "scripts/check-s3-emulator.mjs", "fixtures/development-cases.json", "firebase.json", "firestore.rules", "firestore.indexes.json"];
   const hashes = Object.fromEntries(await Promise.all(sources.map(async (file) => [file, createHash("sha256").update(await readFile(resolve(appDirectory, file))).digest("hex")])));
   let revision = null;
   let dirty = null;
@@ -175,7 +176,12 @@ async function main() {
   };
   const fixtures = JSON.parse(await readFile(resolve(appDirectory, "fixtures/development-cases.json"), "utf8"));
   let selectedFixture = fixtures.cases.find((item) => item.id === "DEV-04");
-  const service = new CaseService({ store, now: () => clock.now });
+  // This multi-case safety harness explicitly raises its quota; production defaults
+  // remain covered separately. Approval-expiry clock travel cannot move HTTP deadlines.
+  const harnessAdmissionPolicy = {...DEFAULT_MODEL_ADMISSION_POLICY,
+    globalMinuteRequests: 100, ownerMinuteRequests: 100, globalDailyRequests: 500, ownerDailyRequests: 500,
+    globalMinuteCalls: 600, ownerMinuteCalls: 600, globalDailyCalls: 3000, ownerDailyCalls: 3000};
+  const service = new CaseService({ store, now: () => clock.now, admissionNow: Date.now, admissionPolicy: harnessAdmissionPolicy });
   const runtime = {
     config: {
       enabled: true, mode: "emulator",
@@ -241,6 +247,51 @@ async function main() {
       await assert.rejects(auth.verifyIdToken(alteredToken(alice.token, { exp: 1 })));
       await assert.rejects(auth.verifyIdToken(alteredToken(alice.token, { aud: "demo-another-project" })));
       await assert.rejects(auth.verifyIdToken("invalid-token"));
+    });
+    await check("Default Firestore model allowances survive service restart and isolate visitors", async () => {
+      const budgetStore = new FirestoreCaseStore(db, `${namespace}_quota`);
+      const budget = new ModelAdmissionService({store: budgetStore});
+      const restarted = new ModelAdmissionService({store: new FirestoreCaseStore(db, `${namespace}_quota`)});
+      const inputDigest = sha256({synthetic: true, purpose: "default-quota-emulator-regression"});
+      const first = await budget.reserve(alice.uid, "quota-first", inputDigest);
+      await assert.rejects(restarted.reserve(alice.uid, "quota-overlap", inputDigest), error => error.code === "MODEL_BUSY");
+      const second = await restarted.reserve(bob.uid, "quota-second", inputDigest);
+      const thirdVisitor = await localIdentity(authHost);
+      await assert.rejects(budget.reserve(thirdVisitor.uid, "quota-global-overlap", inputDigest), error => error.code === "MODEL_BUSY");
+      await budget.release(first); await restarted.release(second);
+      const next = await restarted.reserve(alice.uid, "quota-next", inputDigest); await restarted.release(next);
+      await assert.rejects(budget.reserve(alice.uid, "quota-minute-exhausted", inputDigest), error => error.code === "MODEL_RATE_LIMIT");
+      const usage = await budgetStore.get("usage", "global");
+      assert.equal(usage.day_requests, 3); assert.equal(usage.day_calls, 18); assert.equal(usage.leases.length, 0);
+      assert.equal((await db.collection(`${namespace}_quota_cases`).get()).size, 0);
+      return {storage: "genuine Firestore emulator", production_default_policy: DEFAULT_MODEL_ADMISSION_POLICY,
+        observed_reserved_requests: usage.day_requests, observed_reserved_calls: usage.day_calls,
+        shared_instances: 2, model_calls: 0, case_count: 0};
+    });
+    await check("Late Firestore run creation cannot replace a newer durable reservation head", async () => {
+      const orderStore = new FirestoreCaseStore(db, `${namespace}_order`);
+      const nativeTransaction = orderStore.runTransaction.bind(orderStore);
+      let delayNext = false, release, entered;
+      const gate = new Promise(resolveGate => {release = resolveGate;});
+      const enteredGate = new Promise(resolveEntered => {entered = resolveEntered;});
+      orderStore.runTransaction = async operation => {
+        if (delayNext) {delayNext = false; entered(); await gate;}
+        return nativeTransaction(operation);
+      };
+      const orderService = new CaseService({store: orderStore, admissionPolicy: {...harnessAdmissionPolicy, ownerConcurrent: 2}});
+      const intake = {synthetic: true, purpose: "late-create-emulator-regression"}, inputDigest = sha256(intake);
+      const oldTicket = await orderService.modelAdmission.reserve(alice.uid, "older-create", inputDigest);
+      delayNext = true;
+      const late = orderService.createRun(alice.uid, intake, 1, oldTicket); await enteredGate;
+      const newTicket = await orderService.modelAdmission.reserve(alice.uid, "newer-create", inputDigest);
+      const current = await orderService.createRun(alice.uid, intake, 1, newTicket);
+      release(); await assert.rejects(late, error => error.code === "STALE_VERSION");
+      const head = await orderStore.get("heads", sha256({uid: alice.uid}));
+      assert.equal(head.run_id, current.run_id); assert.equal(head.request_sequence, newTicket.sequence);
+      assert.equal((await orderStore.list("runs", alice.uid)).length, 1);
+      await orderService.modelAdmission.release(oldTicket); await orderService.modelAdmission.release(newTicket);
+      return {storage: "genuine Firestore emulator", delayed_at: "before older transaction dispatch",
+        head_matches_newer_reservation: true, persisted_run_count: 1, model_calls: 0};
     });
     await startServer();
     let firstPlan;
@@ -455,7 +506,7 @@ async function main() {
     await check("HTTP service restart restores owned history and case readback from Firestore", async () => {
       await closeServer(server); server = null;
       // Replace the service object as well as the HTTP server; only emulator data and auth survive.
-      runtime.caseService = new CaseService({ store: new FirestoreCaseStore(db, namespace), now: () => clock.now });
+      runtime.caseService = new CaseService({ store: new FirestoreCaseStore(db, namespace), now: () => clock.now, admissionNow: Date.now, admissionPolicy: harnessAdmissionPolicy });
       await startServer();
       const history = await request(base, "GET", "/api/cases", alice.token);
       assert.equal(history.status, 200); assert(history.body.cases.some((item) => item.case_id === recoveryCaseId));
@@ -508,6 +559,7 @@ async function main() {
       started_at: startedAt, completed_at: new Date().toISOString(),
       project_id: DEMO_PROJECT, auth_host: authHost, firestore_host: firestoreHost,
       storage_namespace: namespace, final_counts: await counts(),
+      workflow_harness_admission_policy: harnessAdmissionPolicy,
       source_snapshot: sources, policy_version: POLICY_VERSION, prompt_versions: PROMPT_VERSIONS,
       requested_model_id: "gemini-3.1-flash-lite", observed_provider_model: "offline-public-fixture",
       model_source: "injected-public-development-fixtures", injected_provider_calls: modelCalls,

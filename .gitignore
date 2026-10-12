@@ -22,3 +22,9 @@ nul
 # Local Firebase emulator state and downloaded tool/runtime caches
 .firebase/
 .tools/
+
+# Private presentation render/finalizer workspace
+.materials-build/
+
+# Operator-specific release configuration
+**/cloud-release.local.json

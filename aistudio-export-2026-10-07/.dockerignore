@@ -29,3 +29,8 @@
 **/*-key.json
 **/*-credentials.json
 **/application_default_credentials.json
+**/.firebase
+**/.tools
+**/*local.json
+**/deploy
+**/scripts

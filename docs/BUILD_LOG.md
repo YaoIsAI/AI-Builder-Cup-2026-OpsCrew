@@ -1,5 +1,13 @@
 # Build log
 
+## Precloud continuation, October 11–12, 2026
+
+S3 was actually merged through PR #3 at `dd0fb3f8cff460b725588447be1d94556ee7f8bb`. The continuation branch `feat/precloud-readiness` adds persistent workflow/call admission, UTC quotas and leases, 90-second total request deadlines, bounded readiness, durable late-create ordering, SDK request compatibility, production-only native packaging, a private digest-pinned cloud release helper and explicit quota information. The runtime is frozen at canonical source digest `833c353f2fee85d7207d5ff5a44d36ab52fafa11e96f650a1f1005f22edac3de`.
+
+Final local validation: 216/216 offline regressions, lint/build, authentic Auth/Firestore emulator 27/27, semantic/fault 350/350 assertions and fresh artifact 12/12 including nine HTTP checks. Production audit zero; development-tool findings retained. Three public local Gemini branches passed after three initial network failures; all attempts remain recorded, known tokens 11,544 plus unknown failed usage, cost unknown. Browser review confirmed explicit consent/readback, edit invalidation, same-UID reload/history and narrow-screen keyboard flow with explicitly injected model output. English official-template thirteen-slide editable proposal/PDF and a 165-second recording plan were prepared and reviewed page by page.
+
+See [current acceptance and test methods](acceptance/PRECLOUD-readiness-2026-10-11.md), [evaluation status](EVALUATION.md), [material review](acceptance/PRECLOUD-materials-review-2026-10-12.md), [release inventory](../RELEASE_MANIFEST.json) and [teammate cloud handoff](CLOUD_TEAMMATE_HANDOFF.md). The old S3 cleanup block was resolved by the owner's cleanup and read-only verification; current-run cleanup is recorded separately after execution. Actual Linux image build, real cloud G3/G4, independent G5, final G6 public video/product links and G7 Submitted receipt remain pending. Historical entries below retain their original evidence and dates.
+
 All records distinguish observed results from planned capabilities. No credentials belong in this file.
 
 | Date (Asia/Shanghai) | Origin and work | Verification boundary |

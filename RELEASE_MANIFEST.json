@@ -1,0 +1,104 @@
+{
+  "schema_version": "opscrew-precloud-release-1.0.0",
+  "prepared_date": "2026-10-12",
+  "timezone": "Asia/Shanghai",
+  "stage": "PRECLOUD_REVIEW",
+  "repository": "https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew",
+  "review_branch": "feat/precloud-readiness",
+  "s3_main_base_commit": "dd0fb3f8cff460b725588447be1d94556ee7f8bb",
+  "implementation_commit": null,
+  "commit_binding_policy": "After the implementation commit, record that SHA in a manifest-only commit. Deploy the exact accepted PR head or merged main SHA and record it independently in new CLOUD evidence; this document cannot contain its own final commit hash.",
+  "runtime_source_binding": {
+    "canonical_sources_sha256": "833c353f2fee85d7207d5ff5a44d36ab52fafa11e96f650a1f1005f22edac3de",
+    "byte_policy": "UTF-8 text, CRLF replaced with LF only; raw file SHA-256 also retained. Canonical JSON sorts keys without changing arrays.",
+    "files": {
+      "package.json": "6c8e1c9ec5d8db1a623a2ae4582416378f6574ec936001358584cb520f3f264d",
+      "package-lock.json": "56f765d3d0010e341a736a4239cad42872bfa641dcf4026e8efbf441a0453c79",
+      "server.ts": "b44a11c3decf3ed48552370f856fc1606ea56f5b85847124588f7429bce4dd57",
+      "server/runtime-config.ts": "c2612bd6bcf6d1fb5b78163b6c83cff647293e69cb8d8a8e37cdf637889ea9e0",
+      "server/planning-service.ts": "fbf1888be93d3833e5db650df4103c2755fa6e2e3d609e262cef871718eab1ae",
+      "server/planning-contracts.ts": "4f59d0b0af2ed01c8e46afd7699219419f53a1147a1646f0a3e8dd78aa9ee71c",
+      "server/case-service.ts": "e02bbc486f45b5ad78094b750c79468b7fc48c925cbaa0d2c7721500889d278d",
+      "server/case-routes.ts": "70d8b913f7b3add03e19382e6e304be238db8a6132a26f18142bfaff7187353c",
+      "server/firebase-runtime.ts": "494211f6a2f106efed747e51084356f62847884aeb5860bd39cfbf2fc842bb4b",
+      "server/model-admission.ts": "7d0e8ac9d3903af0d75c0bfb1e04a2606b7c81b48cf56478e6961ae6afc51c14",
+      "src/domain/contracts.ts": "f886004efd3b260155c7e4d4cc6d20a76d734a07c9b37066910b0cbfa931af3a",
+      "src/domain/policy.ts": "6a7609217c182579a0b72a451bfb61abfa3433cd6bbc743ed5e07f7aff25c678",
+      "src/domain/workflow.ts": "4d79b119c6bc88c3e2113bebf100edb6da6785b6bd63feab072d2d896078dcba",
+      "src/App.tsx": "b08465e33cb1533167eb8cef914e283eae5bda3bf53848931b643c1b7dc78a2a",
+      "src/components/CaseConfirmation.tsx": "ca67fbbf040c7995a283897a6057e851b9878146f4e5283acddfa656cae86830",
+      "src/components/WorkflowReview.tsx": "a7a231b3adf0110a7a940719362a741de8067273154eb8da5be0cbe669485d35",
+      "src/lib/case-client.ts": "beabbb519e4b267a74d3ae2d2579923272f4365d266756014c6d4a071b4c77be",
+      "src/lib/firebase-session.ts": "a37a8479130dcf57fce0c9df12ce884293b2a62a591a40dbc0bcd44dfd1b932a",
+      "src/index.css": "7aa67a643b1d6cee0b64c9719fa3e32e780e9a09a5ae8af476c53bbc23ec8b78",
+      "src/main.tsx": "30d02ee59cb6576973dea4368093b2dcae692a40668f288fdbc66a114873fcd3",
+      "fixtures/development-cases.json": "bb61b80d158f24dafc2e18274d0a5b9c02cf44296649e550bccb0aabd5fe00c7",
+      "firestore.rules": "1990874ed70e379d013db242e2210ff61537c305be1ec35171004ffb30853709",
+      "firestore.indexes.json": "0c634c030b88d477779f7078f059db1e27cf4f52f4f7458315af93d68ff3abd4",
+      "firebase.json": "bfd28943974b7623fc757f8677194303cf87b2ed1edb67593c4827dcdc56b311",
+      "scripts/evaluate-precloud.mjs": "4c0e8260617fd4ce594014fd09dae4a482ea3dbfd6622d7b4d2a3f0ff3012379",
+      "scripts/check-s3-emulator.mjs": "66c1682d7bfa87c47ccc642d11df292f3928fa9fd4472f312aa58b774cfd3e7c",
+      "scripts/smoke-production.mjs": "256d7f4025ac5b7c9f7c0782dc57901b9ef5e8507fa55e5dfbc58b3711ffa5d4",
+      "Dockerfile": "7c07a7a4229159a850582b7d6ce66323caaf5d132ba771559517a19bec364fd8",
+      ".dockerignore": "199530e0d27c2b097d893b99971f4d3d4f2cacc35f067098ddf8f8dedde4288e",
+      "vite.config.ts": "a7aa711292e5ad7eb10f7a17f5f34fbbf75c7b7c24d59cb0212c60bc493c3208",
+      "tsconfig.json": "6624845b5855cb0c547da44d56785371aaf4f77920440f93b685484456952468",
+      "index.html": "abd1bfe158806da8fbef1f48661c6f0f7cb1985768dfc15df867daf772de9f63"
+    }
+  },
+  "materials": {
+    "submission/OpsCrew_Proposal_Precloud_final-review.pptx": {
+      "sha256": "c5d1aa1663d23d53cd7a023593cbbd34225d8e86e41ed1cd8fdac27060afef58",
+      "bytes": 932027
+    },
+    "submission/OpsCrew_Proposal_Precloud_final-review.pdf": {
+      "sha256": "e8d1b44ac5b6cc77a23f736839be95ba5cf03e102e5a8d174f914575fd0e4697",
+      "bytes": 2532018
+    },
+    "submission/assets/official-submission-template.pptx": {
+      "sha256": "2c2dbb4a1a8a6f85fe8767744442d4d5697ae43e936fefd0bbbb05321c1514fe",
+      "bytes": 962802
+    },
+    "submission/assets/team-logo.png": {
+      "sha256": "73e178f543dd8a18431f3cc7de04bb3b578ff20902a6e329dc22b3a37d7f8edf",
+      "bytes": 63098
+    },
+    "submission/RECORDING_PLAN.md": {
+      "sha256": "adfd3b265fb8693f36d92442644e5a3eb915b34872112841d10a64a1ca36bc1f",
+      "bytes": 5664
+    },
+    "submission/build-proposal.mjs": {
+      "sha256": "0120ca521767dbfbd437f08987ae9ff337d9720405c1c3f969d7c09ecb3672f6",
+      "bytes": 18649
+    }
+  },
+  "acceptance": {
+    "report": "docs/acceptance/PRECLOUD-readiness-2026-10-11.md",
+    "offline_tests": "216/216",
+    "auth_firestore_emulator_groups": "27/27",
+    "semantic_assertions": "350/350",
+    "production_http": "9/9",
+    "artifact_groups": "12/12 including the 9 HTTP groups",
+    "live_public_case_rechecks": "3/3 passed; all 3 initial network failures retained",
+    "linux_container_build": "NOT_RUN",
+    "production_audit_findings": 0,
+    "independent_heldout": "PENDING_TEAMMATE",
+    "real_cloud_g3_g4": "PENDING_TEAMMATE"
+  },
+  "deployment": {
+    "source_commit": null,
+    "build_id": null,
+    "image_digest": null,
+    "cloud_run_revision": null,
+    "url": null,
+    "reason": "No cloud operation performed in local preparation"
+  },
+  "submission": {
+    "proposal_status": "English precloud review draft; actual public names/product/video pending",
+    "video_plan": "165 seconds; final actual video must be under 180 seconds",
+    "video_url": null,
+    "submitted_receipt": null,
+    "g6": "PENDING_REAL_CLOUD_AND_FINAL_MATERIALS",
+    "g7": "PENDING_ACTUAL_SUBMISSION"
+  }
+}

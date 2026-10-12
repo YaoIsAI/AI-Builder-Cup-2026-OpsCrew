@@ -1,5 +1,19 @@
 # Delivery workboard
 
+## Current precloud handoff (2026-10-11)
+
+S3 is merged into main through PR #3, merge `dd0fb3f`. The reviewed continuation on `feat/precloud-readiness` is ready for local acceptance and teammate cloud work. Exact methods and outcomes are in [precloud acceptance](acceptance/PRECLOUD-readiness-2026-10-11.md), [evaluation](PRECLOUD_EVALUATION.md), [current deployment runbook](PRECLOUD_DEPLOYMENT.md), and [cloud handoff](CLOUD_TEAMMATE_HANDOFF.md). Historical sections below retain their original dates and results.
+
+- Local engineering: 216/216 offline tests, lint/build, 27/27 authentic Firebase emulator groups, 12/12 fresh pruned runtime groups. Production audit: zero findings; development findings remain disclosed.
+- Semantic/fault evaluation: 12 public cases, four predefined high-risk scenarios each three times, six fault operations, 350 assertions. Injected outputs establish contract behavior, not model quality or independent custody.
+- New real local Gemini: DEV-01/04/10 passed after local proxy repair. Three earlier unavailable results are retained. Known tokens 11,544 plus three unknown attempts, cost unknown.
+- English official-template proposal PDF/editable PPTX and 165-second recording plan prepared. Draft names/product/video statuses require verified owner/cloud data before submission.
+- Teammate executes actual Linux image build, real Cloud/Firebase G3/G4, separate-machine held-out custody/first live evaluation and actual cloud stability. Owner and teammate finalize G6 materials/public links, then G7 actual Submitted receipt.
+- No cloud resource, account configuration, billing activation, portal submit or public video publication was performed in this local stage.
+
+## Historical board snapshot (October 10)
+
+
 Updated: 2026-10-10 (Asia/Shanghai). The user approved the delivery plan and USD 40 management target on October 8. S0/S1 local preparation and engineering checks passed; their external prerequisites remain unresolved. The user authorized S2 on October 9 and explicitly deferred cloud deployment. G2 local functional acceptance passed across disclosed real-model checkpoints; S2 is now merged into `main` at `c967803051966533f4c6f99cafb057dd3da087f0`, with the accepted S2 tree `d02d547`. The user then authorized S3. S3 local development and acceptance passed with genuine local Firebase emulators, injected model fixtures and browser verification. **G3 remains pending** because the required authorized real Firebase write/readback has not run. S3 source is handed off for review on `feat/s3-confirmation-cases`; the full stage also retains an explicitly blocked temporary-file cleanup gate. Historical failures and checkpoints remain preserved. See [scope](../SCOPE.md), [submission checklist](../SUBMISSION_CHECKLIST.md), and [evaluation protocol](EVALUATION_PROTOCOL.md).
 
 ## Ownership

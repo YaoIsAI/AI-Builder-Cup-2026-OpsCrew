@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
 import type { Express, NextFunction, Request, Response } from "express";
-import { GoogleGenAI, ThinkingLevel, Type } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import {
   PORT,
   ALLOWED_GEMINI_MODELS,
@@ -15,6 +15,7 @@ import {
   WORKFLOW_ABORT_TIMEOUT_MS,
   PLANNING_CALL_TIMEOUT_MS,
   PROMPT_VERSIONS,
+  geminiGenerationControls,
 } from "./server/runtime-config.ts";
 import { PlanningReviewError, runPlanningReview } from "./server/planning-service.ts";
 import type { PlanningReviewResult, PlanningStep, TokenUsage, WorkflowResponse } from "./server/planning-contracts.ts";
@@ -22,6 +23,8 @@ import { POLICY_VERSION } from "./src/domain/contracts.ts";
 import { createFirebaseRuntime } from "./server/firebase-runtime.ts";
 import type { FirebaseRuntime } from "./server/firebase-runtime.ts";
 import { createCaseRouter, sendCaseError, verifiedOwner, withCaseDeadline } from "./server/case-routes.ts";
+import type { ModelAdmissionTicket } from "./server/model-admission.ts";
+import {sha256} from "./server/case-service.ts";
 
 export {
   PORT,
@@ -663,6 +666,7 @@ export interface GenerateContentCallArgs {
   promptPayload: string;
   systemInstruction: string;
   abortSignal: AbortSignal;
+  timeoutMs?: number;
 }
 
 export interface GenerateContentCallResult {
@@ -682,7 +686,7 @@ async function defaultGenerateContent(
   const ai = new GoogleGenAI({
     apiKey: args.apiKey,
     httpOptions: {
-      timeout: GEMINI_SDK_TIMEOUT_MS,
+      timeout: args.timeoutMs ?? GEMINI_SDK_TIMEOUT_MS,
       retryOptions: {
         // The service records and bounds each attempt; no hidden SDK retry.
         attempts: 1,
@@ -696,18 +700,14 @@ async function defaultGenerateContent(
     },
   });
 
-  const isGemini38Flash = args.model.toLowerCase() === "gemini-3.8-flash";
-
   const response = await ai.models.generateContent({
     model: args.model,
     contents: args.promptPayload,
     config: {
       abortSignal: args.abortSignal,
       systemInstruction: args.systemInstruction,
-      temperature: 0.1,
-      ...(isGemini38Flash
-        ? { thinkingConfig: { thinkingLevel: ThinkingLevel.LOW } }
-        : {}),
+      ...geminiGenerationControls(args.model, 0.1),
+      maxOutputTokens: 2_048,
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
@@ -786,6 +786,8 @@ export interface CreateAppOptions {
   planningCallTimeoutMs?: number;
   planningTotalTimeoutMs?: number;
   planningRetryDelayMs?: number;
+  modelEnabled?: boolean;
+  caseStorageTimeoutMs?: number;
 }
 
 function toTokenUsage(response: GenerateContentCallResult): TokenUsage | null {
@@ -832,16 +834,38 @@ export function createApp(options: CreateAppOptions = {}): Express {
   app.use(express.json({ limit: "64kb" }));
 
   const generateContentFn = options.generateContentFn ?? defaultGenerateContent;
-  const routeTimeoutMs = options.routeTimeoutMs ?? ROUTE_ABORT_TIMEOUT_MS;
+  const routeTimeoutMs = Math.min(options.routeTimeoutMs ?? ROUTE_ABORT_TIMEOUT_MS, ROUTE_ABORT_TIMEOUT_MS);
+  const modelEnabledText = process.env.OPSCREW_MODEL_ENABLED?.trim();
+  if (modelEnabledText && modelEnabledText !== "true" && modelEnabledText !== "false") throw new Error("OPSCREW_MODEL_ENABLED must be true or false.");
+  const modelEnabled = options.modelEnabled ?? modelEnabledText !== "false";
+  const storageTimeoutMs = options.caseStorageTimeoutMs === undefined ? 30_000 : Math.min(30_000, Math.max(1, options.caseStorageTimeoutMs));
+  const hasModelKey = () => {
+    const key = options.apiKeyOverride ?? process.env.GEMINI_API_KEY;
+    return Boolean(key?.trim() && key !== "MY_GEMINI_API_KEY");
+  };
 
   // Endpoint to inspect non-sensitive server configuration
   app.get("/api/health", (_req: Request, res: Response) => {
     res.status(200).type("application/json").json({
       ok: true,
       service: "opscrew",
-      stage: "S3",
+      stage: "S4",
       case_backend_mode: caseRuntime.config.mode,
     });
+  });
+
+  // Liveness is deliberately separate from deployability. This probe makes no model call.
+  app.get("/api/ready", async (_req: Request, res: Response) => {
+    const production = process.env.NODE_ENV === "production";
+    if (!modelEnabled || !hasModelKey() || !caseRuntime.config.enabled || !caseRuntime.caseService || !caseRuntime.verifyIdToken || production && caseRuntime.config.mode !== "firestore") {
+      res.status(503).json({ok: false, ready: false, stage: "S4", error: {code: "SANDBOX_NOT_READY", message: "The sandbox's model, trusted identity and persistent storage configuration must be ready before use."}}); return;
+    }
+    try {
+      await withCaseDeadline(caseRuntime.caseService.modelAdmission.readiness(), 5_000);
+      res.json({ok: true, ready: true, stage: "S4", case_backend_mode: caseRuntime.config.mode, model_calls: 0});
+    } catch {
+      res.status(503).json({ok: false, ready: false, stage: "S4", error: {code: "SANDBOX_STORAGE_NOT_READY", message: "Persistent sandbox storage is unavailable. No model call was made."}});
+    }
   });
 
   app.get("/api/config", (_req: Request, res: Response) => {
@@ -857,11 +881,14 @@ export function createApp(options: CreateAppOptions = {}): Express {
       route_timeout_ms: routeTimeoutMs,
       max_attempts: GEMINI_MAX_ATTEMPTS,
       api_key_configured: keyConfigured,
-      stage: "S3",
+      stage: "S4",
       case_backend: caseRuntime.config,
       policy_version: POLICY_VERSION,
-      workflow_timeout_ms: options.workflowTimeoutMs ?? WORKFLOW_ABORT_TIMEOUT_MS,
+      workflow_timeout_ms: Math.min(options.workflowTimeoutMs ?? WORKFLOW_ABORT_TIMEOUT_MS, WORKFLOW_ABORT_TIMEOUT_MS),
       planning_step_timeout_ms: PLANNING_CALL_TIMEOUT_MS,
+      model_enabled: modelEnabled,
+      model_admission: {enabled: Boolean(caseRuntime.caseService), limits: caseRuntime.caseService?.modelAdmission.policy ?? null,
+        workflow_reserved_calls: 6, facts_reserved_calls: 2, reset_timezone: "UTC", unknown_usage_refunded: false},
     });
   });
 
@@ -872,11 +899,42 @@ export function createApp(options: CreateAppOptions = {}): Express {
     let runId = `run_${crypto.randomUUID()}`;
     const timestamp = new Date().toISOString();
     const workflowMode = req.path === "/api/workflow";
+    const activeRouteTimeout = workflowMode ? Math.min(options.workflowTimeoutMs ?? WORKFLOW_ABORT_TIMEOUT_MS, WORKFLOW_ABORT_TIMEOUT_MS) : Math.min(routeTimeoutMs, ROUTE_ABORT_TIMEOUT_MS);
+    const deadlineAt = Date.now() + activeRouteTimeout;
+    const abortController = new AbortController();
+    const timeoutHandle = setTimeout(() => abortController.abort(new DOMException("The HTTP workflow deadline expired.", "TimeoutError")), activeRouteTimeout);
+    const remaining = () => Math.max(1, deadlineAt - Date.now());
+    const expireIfDue = () => {if (Date.now() >= deadlineAt && !abortController.signal.aborted) abortController.abort(new DOMException("The HTTP workflow deadline expired.", "TimeoutError"));};
+    const withinDeadline = <T>(operation: Promise<T>, maximumMs = storageTimeoutMs) => {
+      expireIfDue();
+      // The shared absolute timer owns expiration when it is earlier than a phase cap.
+      // A second rounded timer must not mislabel an HTTP deadline as a storage outage.
+      return abortable(maximumMs < remaining() ? withCaseDeadline(operation, maximumMs) : operation, abortController.signal);
+    };
     const factSteps: PlanningStep[] = [];
     const apiKey = options.apiKeyOverride ?? process.env.GEMINI_API_KEY;
     let trustedOwner: string | null = null;
     let durableRunCreated = false;
+    let admission: ModelAdmissionTicket | undefined;
+    const releaseAdmission = async () => {
+      if (!admission || !caseRuntime.caseService) return;
+      try { await withCaseDeadline(caseRuntime.caseService.modelAdmission.release(admission), storageTimeoutMs); }
+      catch { console.warn("Model capacity remains reserved until its lease expires because release is unavailable."); }
+    };
+    const cancelDurableRun = () => {
+      if (durableRunCreated && trustedOwner && caseRuntime.caseService) void withCaseDeadline(caseRuntime.caseService.cancelRun(trustedOwner, runId), storageTimeoutMs).catch(() => {});
+    };
+    const cancelOnDisconnect = () => {
+      if (!res.writableEnded) {
+        abortController.abort(new DOMException("Request canceled", "AbortError"));
+        cancelDurableRun(); void releaseAdmission();
+      }
+      clearTimeout(timeoutHandle);
+    };
+    const cleanupDeadline = () => {clearTimeout(timeoutHandle); res.removeListener("close", cancelOnDisconnect);};
+    res.once("close", cancelOnDisconnect); res.once("finish", cleanupDeadline);
     const reply = async (status: number, payload: Record<string, unknown>) => {
+      expireIfDue();
       let result = redactResponse({
         ...(workflowMode ? { facts: null, workflow: null } : {}),
         ...payload,
@@ -885,15 +943,35 @@ export function createApp(options: CreateAppOptions = {}): Express {
         prompt_versions: PROMPT_VERSIONS,
       }, apiKey);
       if (durableRunCreated && trustedOwner && caseRuntime.caseService) {
-        try { result = await withCaseDeadline(caseRuntime.caseService.completeRun(trustedOwner, runId, result as WorkflowResponse)); }
-        catch (error) { if (!res.destroyed && !res.writableEnded) sendCaseError(res, error); return; }
+        if (abortController.signal.aborted) {
+          // A failed deadline envelope can persist later, but never delay the HTTP deadline.
+          // It grants no reviewability. A successful late result is discarded and invalidated.
+          if ((result as WorkflowResponse).ok === false) void withCaseDeadline(caseRuntime.caseService.completeRun(trustedOwner, runId, result as WorkflowResponse), storageTimeoutMs).catch(() => {});
+          else {cancelDurableRun(); result = deadlineResult((result as WorkflowResponse).steps); status = safeJsonHttpStatus(504);}
+        } else {
+          try {result = await withinDeadline(caseRuntime.caseService.completeRun(trustedOwner, runId, result as WorkflowResponse));}
+          catch (error) {
+            expireIfDue();
+            if (abortController.signal.aborted) {cancelDurableRun(); result = deadlineResult((result as WorkflowResponse).steps); status = safeJsonHttpStatus(504);}
+            else {if (!res.destroyed && !res.writableEnded) sendCaseError(res, error); return;}
+          }
+        }
       }
       if (!res.destroyed && !res.writableEnded) res.status(status).type("application/json").json(result);
     };
+    const deadlineResult = (steps: PlanningStep[] = factSteps) => ({ok: false, run_id: runId, timestamp, requested_model_id: DEFAULT_GEMINI_MODEL,
+      model_id: DEFAULT_GEMINI_MODEL, http_status: 504, upstream_status: null, facts: null, workflow: null,
+      steps, prompt_versions: PROMPT_VERSIONS,
+      error: {code: "GEMINI_REQUEST_TIMEOUT", message: `The HTTP workflow deadline (${activeRouteTimeout}ms) elapsed. Persistence may have an unknown outcome; no verified result was returned. Check owned history or analyze the current input again.`}});
+    const boundaryFailure = async (error: unknown) => {
+      expireIfDue();
+      if (abortController.signal.aborted) {if (!res.destroyed) await reply(safeJsonHttpStatus(504), deadlineResult());}
+      else if (!res.destroyed) sendCaseError(res, error);
+    };
 
     if (caseRuntime.config.enabled) {
-      try { trustedOwner = await verifiedOwner(req, caseRuntime.verifyIdToken!); }
-      catch (error) { sendCaseError(res, error); return; }
+      try { trustedOwner = await withinDeadline(verifiedOwner(req, caseRuntime.verifyIdToken!), 10_000); }
+      catch (error) {await boundaryFailure(error); return;}
     }
 
     const body = (req.body && typeof req.body === "object" ? req.body : {}) as Record<
@@ -1007,6 +1085,16 @@ export function createApp(options: CreateAppOptions = {}): Express {
     }
 
     // 3. Verify server-side GEMINI_API_KEY secret
+    if (!modelEnabled) {
+      await reply(503, {ok: false, run_id: runId, timestamp, http_status: 503, upstream_status: null,
+        requested_model_id: requestedModel, model_id: requestedModel,
+        error: {code: "MODEL_DISABLED", message: "The sandbox's model processing is paused. Existing cases remain available in owned history."}}); return;
+    }
+    if (process.env.NODE_ENV === "production" && (!trustedOwner || !caseRuntime.caseService || caseRuntime.config.mode !== "firestore")) {
+      await reply(503, {ok: false, run_id: runId, timestamp, http_status: 503, upstream_status: null,
+        requested_model_id: requestedModel, model_id: requestedModel,
+        error: {code: "MODEL_LIMITS_UNAVAILABLE", message: "Production model processing requires trusted identity and persistent shared limits. No model call was made."}}); return;
+    }
     if (!apiKey || apiKey.trim() === "" || apiKey === "MY_GEMINI_API_KEY") {
       await reply(500, {
         ok: false,
@@ -1025,37 +1113,35 @@ export function createApp(options: CreateAppOptions = {}): Express {
       return;
     }
 
-    const abortController = new AbortController();
-    if (workflowMode && trustedOwner && caseRuntime.caseService) {
+    if (abortController.signal.aborted) {await boundaryFailure(abortController.signal.reason); return;}
+    if (trustedOwner && caseRuntime.caseService) {
       try {
-        const run = await withCaseDeadline(caseRuntime.caseService.createRun(trustedOwner,
-          redactResponse(body, apiKey) as Record<string, unknown>, Number(body.input_version ?? 1)));
-        runId = run.run_id;
-        durableRunCreated = true;
-      } catch (error) { sendCaseError(res, error); return; }
-      if (res.destroyed) { await withCaseDeadline(caseRuntime.caseService.cancelRun(trustedOwner, runId)).catch(() => {}); return; }
+        const intake = redactResponse(body, apiKey) as Record<string, unknown>;
+        const reservation = caseRuntime.caseService.modelAdmission.reserve(trustedOwner, runId, sha256(intake), workflowMode ? 6 : 2, deadlineAt);
+        try {admission = await withinDeadline(reservation);}
+        catch (error) {
+          void reservation.then(ticket => withCaseDeadline(caseRuntime.caseService!.modelAdmission.release(ticket), storageTimeoutMs)).catch(() => {});
+          throw error;
+        }
+        if (res.destroyed) {void releaseAdmission(); return;}
+        if (workflowMode) {
+          const creation = caseRuntime.caseService.createRun(trustedOwner, intake, Number(body.input_version ?? 1), admission);
+          try {
+            const run = await withinDeadline(creation);
+            runId = run.run_id; durableRunCreated = true;
+          } catch (error) {
+            // The late RPC may still commit, but can never supersede a newer reservation.
+            // If it already committed before the deadline, invalidate its abandoned result.
+            void creation.then(run => withCaseDeadline(caseRuntime.caseService!.cancelRun(trustedOwner!, run.run_id), storageTimeoutMs)).catch(() => {});
+            throw error;
+          }
+        }
+      } catch (error) {void releaseAdmission(); await boundaryFailure(error); return;}
+      if (res.destroyed) {cancelDurableRun(); void releaseAdmission(); return;}
     }
-    const activeRouteTimeout = workflowMode ? (options.workflowTimeoutMs ?? WORKFLOW_ABORT_TIMEOUT_MS) : routeTimeoutMs;
-    const timeoutHandle = setTimeout(() => {
-      abortController.abort(
-        new DOMException(
-          `Request timed out after ${activeRouteTimeout}ms.`,
-          "TimeoutError"
-        )
-      );
-    }, activeRouteTimeout);
     const extractionTimeoutHandle = workflowMode ? setTimeout(() => {
       abortController.abort(new DOMException(`Fact extraction timed out after ${routeTimeoutMs}ms.`, "TimeoutError"));
-    }, routeTimeoutMs) : undefined;
-    const cancelOnDisconnect = () => {
-      if (!res.writableEnded) {
-        abortController.abort(new DOMException("Request canceled", "AbortError"));
-        if (durableRunCreated && trustedOwner && caseRuntime.caseService) {
-          void withCaseDeadline(caseRuntime.caseService.cancelRun(trustedOwner, runId)).catch(() => {});
-        }
-      }
-    };
-    res.once("close", cancelOnDisconnect);
+    }, Math.min(routeTimeoutMs, remaining())) : undefined;
 
     try {
       const systemInstruction = [
@@ -1099,6 +1185,7 @@ export function createApp(options: CreateAppOptions = {}): Express {
             promptPayload,
             systemInstruction,
             abortSignal: abortController.signal,
+            timeoutMs: Math.min(GEMINI_SDK_TIMEOUT_MS, remaining()),
           }), abortController.signal);
           factSteps.push({ role: "FACTS", attempt: attempt + 1, outcome: "SUCCESS",
             duration_ms: Math.round(performance.now() - startedAt), requested_model_id: requestedModel,
@@ -1303,9 +1390,8 @@ export function createApp(options: CreateAppOptions = {}): Express {
         },
       });
     } finally {
-      clearTimeout(timeoutHandle);
       clearTimeout(extractionTimeoutHandle);
-      res.removeListener("close", cancelOnDisconnect);
+      void releaseAdmission();
     }
   });
 
@@ -1362,6 +1448,9 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.resolve(__dirname, "dist");
+    // Refuse to serve an incomplete release, instead of failing on its first page request.
+    const { access } = await import("node:fs/promises");
+    await access(path.join(distPath, "index.html"));
     app.use(express.static(distPath));
     app.get("*", (_req: Request, res: Response) => {
       res.sendFile(path.join(distPath, "index.html"));
@@ -1369,14 +1458,37 @@ async function startServer() {
   }
 
   const host = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
-  app.listen(PORT, host, () => {
+  const server = app.listen(PORT, host, () => {
     console.log(`OpsCrew server listening on http://${host}:${PORT}`);
   });
+  server.on("error", (error: NodeJS.ErrnoException) => {
+    // Do not print environment variables, credentials, or an upstream error object.
+    console.error(error.code === "EADDRINUSE" ? "OpsCrew startup failed: EADDRINUSE." : "OpsCrew startup failed: listener unavailable.");
+    process.exitCode = 1;
+  });
+  let closing = false;
+  for (const signal of ["SIGTERM", "SIGINT"] as const) {
+    process.once(signal, () => {
+      if (closing) return;
+      closing = true;
+      // Cloud Run allows ten seconds. Finish active requests where possible, then exit.
+      const shutdownDeadline = setTimeout(() => process.exit(0), 8_000);
+      shutdownDeadline.unref();
+      server.close(() => {
+        clearTimeout(shutdownDeadline);
+        process.exit(0);
+      });
+      server.closeIdleConnections();
+    });
+  }
 }
 
 const isMainModule =
   process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename);
 
 if (isMainModule) {
-  startServer();
+  startServer().catch(() => {
+    console.error("OpsCrew startup failed. Verify the release files and server configuration.");
+    process.exitCode = 1;
+  });
 }
