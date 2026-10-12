@@ -9,6 +9,8 @@ const fixture = JSON.parse(readFileSync(new URL("../fixtures/development-cases.j
 for (const model of ["gemini-3.1-flash-lite", "gemini-3.8-flash", "gemini-flash-latest"]) {
   test(`actual SDK serialization preserves valid FACTS/Planner/Reviewer controls for ${model}`, async () => {
     const nativeFetch = globalThis.fetch, requests: {role: string; config: any}[] = [];
+    const prevVertex = process.env.GOOGLE_GENAI_USE_VERTEXAI;
+    delete process.env.GOOGLE_GENAI_USE_VERTEXAI;
     // Exercise production SDK serialization while intercepting every Google request
     // before network access. The key and responses below are explicitly offline.
     globalThis.fetch = (async (resource: string | URL | Request, init?: RequestInit) => {
@@ -55,6 +57,8 @@ for (const model of ["gemini-3.1-flash-lite", "gemini-3.8-flash", "gemini-flash-
       }
     } finally {
       globalThis.fetch = nativeFetch;
+      if (prevVertex !== undefined) process.env.GOOGLE_GENAI_USE_VERTEXAI = prevVertex;
+      else delete process.env.GOOGLE_GENAI_USE_VERTEXAI;
       if (server) {server.closeAllConnections(); await new Promise<void>((resolve, reject) => server!.close(error => error ? reject(error) : resolve()));}
     }
   });
