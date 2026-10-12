@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { access } from "node:fs/promises";
+import { access, readdir } from "node:fs/promises";
 import net from "node:net";
 import { devNull } from "node:os";
 import path from "node:path";
@@ -143,7 +143,16 @@ async function runChecks(baseUrl) {
   assert.equal(asset.response.status, 200);
   assert.match(asset.response.headers.get("content-type") ?? "", /(?:application|text)\/javascript\b/i);
   assert(asset.body.length > 0, "Built JavaScript must not be empty.");
-  checks.push("built JavaScript asset served");
+  const builtChunks = (await readdir(path.join(appDirectory, "dist", "assets")))
+    .filter((name) => name.endsWith(".js"));
+  assert(builtChunks.length > 0, "The production build must contain JavaScript chunks.");
+  for (const name of builtChunks) {
+    const chunk = await request(baseUrl, `/assets/${encodeURIComponent(name)}`);
+    assert.equal(chunk.response.status, 200, `Built chunk ${name} must be served.`);
+    assert.match(chunk.response.headers.get("content-type") ?? "", /(?:application|text)\/javascript\b/i);
+    assert(chunk.body.length > 0, `Built chunk ${name} must not be empty.`);
+  }
+  checks.push(`all ${builtChunks.length} built JavaScript chunks served`);
 
   const refresh = await request(baseUrl, "/smoke/refresh/check");
   assert.equal(refresh.response.status, 200);

@@ -1,5 +1,9 @@
 # Evaluation status
 
+## October 12 build integration
+
+The later teammate build/report increment through `7fb9e03` was integrated without changing domain, provider, persistence, policy or fixture source. [Fresh integration checks](acceptance/PR04-build-integration-2026-10-12.json) bind canonical digest `5acc8cafe5a41e3a1d773905072c23021d76508a4cf7ad4d04c6858fe42f2704`: 232 offline tests, strict types, vendor-split build and 12 production artifact groups including all five JavaScript chunks passed. The earlier 27 emulator groups and 350 semantic assertions below are carried forward for unchanged business logic, not claimed rerun. Actual browser module/mount inspection was unavailable. New cloud revision/six-step claims remain attributed, partial evidence; G5 is still pending.
+
 ## October 12 teammate review
 
 The current reviewed runtime is different from the original October 11 snapshot. Latest methods and executed outcomes are in [PR #4 code review](acceptance/PR04-code-review-2026-10-12.md), [current 350-assertion offline report](acceptance/PR04-offline-evaluation-2026-10-12.json) and [fresh 27-group emulator report](acceptance/S03-emulator-validation-2026-10-12-pr04.json). The updated [release manifest](../RELEASE_MANIFEST.json) preserves previous identity and binds the current source. Earlier real-model results below are historical for their exact source/prompt versions; they are not new runs on the changed Reviewer prompt. Teammate cloud summaries and incomplete accounting remain separate in [the corrected operational report](DEPLOYMENT_AND_USAGE_REPORT.md). Real current-source cloud acceptance and independent G5 remain pending.

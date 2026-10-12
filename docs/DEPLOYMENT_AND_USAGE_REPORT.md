@@ -1,6 +1,6 @@
 # OpsCrew cloud deployment and usage review
 
-Reviewed October 12, 2026 (Asia/Shanghai). Application source reviewed: `6091ed3868bcb1d889a82e3b4b700497c1154058`; previous precloud review head: `8793865657a5566e0ed34b31dac13a84d60ab88c`. Record subsequent review corrections and the final accepted Git SHA separately.
+Reviewed October 12, 2026 (Asia/Shanghai). Teammate source reviewed through `7fb9e03ed21c8e6a3eb01e5be2574ccec3dfae9a`, including the earlier `6091ed3868bcb1d889a82e3b4b700497c1154058`; previous precloud review head: `8793865657a5566e0ed34b31dac13a84d60ab88c`. Record subsequent review corrections and the final accepted Git SHA separately.
 
 This report corrects the earlier guide against the application and retained evidence. OpsCrew plans synthetic USD expense exceptions with Gemini FACTS, deterministic POLICY, PLANNER and a separately prompted REVIEWER. A current eligible recommendation requires explicit human confirmation before one owned exception case is saved and independently read back. It never approves reimbursement or payment.
 
@@ -14,13 +14,14 @@ All deployment values below are **teammate-reported historical metadata**. Curre
 | --- | --- | --- |
 | Project / region | `project-b2db87f6-7a4e-4020-972` / `us-central1` | Operator-selected; not asserted to be contest-mandated |
 | Service / reported active revision | `opscrew` / `opscrew-00003-h5s` | Previously reported as 100% traffic; current traffic unverified |
+| Later reported active revision | `opscrew-00004-mtz` | The October 12 teammate report claims 100% traffic, Firestore mode and a successful readiness response; current control-plane state and source/image binding were not independently verified |
 | Earlier tested revisions | `opscrew-00001-pz4`, `opscrew-00002-mqc` | Historical plan-only tests; not accepted rollback targets |
 | Cloud Build ID | `e0c6a257-182c-48f1-a103-2457ed0cd65b` | Build success and source-to-image binding unverified here |
 | Image digest | `sha256:7d9fc94cb6babefacd7787b19f96138010103c92aed8fdacc87e064d9d4a1d45` | Reported artifact in the project's `cloud-run-source-deploy/opscrew` repository; no independently verified source SHA |
 | Runtime / resources | Node 24; min instances 0; max instances 1; concurrency 4; CPU 1; memory 512 MiB; platform timeout 120 seconds | Reported settings, not a current console export or spending guarantee |
 | Default model | `gemini-3.1-flash-lite` | Historical requested model ID; actual returned provider model version not established by these summaries |
 | Secret | `gemini-api-key:latest` | Reported mutable alias; not an immutable numeric-version binding |
-| Firebase business backend | Historical reports say case creation remained pending | Current real Auth, Firestore, rules, indexes, IAM and saved-case verification remain unverified |
+| Firebase business backend | Earlier reports left case creation pending; the October 12 report claims a six-step real Auth/workflow/confirmation/create/readback/history chain | No new immutable response/attempt journal accompanies that claim; owner isolation, idempotent retries, rules/indexes, IAM and the exact deployed source remain unverified by this review |
 
 ## 2. Retained test evidence
 
@@ -32,6 +33,7 @@ Historical reports are preserved without rewriting outcomes. They are teammate-a
 | [G4 public acceptance summary](acceptance/G4-public-acceptance-2026-10-11.json) | Initial five branches pass; S04 has two Reviewer contract errors. After the prompt repair at `71ed689`, S04 and S05 are reported passing; S05 includes a FACTS 503 and retry. Reports 11 negative checks, browser checks and a health-only traffic drill | The final 6/6 combines results across revisions; no full six-case rerun on one final revision is recorded. The reported 11 real calls lack a full role/attempt journal and clear counting definition. Full G3/G4 and independent G5 are not passed |
 | [Night emulator report](acceptance/S03-emulator-validation-2026-10-10-night-verify.json) | 25/25 groups at clean `51fd83207c4026a5c8760305f3a6c43f08632eb4`; injected public fixtures; zero real Gemini calls and zero production Firebase writes | Historical S3 evidence, not current 27-group acceptance or real-cloud verification |
 | [Prior precloud acceptance](acceptance/PRECLOUD-readiness-2026-10-11.md) | Source-bound preparation: 216 offline tests, 27 emulator groups and 350 offline assertions | Binds the previous snapshot. Changed runtime code needs fresh review checks; public fixtures and offline assertions are not independent held-out tests |
+| October 12 teammate report in commits `9cb9c53` and `ce77d83` | Reports active revision `opscrew-00004-mtz` and successful anonymous signup, workflow, confirmation, case create, independent GET and history | Retained as a teammate-reported result, not discarded. No newly saved full response journal, case/run identifiers, idempotency replay, all failed attempts or accepted-source/image attestation was added. The illustrative commands do not establish a reproduced full G3/G4 pass |
 
 At the reviewed source, prompt versions are FACTS `opscrew-facts-1.1.0`, PLANNER `opscrew-planner-1.0.1` and REVIEWER `opscrew-reviewer-1.0.1`; policy is `synthetic-expense-usd-1.0.0`. Preserve earlier failures and record fresh dated results for each newly accepted release.
 
@@ -141,7 +143,7 @@ G1 through G7 are team engineering gates, not asserted official contest rules. O
 | --- | --- | --- |
 | G1 engineering | Prior source-bound checks; current changes under review | Fresh appropriate checks for final accepted SHA |
 | G2 policy/model | Versioned policy/prompts and teammate-reported historical planning | Final source, requested/returned model and complete bounded attempt records |
-| G3 real resources | PENDING; emulators are not production evidence | Real Auth, isolation, confirmation, idempotency, independent GET/history, client denial, rules/indexes and failures |
+| G3 real resources | PARTIAL teammate-reported six-step chain; emulators are not production evidence | Source-bound responses and identifiers, real Auth isolation, confirmation, idempotency, independent GET/history, client denial, rules/indexes and failures |
 | G4 cloud operations | PARTIAL historical teammate summaries; current deployment unverified | Source/image/revision/secret binding, ready release, persistent limits, cold start, pause/restore and accepted rollback |
 | G5 independent evaluation | PENDING; 350 prior offline assertions and public DEV examples are not hidden tests | Independently sealed eight cases; four risk categories with three repeats; three consecutive full main-demo runs; all failures retained |
 | G6 final materials | PENDING; editable English deck, review PDF and 165-second recording plan are preparation | Verified names/product/video links, real cloud recording under 180 seconds and final review |
@@ -150,3 +152,9 @@ G1 through G7 are team engineering gates, not asserted official contest rules. O
 For new cloud tests, record accepted Git SHA, lock hash, build ID, image digest, revision, runtime identity, project/region, numeric secret version and nonsecret outcomes. Retain full model-attempt telemetry when available, every first failure and rerun, and independent readback for saved-case claims. Do not export credentials or relabel public development examples as hidden tests.
 
 An [HTML reading copy](DEPLOYMENT_AND_USAGE_REPORT.html) contains the same report. Historical JSON remains unchanged; newly executed release acceptance belongs in new dated evidence files.
+
+## 9. October 12 build integration
+
+The teammate's latest build change replaces the deprecated `__dirname` alias with an ESM-compatible root and splits React/Firebase/icon dependencies into vendor chunks. The reviewer observed a successful Vite 8.3.3 build of 1,677 modules in 2.91 seconds with no warnings: the application entry is 79.28 kB, alongside separately loaded vendor/runtime chunks. This is a local observation, not a cloud build timing or a claim that the total shipped code is only 79.28 kB. Function-style `manualChunks` and `rollupOptions` remain compatible in Vite 8 but are deprecated; future migration is separate from the current accepted build.
+
+Both production smoke tools retain Node 24, matching the package engines, `.node-version` and Docker contract. The proposed `>=22` guard also admitted early Node 22 and other unvalidated majors, so it was not accepted as a claim of runtime compatibility. The maintained production check now verifies every emitted JavaScript chunk, including split dependencies. See the [integration review](acceptance/PR04-code-review-2026-10-12.md) for actual fresh checks and their source binding. No production traffic, runtime identity, billing or cloud resource was changed by this integration.
