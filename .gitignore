@@ -28,3 +28,17 @@ nul
 
 # Operator-specific release configuration
 **/cloud-release.local.json
+
+# Team internal planning and local setup docs (kept local, excluded from public repo)
+COMPETITION_ASSESSMENT_*.md
+OPSCREW_FULL_DELIVERY_PLAN_*.md
+PROJECT_NOTES*.md
+*SOP*.md
+
+# AI-assistant working files (coding/test helper only; keep the public repo Google-only)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# Team-internal resource guide with private emails, GCP project and billing IDs
+AI-Builder-Cup-2026-Gemini-API使用指南.md
