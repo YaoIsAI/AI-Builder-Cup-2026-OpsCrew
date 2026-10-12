@@ -8,6 +8,8 @@ Final local validation: 216/216 offline regressions, lint/build, authentic Auth/
 
 See [current acceptance and test methods](acceptance/PRECLOUD-readiness-2026-10-11.md), [evaluation status](EVALUATION.md), [material review](acceptance/PRECLOUD-materials-review-2026-10-12.md), [release inventory](../RELEASE_MANIFEST.json) and [teammate cloud handoff](CLOUD_TEAMMATE_HANDOFF.md). The old S3 cleanup block was resolved by the owner's cleanup and read-only verification; current-run cleanup is recorded separately after execution. Actual Linux image build, real cloud G3/G4, independent G5, final G6 public video/product links and G7 Submitted receipt remain pending. Historical entries below retain their original evidence and dates.
 
+Publication checkpoint: implementation `22be594` and manifest-only `81b30e2` are uploaded in [PR #4](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/4); authenticated ref/fetched tree checks passed for 134 published paths. Documentation-only publication notes follow without runtime changes. The new temporary-artifact deletion request was rejected by automatic approval with `blocked by policy`; the owner was asked to clean the exact eight known targets, so cleanup remains pending and no full delivery-done claim is made. See [publication review](acceptance/PRECLOUD-delivery-review-2026-10-12.md).
+
 All records distinguish observed results from planned capabilities. No credentials belong in this file.
 
 | Date (Asia/Shanghai) | Origin and work | Verification boundary |

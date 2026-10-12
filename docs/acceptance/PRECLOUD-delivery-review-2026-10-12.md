@@ -10,7 +10,8 @@ This working delivery record accompanies the frozen local source. Test evidence 
 - [x] Maintained JavaScript scripts and the PowerShell release helper passed syntax parsing; reviewed tracked changes passed the initial whitespace check. Final staged check follows before commit.
 - [x] Default-preview and 390-pixel browser results and thirteen-slide editable/PDF visual checks are recorded. Real cloud/model quality claims stay separate.
 - [x] Owned preview/emulator processes were identified by exact command/project/PID and stopped. Ports 3103, 8080 and 9099 have no remaining listeners. Temporary viewport reset and owned browser tab closed.
-- [ ] Final staged whitespace/credential/source checks, exact commit and remote-tree verification recorded after Git publication.
+- [x] Final staged whitespace and publication-path checks passed for 134 files. All 32 source hashes and six material hashes were verified directly from staged Git blobs; credential-pattern and disposable/secret-path findings were zero. Binary attributes preserve exported PDF/PPTX/image bytes without text normalization.
+- [x] Implementation `22be5948fe20fd3b14eaeffac11ae1a31ade414c` and manifest-only commit `81b30e2ff68b4a339ca953faa13fdd42f771ce9d` were pushed to `feat/precloud-readiness`. [PR #4](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/4) is open for review against main. An authenticated GitHub ref read and subsequent fetch verified that published checkpoint exactly; all 134 remote paths match its local Git tree. The following publication-note commit changes documentation only. Use the current exact PR head for review/deployment and record its SHA in cloud evidence.
 
 ## Cleanup state
 
