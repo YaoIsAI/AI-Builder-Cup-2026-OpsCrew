@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0.0",
+  "stage": "G4-public-acceptance",
+  "mode": "public-cloud-run-full-acceptance",
+  "target": "https://opscrew-883881551915.us-central1.run.app",
+  "created_at": "2026-10-11T21:55:00+08:00",
+  "revisions": {
+    "initial": "opscrew-00001-pz4",
+    "after_prompt_fix": "opscrew-00002-mqc"
+  },
+  "requested_model_id": "gemini-3.1-flash-lite",
+  "branch_sweep": {
+    "note": "Six synthetic policy branches against the public URL, one bounded call each.",
+    "attempts": [
+      {
+        "case": "S01 high-amount-complete",
+        "expected": "MANUAL_REVIEW/REVIEWABLE",
+        "outcome": "PASS",
+        "review": "PASS"
+      },
+      {
+        "case": "S02 amount-receipt-conflict",
+        "expected": "BLOCKED/BLOCKED",
+        "outcome": "PASS",
+        "review": "BLOCKED"
+      },
+      {
+        "case": "S03 unknown-receipt-null-employee",
+        "expected": "NEEDS_INFO/NEEDS_INFO",
+        "outcome": "PASS",
+        "review": "NEEDS_INFO"
+      },
+      {
+        "case": "S04 employee-id-conflict",
+        "expected": "BLOCKED/BLOCKED",
+        "outcome": "FAIL (REVIEWER_CONTRACT_ERROR x2, preserved)",
+        "detail": "Reviewer trimmed citation_ids to SYN-002+SYN-003; exact-set veto worked as designed"
+      },
+      {
+        "case": "S05 missing-receipt-evidence",
+        "expected": "EVIDENCE_REQUEST/REVIEWABLE",
+        "outcome": "PASS",
+        "review": "PASS"
+      },
+      {
+        "case": "S06 complete-no-action",
+        "expected": "NO_ACTION_REQUIRED",
+        "outcome": "PASS",
+        "review": "PASS"
+      }
+    ],
+    "root_cause_and_fix": "Reviewer instruction lacked the explicit exact-citation-set sentence the Planner instruction has. Fixed in planning-service.ts, reviewer prompt version bumped to opscrew-reviewer-1.0.1, deployed as opscrew-00002-mqc (commit 71ed689).",
+    "post_fix": [
+      {
+        "case": "S04 re-verify",
+        "outcome": "PASS",
+        "review": "BLOCKED",
+        "citations": [
+          "SYN-001",
+          "SYN-002",
+          "SYN-003",
+          "SYN-008"
+        ],
+        "prompt_version": "opscrew-reviewer-1.0.1"
+      },
+      {
+        "case": "S05 regression",
+        "outcome": "PASS",
+        "review": "PASS",
+        "citations": [
+          "SYN-001",
+          "SYN-002",
+          "SYN-004",
+          "SYN-007",
+          "SYN-008"
+        ],
+        "note": "FACTS 503 then bounded retry succeeded; retry telemetry preserved"
+      }
+    ],
+    "final": "6/6 branches correct after fix; both pre-fix failures preserved above"
+  },
+  "negative_and_limits": {
+    "passed": 11,
+    "failed": 0,
+    "cases": [
+      "analyze unknown field -> 400 INVALID_ANALYZE_INPUT (M1 verified live)",
+      "analyze oversized description -> 400",
+      "negative amount -> 400 INVALID_AMOUNT",
+      "disallowed model -> 400 UNSUPPORTED_MODEL",
+      "input_version 0 -> 400",
+      "GET on POST route -> 404 JSON",
+      "unknown API -> 404 JSON",
+      "malformed JSON -> 400 BAD_JSON_REQUEST",
+      "70KB body -> 400",
+      "case endpoints fail-closed 503 CASE_BACKEND_NOT_CONFIGURED",
+      "config never echoes secrets"
+    ]
+  },
+  "browser_dom": {
+    "desktop_1440": {
+      "scrollWidth": 1440,
+      "overflow": false
+    },
+    "mobile_390_emulated": {
+      "scrollWidth": 390,
+      "overflow": false
+    },
+    "keyboard_tab_order": [
+      "OpsCrew brand",
+      "Intake Form",
+      "Synthetic Cases",
+      "Plan & Review",
+      "Saved Cases",
+      "Scope & Guardrails",
+      "Load Default Case",
+      "Clear Form",
+      "Synthetic 01..04 presets"
+    ],
+    "note": "Tab order follows visual reading order; focus reaches every control"
+  },
+  "rollback_drill": {
+    "steps": [
+      "opscrew-00002-mqc at 100% (Ready)",
+      "traffic switched to opscrew-00001-pz4 at 100% -> /api/health 200",
+      "traffic rolled forward to opscrew-00002-mqc at 100% -> /api/health 200"
+    ],
+    "outcome": "PASS"
+  },
+  "security_headers": [
+    "Content-Security-Policy (production)",
+    "X-Content-Type-Options: nosniff",
+    "X-Frame-Options: DENY",
+    "Referrer-Policy: strict-origin-when-cross-origin",
+    "Permissions-Policy camera/microphone/geolocation=()"
+  ],
+  "real_gemini_calls_total": 11,
+  "scope_note": "Case-creation chain (G3 real identity) remains pending the Firebase console linkage step; identity isolation on real data will be covered by scripts/check-g3-real.mjs after that step.",
+  "real_resource_g3": "PENDING",
+  "failed_attempts_preserved": true
+}

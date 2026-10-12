@@ -32,8 +32,6 @@ export default function CaseConfirmation({ config, session, workflow, inputRevis
   const abortRef = useRef<AbortController | null>(null);
   const lastInputRevision = useRef(inputRevision);
   const readOnlyRecovery = useRef(false);
-  // Close the mutation gate immediately during the render caused by a real input edit.
-  if (lastInputRevision.current !== inputRevision) readOnlyRecovery.current = true;
   const bindingKey = JSON.stringify(workflow?.binding ?? null);
   const eligible = workflow?.status === "REVIEWABLE" && workflow.plan !== null && workflow.review?.verdict === "PASS" &&
     workflow.binding.owner_id === session.uid && receipt?.run_id !== workflow.binding.run_id;
@@ -53,6 +51,8 @@ export default function CaseConfirmation({ config, session, workflow, inputRevis
   useEffect(() => {
     if (lastInputRevision.current === inputRevision) return;
     lastInputRevision.current = inputRevision;
+    // Any real input edit closes the mutation gate before the next user event can fire.
+    readOnlyRecovery.current = true;
     if (!pending || pending.owner_id !== session.uid) return;
     const invalidated = { ...pending, invalidated_locally: true };
     setPending(invalidated);

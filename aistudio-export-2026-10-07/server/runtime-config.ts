@@ -24,7 +24,7 @@ export const PLANNING_TOTAL_TIMEOUT_MS = 60_000;
 export const PROMPT_VERSIONS = Object.freeze({
   facts: "opscrew-facts-1.1.0",
   planner: "opscrew-planner-1.0.1",
-  reviewer: "opscrew-reviewer-1.0.0",
+  reviewer: "opscrew-reviewer-1.0.1",
 });
 
 /** Newer Flash releases deprecate sampling controls; the accepted 3.1 settings stay intact. */

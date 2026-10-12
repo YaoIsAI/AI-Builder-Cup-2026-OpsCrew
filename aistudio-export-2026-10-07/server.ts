@@ -833,6 +833,30 @@ export function createApp(options: CreateAppOptions = {}): Express {
   }
   app.use(express.json({ limit: "64kb" }));
 
+  // Baseline hardening headers (M3). CSP is production-only: the dev server
+  // relies on Vite HMR inline scripts and would break under a strict policy.
+  const contentSecurityPolicy = [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data:",
+    "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com http://127.0.0.1:* ws://127.0.0.1:*",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "object-src 'none'",
+  ].join("; ");
+  app.use((_req: Request, res: Response, next: NextFunction) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    if (process.env.NODE_ENV === "production") {
+      res.setHeader("Content-Security-Policy", contentSecurityPolicy);
+    }
+    next();
+  });
+
   const generateContentFn = options.generateContentFn ?? defaultGenerateContent;
   const routeTimeoutMs = Math.min(options.routeTimeoutMs ?? ROUTE_ABORT_TIMEOUT_MS, ROUTE_ABORT_TIMEOUT_MS);
   const modelEnabledText = process.env.OPSCREW_MODEL_ENABLED?.trim();
@@ -979,8 +1003,12 @@ export function createApp(options: CreateAppOptions = {}): Express {
       unknown
     >;
 
-    if (workflowMode) {
-      const fields = ["description", "amount_usd", "receipt_status", "employee_identifier", "model_id", "input_version"];
+    {
+      // Both intake endpoints enforce the same field whitelist and length caps (M1).
+      // input_version is accepted only in durable workflow mode.
+      const fields = workflowMode
+        ? ["description", "amount_usd", "receipt_status", "employee_identifier", "model_id", "input_version"]
+        : ["description", "amount_usd", "receipt_status", "employee_identifier", "model_id"];
       const wrongShape = !req.body || typeof req.body !== "object" || Array.isArray(req.body);
       const unknownField = Object.keys(body).find((field) => !fields.includes(field));
       const tooLong = (typeof body.description === "string" && body.description.length > 4000)
@@ -991,7 +1019,7 @@ export function createApp(options: CreateAppOptions = {}): Express {
       if (wrongShape || unknownField || tooLong || badVersion || badType) {
         await reply(400, { ok: false, run_id: runId, timestamp, http_status: 400, upstream_status: null,
           requested_model_id: DEFAULT_GEMINI_MODEL, model_id: DEFAULT_GEMINI_MODEL,
-          error: { code: "INVALID_WORKFLOW_INPUT", message: "Use only supported synthetic intake fields, their documented types and a positive input version; description limit is 4000 characters." } });
+          error: { code: workflowMode ? "INVALID_WORKFLOW_INPUT" : "INVALID_ANALYZE_INPUT", message: "Use only supported synthetic intake fields, their documented types and a positive input version; description limit is 4000 characters." } });
         return;
       }
     }
