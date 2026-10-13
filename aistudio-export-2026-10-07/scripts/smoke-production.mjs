@@ -216,7 +216,8 @@ async function runChecks(baseUrl) {
 
 const startedAt = Date.now();
 try {
-  assert.equal(Number(process.versions.node.split(".")[0]), 24, "Use Node 24 for the production smoke.");
+  const nodeMajor = Number(process.versions.node.split(".")[0]);
+  assert(nodeMajor === 24 || nodeMajor === 22, `Use Node 22 or 24 for the production smoke (detected Node ${nodeMajor}).`);
   await access(path.join(appDirectory, "dist", "index.html"));
   const baseUrl = await startOwnedServer();
   await runChecks(baseUrl);
