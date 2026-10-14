@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { PlanningReviewResult, PlanningStep } from "../../server/planning-contracts.ts";
-import type { PolicyCitation } from "../domain/contracts.ts";
+import { ALLOWED_ACTION, BINDING_FIELDS, type PolicyCitation } from "../domain/contracts.ts";
 import { Check, Copy, Sparkles } from "lucide-react";
 
 const STATUS_LABELS = {
@@ -58,38 +58,43 @@ export function WorkflowSteps({ steps }: { steps: PlanningStep[] }) {
 
 function EmployeeNoticeDraft({ workflow }: { workflow: PlanningReviewResult }) {
   const [copied, setCopied] = useState(false);
-  const { decision, plan } = workflow;
-  
-  let clauseId = "SYN-006";
-  if (decision.branch === "EVIDENCE_REQUEST") clauseId = "SYN-004";
-  else if (decision.branch === "MANUAL_REVIEW") clauseId = "SYN-005";
-  else if (decision.branch === "NO_ACTION_REQUIRED") clauseId = "SYN-006";
-  
-  const policyClause = `${clauseId} (${decision.branch})`;
+  const [copyError, setCopyError] = useState("");
+  const { decision, plan, review, binding } = workflow;
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+  const current = plan && review && BINDING_FIELDS.every((field) =>
+    plan[field] === binding[field] && review[field] === binding[field]);
+  if (workflow.status !== "REVIEWABLE" || !decision.case_eligible ||
+      review?.verdict !== "PASS" || !current || plan?.action !== ALLOWED_ACTION) return null;
+  const policyClause = decision.citations.map((citation) => citation.clause_id).join(", ");
   const summary = decision.summary;
 
-  const draftText = `Subject: OpsCrew Automated Notice: Expense Claim Update (${policyClause})
+  const draftText = `Subject: Operator draft for synthetic expense exception (${decision.branch})
 
 Dear Colleague,
 
-Your submitted expense claim has been processed by the automated OpsCrew compliance audit team.
+This is a draft for an operator to review using synthetic demonstration data.
 
 • Workflow Status: ${workflow.status}
 • Applicable Policy: ${policyClause}
 • Key Findings: ${summary}
 ${decision.evidence_requirements?.length ? `• Required Evidence:\n${decision.evidence_requirements.map((req, i) => `  ${i + 1}. ${req}`).join("\n")}\n` : ""}${plan?.rationale ? `• Planner Rationale: ${plan.rationale}\n` : ""}
-Please review the notes above. If additional documentation (such as an itemized tax receipt or business purpose justification) is required, please reply directly or update your claim portal.
+Please review the findings and the required evidence above. An operator must check this draft before using it outside the sandbox.
 
 Best regards,
-OpsCrew Autonomous Financial Operations Team`;
+OpsCrew demonstration sandbox`;
 
   const copyNotice = async () => {
     try {
       await navigator.clipboard.writeText(draftText);
+      setCopyError("");
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback
+      setCopied(false);
+      setCopyError("Clipboard access failed. Select and copy the draft text below.");
     }
   };
 
@@ -98,7 +103,7 @@ OpsCrew Autonomous Financial Operations Team`;
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-900">
           <Sparkles className="w-4 h-4 text-purple-700" />
-          <span>AI Employee Explanatory Notice (员工沟通函草稿)</span>
+          <span>Operator communication draft</span>
         </div>
         <button
           type="button"
@@ -110,8 +115,9 @@ OpsCrew Autonomous Financial Operations Team`;
         </button>
       </div>
       <p className="text-[11px] text-purple-700 mb-2">
-        Interactive pre-draft tool for finance operators to review and dispatch.
+        A copy-only draft from the current validated result. Copying sends no message and grants no reimbursement or payment approval.
       </p>
+      {copyError && <p role="alert" className="text-xs text-red-800 mb-2">{copyError}</p>}
       <pre className="text-[11px] font-mono bg-white/90 border border-purple-100 rounded p-2.5 text-slate-800 whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto">
         {draftText}
       </pre>
@@ -203,7 +209,7 @@ export default function WorkflowReview({ workflow, caseBackendEnabled = false }:
         </div>}
       </section>
 
-      <EmployeeNoticeDraft workflow={workflow} />
+      <EmployeeNoticeDraft key={`${binding.run_id}-${binding.input_version}-${binding.plan_version}`} workflow={workflow} />
 
       <div className="rounded-md border border-slate-300 bg-slate-100 p-4">
         <p className="text-xs font-semibold text-slate-900">
