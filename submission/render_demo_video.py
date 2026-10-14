@@ -61,15 +61,15 @@ SCENES = [
         "id": "scene_05",
         "duration": 13.5,
         "image": os.path.join(BASE_DIR, "assets", "slides", "slide-06.png"),
-        "narration": "In the live web app, operators see sub-two-second SLAs, one hundred percent auditability, and annual savings of over one hundred eighty thousand dollars.",
-        "subtitle": "In the live web app, operators see sub-two-second SLAs,\none hundred percent auditability, and annual savings of over one hundred eighty thousand dollars."
+        "narration": "In the live web app, operators see under fifteen seconds cloud deliberation replacing 48-hour manual backlogs, one hundred percent auditability, and modeled annual savings.",
+        "subtitle": "In the live web app, operators see under fifteen seconds cloud deliberation replacing 48-hour manual backlogs,\none hundred percent auditability, and modeled annual savings."
     },
     {
         "id": "scene_06",
         "duration": 13.0,
         "image": os.path.join(PROJECT_DIR, "docs", "acceptance", "S02-live-ui-desktop-2026-10-10.png"),
-        "narration": "Here we inspect synthetic scenario DEV-04: a thirty-eight-dollar expense with a missing receipt, featuring multimodal drag-and-drop intake.",
-        "subtitle": "Here we inspect synthetic scenario DEV-04: a thirty-eight-dollar expense with a missing receipt,\nfeaturing multimodal drag-and-drop intake."
+        "narration": "Here we inspect synthetic scenario DEV-04: a thirty-eight-dollar expense with a missing receipt hitting clause SYN-004 for evidence requests, featuring multimodal drag-and-drop intake.",
+        "subtitle": "Here we inspect synthetic scenario DEV-04: a thirty-eight-dollar expense with a missing receipt hitting clause SYN-004 for evidence requests,\nfeaturing multimodal drag-and-drop intake."
     },
     {
         "id": "scene_07",
@@ -82,8 +82,8 @@ SCENES = [
         "id": "scene_08",
         "duration": 13.0,
         "image": os.path.join(BASE_DIR, "assets", "slides", "slide-05.png"),
-        "narration": "With a PASS verdict, OpsCrew generates an empathetic, policy-grounded employee notice, ready for one-click dispatch without authorizing payout.",
-        "subtitle": "With a PASS verdict, OpsCrew generates an empathetic, policy-grounded employee notice,\nready for one-click dispatch without authorizing payout."
+        "narration": "With a PASS verdict, OpsCrew generates an interactive pre-draft notice citing SYN-004, ready for one-click dispatch without authorizing payout.",
+        "subtitle": "With a PASS verdict, OpsCrew generates an interactive pre-draft notice citing SYN-004,\nready for one-click dispatch without authorizing payout."
     },
     {
         "id": "scene_09",
@@ -103,15 +103,15 @@ SCENES = [
         "id": "scene_11",
         "duration": 12.0,
         "image": os.path.join(BASE_DIR, "assets", "slides", "slide-08.png"),
-        "narration": "OpsCrew is verified by two hundred seventeen automated tests with zero failures, including offline evaluation and security guardrails.",
-        "subtitle": "OpsCrew is verified by two hundred seventeen automated tests with zero failures,\nincluding offline evaluation and security guardrails."
+        "narration": "OpsCrew is verified by two hundred thirty-two automated tests with zero failures, including offline evaluation and security guardrails.",
+        "subtitle": "OpsCrew is verified by two hundred thirty-two automated tests with zero failures,\nincluding offline evaluation and security guardrails."
     },
     {
         "id": "scene_12",
         "duration": 11.0,
         "image": os.path.join(BASE_DIR, "assets", "slides", "slide-09.png"),
-        "narration": "With operational costs under forty dollars per month and massive labor savings, OpsCrew delivers extraordinary return on investment.",
-        "subtitle": "With operational costs under forty dollars per month and massive labor savings,\nOpsCrew delivers extraordinary return on investment."
+        "narration": "With a strict forty-dollar monthly budget guardrail and fail-closed admission, OpsCrew delivers extraordinary return on investment.",
+        "subtitle": "With a strict forty-dollar monthly budget guardrail and fail-closed admission,\nOpsCrew delivers extraordinary return on investment."
     },
     {
         "id": "scene_13",
@@ -124,8 +124,8 @@ SCENES = [
         "id": "scene_14",
         "duration": 11.5,
         "image": os.path.join(BASE_DIR, "assets", "slides", "slide-13.png"),
-        "narration": "OpsCrew combines autonomous AI with deterministic enterprise safety. We invite you to test our live deployment. Thank you.",
-        "subtitle": "OpsCrew combines autonomous AI with deterministic enterprise safety.\nWe invite you to test our live deployment. Thank you."
+        "narration": "OpsCrew combines autonomous AI with deterministic enterprise safety. We invite you to test our live deployment at opscrew-883881551915.us-central1.run.app.",
+        "subtitle": "OpsCrew combines autonomous AI with deterministic enterprise safety.\nWe invite you to test our live deployment at opscrew-883881551915.us-central1.run.app."
     }
 ]
 
@@ -192,7 +192,7 @@ def create_subtitled_slide(image_path, subtitle_text, out_path):
     pill_h = text_h + pad_y * 2
 
     pill_x = (target_w - pill_w) // 2
-    pill_y = target_h - pill_h - 40
+    pill_y = target_h - pill_h - 15
 
     overlay = Image.new('RGBA', (target_w, target_h), (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
@@ -209,8 +209,8 @@ def create_subtitled_slide(image_path, subtitle_text, out_path):
     overlay_draw.rounded_rectangle(
         [pill_x, pill_y, pill_x + pill_w, pill_y + pill_h],
         radius=12,
-        fill=(15, 23, 42, 240),
-        outline=(56, 189, 248, 180),
+        fill=(15, 23, 42, 190),
+        outline=(56, 189, 248, 160),
         width=2
     )
 

@@ -59,7 +59,13 @@ export function WorkflowSteps({ steps }: { steps: PlanningStep[] }) {
 function EmployeeNoticeDraft({ workflow }: { workflow: PlanningReviewResult }) {
   const [copied, setCopied] = useState(false);
   const { decision, plan } = workflow;
-  const policyClause = decision.branch;
+  
+  let clauseId = "SYN-006";
+  if (decision.branch === "EVIDENCE_REQUEST") clauseId = "SYN-004";
+  else if (decision.branch === "MANUAL_REVIEW") clauseId = "SYN-005";
+  else if (decision.branch === "NO_ACTION_REQUIRED") clauseId = "SYN-006";
+  
+  const policyClause = `${clauseId} (${decision.branch})`;
   const summary = decision.summary;
 
   const draftText = `Subject: OpsCrew Automated Notice: Expense Claim Update (${policyClause})
@@ -72,7 +78,6 @@ Your submitted expense claim has been processed by the automated OpsCrew complia
 • Applicable Policy: ${policyClause}
 • Key Findings: ${summary}
 ${decision.evidence_requirements?.length ? `• Required Evidence:\n${decision.evidence_requirements.map((req, i) => `  ${i + 1}. ${req}`).join("\n")}\n` : ""}${plan?.rationale ? `• Planner Rationale: ${plan.rationale}\n` : ""}
-
 Please review the notes above. If additional documentation (such as an itemized tax receipt or business purpose justification) is required, please reply directly or update your claim portal.
 
 Best regards,
@@ -105,7 +110,7 @@ OpsCrew Autonomous Financial Operations Team`;
         </button>
       </div>
       <p className="text-[11px] text-purple-700 mb-2">
-        Pre-drafted, empathetic communication citing verified policy clauses for finance operators to dispatch with one click.
+        Interactive pre-draft tool for finance operators to review and dispatch.
       </p>
       <pre className="text-[11px] font-mono bg-white/90 border border-purple-100 rounded p-2.5 text-slate-800 whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto">
         {draftText}

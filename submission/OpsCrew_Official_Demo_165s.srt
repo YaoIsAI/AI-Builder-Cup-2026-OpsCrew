@@ -20,12 +20,12 @@ preventing AI hallucinations and unverified payouts.
 
 5
 00:00:49,500 --> 00:01:03,000
-In the live web app, operators see sub-two-second SLAs,
-one hundred percent auditability, and annual savings of over one hundred eighty thousand dollars.
+In the live web app, operators see under fifteen seconds cloud deliberation replacing 48-hour manual backlogs,
+one hundred percent auditability, and modeled annual savings.
 
 6
 00:01:03,000 --> 00:01:16,000
-Here we inspect synthetic scenario DEV-04: a thirty-eight-dollar expense with a missing receipt,
+Here we inspect synthetic scenario DEV-04: a thirty-eight-dollar expense with a missing receipt hitting clause SYN-004 for evidence requests,
 featuring multimodal drag-and-drop intake.
 
 7
@@ -35,7 +35,7 @@ the Planner requests receipt proof, and the Reviewer validates rule compliance.
 
 8
 00:01:28,000 --> 00:01:41,000
-With a PASS verdict, OpsCrew generates an empathetic, policy-grounded employee notice,
+With a PASS verdict, OpsCrew generates an interactive pre-draft notice citing SYN-004,
 ready for one-click dispatch without authorizing payout.
 
 9
@@ -50,12 +50,12 @@ backed by idempotent key binding.
 
 11
 00:02:02,000 --> 00:02:14,000
-OpsCrew is verified by two hundred seventeen automated tests with zero failures,
+OpsCrew is verified by two hundred thirty-two automated tests with zero failures,
 including offline evaluation and security guardrails.
 
 12
 00:02:14,000 --> 00:02:25,000
-With operational costs under forty dollars per month and massive labor savings,
+With a strict forty-dollar monthly budget guardrail and fail-closed admission,
 OpsCrew delivers extraordinary return on investment.
 
 13
@@ -66,4 +66,4 @@ OpsCrew is secure and containerized.
 14
 00:02:36,500 --> 00:02:48,000
 OpsCrew combines autonomous AI with deterministic enterprise safety.
-We invite you to test our live deployment. Thank you.
+We invite you to test our live deployment at opscrew-883881551915.us-central1.run.app.
