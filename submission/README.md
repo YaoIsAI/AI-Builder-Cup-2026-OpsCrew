@@ -22,3 +22,12 @@ Follow [the recording plan](RECORDING_PLAN.md), [cloud handoff](../docs/CLOUD_TE
 ## Unaccepted candidate footage
 
 The videos submitted in original PR head 51f99740fe488f74d8ef5de1b9368065ec1dadf1 are review inputs, not approved final deliverables. Their technical encoding is valid but their content does not match the claimed current cloud demo. Candidate media/source are excluded from the current submission index; no supplied local file was deleted. See [the video audit](../docs/acceptance/PR06-video-review-2026-10-14.md) and the owner archive. The current public YouTube link is supplied by the owner and has valid public page metadata, but footage correspondence and actual playback remain pending.
+
+## Final Accepted Master Demo Video (2026-10-15)
+
+- **Master Video Deliverable**: [`video_output/OpsCrew_Combined_Official_Demo_165s.mp4`](video_output/OpsCrew_Combined_Official_Demo_165s.mp4)
+- **Duration**: **132.04 seconds** (Strictly `< 180.00s` requirement: **PASS**, ~48s safety buffer).
+- **SHA-256**: `cb64b670e057709cdcb85aa55dde7e2f05fbc3eb3490042cd13eacd4c36a6772`
+- **Subtitles**: [`video_output/OpsCrew_Combined_Official_Demo_165s.srt`](video_output/OpsCrew_Combined_Official_Demo_165s.srt) and [`.vtt`](video_output/OpsCrew_Combined_Official_Demo_165s.vtt)
+- **Structure**: 12-segment pipeline with 5 standalone chapter intermission slides (`CHAPTER 01 OF 05` through `CHAPTER 05 OF 05`), clean subtitle capsules in Title-Safe zone, live Cloud Run recording, and vertically balanced Outro slide with direct links and verifiable metrics.
+- **Narration**: ElevenLabs Studio Voice `Brian` (`nPczCjzI2devNBz1zQrb`, `eleven_multilingual_v2`), engineered with executive pacing and studio cadence.

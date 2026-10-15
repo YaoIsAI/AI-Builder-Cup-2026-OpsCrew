@@ -40,3 +40,22 @@ Publish to an allowed public YouTube/Vimeo/Drive link only under the owner's aut
 Use the new cloud-evidence review proposal as the editing source. Update public team names from verified registration data and add the actual public video URI. Preserve the date and limits of recorded cloud evidence, including unverified source-to-image identity until it is actually established. Keep offline, emulator, public development and independent held-out results distinguishable. Historical packaging comprises 12 groups including nine HTTP checks, not 21 independent checks. Replace any old local screenshot only with a genuine new browser capture. Export a new PDF and PPTX revision, render every page, verify links and compare their hashes to the submitted files.
 
 Sources: [official submission requirements](https://aibuildercup.com/themes.html), [stricter video duration FAQ](https://aibuildercup.com/Faqs.html), [cloud handoff](../docs/CLOUD_TEAMMATE_HANDOFF.md), [evaluation protocol](../docs/EVALUATION_PROTOCOL.md).
+
+---
+
+## Verified Master Production Cut (2026-10-15)
+
+- **Output Video**: `submission/video_output/OpsCrew_Combined_Official_Demo_165s.mp4`
+- **Exact Duration**: **132.04 seconds** (Strict `< 180.00s` requirement: **PASS**, ~48s safety buffer).
+- **SHA-256 Checksum**: `cb64b670e057709cdcb85aa55dde7e2f05fbc3eb3490042cd13eacd4c36a6772`
+- **Video Specifications**: 1920x1080 resolution, 25.0 fps, H.264/AAC stereo 48kHz.
+- **Subtitles**: `submission/video_output/OpsCrew_Combined_Official_Demo_165s.srt` and `.vtt`.
+- **Audio Synthesis Engine**: ElevenLabs Studio Voice `Brian` (`nPczCjzI2devNBz1zQrb`, `eleven_multilingual_v2`, speed: 0.95, stability: 0.75).
+- **Structural Architecture**: 12-segment pipeline featuring 5 dedicated standalone chapter intermission slides:
+  1. `Part 1 Slides` (20.02s): System Introduction & Google Cloud Architecture.
+  2. `Chapter 01 Slide` (4.00s) + `DEV-04 Live Intake` (14.00s): Visitor Isolation & Intake.
+  3. `Chapter 02 Slide` (4.00s) + `Cloud Multi-Agent Deliberation` (19.00s): Facts -> Planner -> Reviewer.
+  4. `Chapter 03 Slide` (4.00s) + `Deterministic Policy Matrix` (17.00s): SYN-004 Flag & Notice Pre-draft.
+  5. `Chapter 04 Slide` (4.00s) + `Human-in-the-Loop Authorization` (13.00s): Checkbox binding & Submission.
+  6. `Chapter 05 Slide` (4.00s) + `Firestore Readback & Audit Parity` (15.00s): Atomic persistence verification.
+  7. `Part 3 Outro Slide` (14.00s): Enriched 380px vertical cards, Live Cloud Run URL, 232 test metrics, sub-15s SLA, and strict $40 budget guardrail.
