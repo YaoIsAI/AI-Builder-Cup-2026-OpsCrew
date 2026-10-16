@@ -51,6 +51,15 @@
 - `docs/acceptance/PR06-youtube-public-link-2026-10-16.json`: 记录 YouTube 视频 oEmbed HTTP 200 验证结果与元数据。
 - `submission/YOUTUBE_METADATA.md`: 记录无尖括号合规视频文案、章节时间轴打点与标签。
 
+### 4. 官方演示视频母带与字幕 (Official Master Video & Subtitles)
+- **本地绝对路径**: `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/OpsCrew_Combined_Official_Demo_104s.mp4`
+- **GitHub 远程直达**: [查看演示视频文件](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/blob/release/final-verified-delivery/submission/video_output/OpsCrew_Combined_Official_Demo_104s.mp4)
+- **文件体积**: `10,687,560` 字节 (约 10.19 MB 原画)
+- **精准时长**: `103.94` 秒（严格满足大赛 `< 180s` 规定，余量约 76 秒）
+- **SHA-256 指纹**: `d486ba5170d1088b55c0848703bbd1a72a686d308a76e01360cca2c2eadf3042`
+- **双格式字幕**: [`OpsCrew_Combined_Official_Demo_104s.srt`](file:///Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/OpsCrew_Combined_Official_Demo_104s.srt) 与 [`.vtt`](file:///Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/OpsCrew_Combined_Official_Demo_104s.vtt)
+- **音画工程**: ElevenLabs 演播室级语音合成（Brian），1080p 高清实测录屏 + 5 章节过场插页与结算卡片。
+
 ---
 
 ## 三、 云端生产部署补证与真实凭证（解决队长关注的 Manifest 字段）

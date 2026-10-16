@@ -45,11 +45,11 @@ Sources: [official submission requirements](https://aibuildercup.com/themes.html
 
 ## Verified Master Production Cut (2026-10-15)
 
-- **Output Video**: `submission/video_output/OpsCrew_Combined_Official_Demo_165s.mp4`
-- **Exact Duration**: **132.04 seconds** (Strict `< 180.00s` requirement: **PASS**, ~48s safety buffer).
-- **SHA-256 Checksum**: `cb64b670e057709cdcb85aa55dde7e2f05fbc3eb3490042cd13eacd4c36a6772`
+- **Output Video**: `submission/video_output/OpsCrew_Combined_Official_Demo_104s.mp4`
+- **Exact Duration**: **103.94 seconds** (Strict `< 180.00s` requirement: **PASS**, ~76s safety buffer).
+- **SHA-256 Checksum**: `d486ba5170d1088b55c0848703bbd1a72a686d308a76e01360cca2c2eadf3042`
 - **Video Specifications**: 1920x1080 resolution, 25.0 fps, H.264/AAC stereo 48kHz.
-- **Subtitles**: `submission/video_output/OpsCrew_Combined_Official_Demo_165s.srt` and `.vtt`.
+- **Subtitles**: `submission/video_output/OpsCrew_Combined_Official_Demo_104s.srt` and `.vtt`.
 - **Audio Synthesis Engine**: ElevenLabs Studio Voice `Brian` (`nPczCjzI2devNBz1zQrb`, `eleven_multilingual_v2`, speed: 0.95, stability: 0.75).
 - **Structural Architecture**: 12-segment pipeline featuring 5 dedicated standalone chapter intermission slides:
   1. `Part 1 Slides` (20.02s): System Introduction & Google Cloud Architecture.

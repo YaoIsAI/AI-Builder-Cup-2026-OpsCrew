@@ -25,9 +25,9 @@ The videos submitted in original PR head 51f99740fe488f74d8ef5de1b9368065ec1dadf
 
 ## Final Accepted Master Demo Video (2026-10-16)
 
-- **Master Video Deliverable**: [`video_output/OpsCrew_Combined_Official_Demo_165s.mp4`](video_output/OpsCrew_Combined_Official_Demo_165s.mp4)
+- **Master Video Deliverable**: [`video_output/OpsCrew_Combined_Official_Demo_104s.mp4`](video_output/OpsCrew_Combined_Official_Demo_104s.mp4)
 - **Duration**: **103.94 seconds** (Strictly `< 180.00s` requirement: **PASS**, ~76s safety buffer).
 - **SHA-256**: `d486ba5170d1088b55c0848703bbd1a72a686d308a76e01360cca2c2eadf3042`
-- **Subtitles**: [`video_output/OpsCrew_Combined_Official_Demo_165s.srt`](video_output/OpsCrew_Combined_Official_Demo_165s.srt) and [`.vtt`](video_output/OpsCrew_Combined_Official_Demo_165s.vtt)
+- **Subtitles**: [`video_output/OpsCrew_Combined_Official_Demo_104s.srt`](video_output/OpsCrew_Combined_Official_Demo_104s.srt) and [`.vtt`](video_output/OpsCrew_Combined_Official_Demo_104s.vtt)
 - **Structure**: 12-segment pipeline with 5 standalone chapter intermission slides (`CHAPTER 01 OF 05` through `CHAPTER 05 OF 05`), clean subtitle capsules in Title-Safe zone, live Cloud Run recording, and vertically balanced Outro slide with direct links and verifiable metrics.
 - **Narration**: ElevenLabs Studio Voice `Brian` (`nPczCjzI2devNBz1zQrb`, `eleven_multilingual_v2`), engineered with executive pacing and studio cadence.

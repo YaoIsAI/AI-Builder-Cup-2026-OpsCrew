@@ -454,7 +454,7 @@ function assembleAllSegments(rawFile, pageReadyOffsetSec) {
   const concatTxt = path.join(OUTPUT_DIR, "master_concat.txt");
   fs.writeFileSync(concatTxt, clipList.map(p => `file '${p}'`).join("\n") + "\n", "utf8");
 
-  const finalVideo = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_165s.mp4");
+  const finalVideo = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_104s.mp4");
   console.log("Concatenating into final video:", finalVideo);
   execSync(
     `ffmpeg -y -f concat -safe 0 -i "${concatTxt}" -c:v libx264 -preset medium -crf 19 -pix_fmt yuv420p -r 25 -c:a aac -b:a 192k -ar 48000 "${finalVideo}"`,
@@ -541,8 +541,8 @@ function generateSubtitles(clipList) {
     vtt += `${formatVttTime(e.startMs)} --> ${formatVttTime(e.endMs)}\n${e.text}\n\n`;
   }
 
-  const srtFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_165s.srt");
-  const vttFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_165s.vtt");
+  const srtFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_104s.srt");
+  const vttFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_104s.vtt");
   fs.writeFileSync(srtFile, srt.trim() + "\n", "utf8");
   fs.writeFileSync(vttFile, vtt.trim() + "\n", "utf8");
   console.log("Master Subtitles generated:", srtFile, vttFile);

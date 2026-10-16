@@ -63,12 +63,12 @@
       "byte_policy": "UTF-8 text with CRLF normalized to LF for published Git blob"
     },
     "submission/README.md": {
-      "sha256": "9945facd105d6a26ad9c8573049e5531b96e6b2fd4a583cb4e112999701157e8",
+      "sha256": "11ac80bfdaf110e909f675f4a2d9643a0f1153792dbafdb6d93519f2a4617c0d",
       "bytes": 4747,
       "byte_policy": "UTF-8 text with CRLF normalized to LF for published Git blob"
     },
     "submission/RECORDING_PLAN.md": {
-      "sha256": "21060db3c105a8b2f118d87802170833a596d536e2097e6c5a4f30233e763972",
+      "sha256": "b7b32f0fea2304d9d1ad90bd9a8e5e5b3cec986096d561df9c7e4a675b577c9c",
       "bytes": 8945,
       "byte_policy": "UTF-8 text with CRLF normalized to LF for published Git blob"
     },

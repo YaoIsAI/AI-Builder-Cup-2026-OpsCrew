@@ -46,8 +46,8 @@ Google Cloud, Gemini API, Vertex AI, AI Builder Cup 2026, Multi-Agent System, En
 
 ## Upload Files / 本地上传文件路径
 - **Master Video / 视频文件**:
-  `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/OpsCrew_Combined_Official_Demo_165s.mp4`
+  `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/OpsCrew_Combined_Official_Demo_104s.mp4`
 - **Subtitles / 英文外挂字幕**:
-  `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/OpsCrew_Combined_Official_Demo_165s.srt`
+  `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/OpsCrew_Combined_Official_Demo_104s.srt`
 - **Recommended Thumbnail / 推荐封面**:
   `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/video_output/chapters/chapter_01_slide.png`

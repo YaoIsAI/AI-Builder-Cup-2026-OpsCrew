@@ -178,8 +178,8 @@ function generateCombinedSubtitles(part1DurationSec, part2DurationSec, part2Clip
     vtt += `${formatVttTime(e.startMs)} --> ${formatVttTime(e.endMs)}\n${e.text}\n\n`;
   }
 
-  const srtFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_165s.srt");
-  const vttFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_165s.vtt");
+  const srtFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_104s.srt");
+  const vttFile = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_104s.vtt");
   fs.writeFileSync(srtFile, srt.trim() + "\n", "utf8");
   fs.writeFileSync(vttFile, vtt.trim() + "\n", "utf8");
   console.log("Subtitles generated:", srtFile, vttFile);
@@ -683,7 +683,7 @@ async function run() {
   console.log(`Part 2 demo ready: ${part2Mp4} (${p2Dur.toFixed(2)}s)`);
 
   console.log("\n=== Seamlessly Concatenating Part 1 (Slides), Part 2 (Live Cloud Demo) & Part 3 (Outro) ===");
-  const finalCombinedMp4 = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_165s.mp4");
+  const finalCombinedMp4 = path.join(OUTPUT_DIR, "OpsCrew_Combined_Official_Demo_104s.mp4");
 
   execSync(
     `ffmpeg -y -i "${PART1_VIDEO}" -i "${part2Mp4}" -i "${PART3_VIDEO}" -filter_complex "[0:v][0:a][1:v][1:a][2:v][2:a]concat=n=3:v=1:a=1[v][a]" -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 19 -pix_fmt yuv420p -r 25 -c:a aac -b:a 192k -ar 48000 "${finalCombinedMp4}"`,
