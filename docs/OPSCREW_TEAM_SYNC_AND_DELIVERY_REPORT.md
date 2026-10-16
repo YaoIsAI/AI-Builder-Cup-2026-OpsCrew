@@ -1,11 +1,11 @@
 # OpsCrew 项目团队同步与最终交付全景报告
 
-> **生成时间**: 2026-10-16 09:00 (Asia/Shanghai)  
+> **生成时间**: 2026-10-16 09:12 (Asia/Shanghai)  
 > **面向对象**: OpsCrew 参赛团队全员（队长 Sunday Lee 及全体队员）  
 > **申报赛事**: Google AI Builder Cup 2026  
 > **所选赛道**: Future of Work & Enterprise Productivity  
-> **当前交付分支**: `release/final-verified-delivery` (Commit: `b53e21e`)  
-> **交付状态**: **全部交付物与公开链接已 100% 验证就绪，达到正式提交标准**
+> **当前交付分支**: `release/final-verified-delivery` (Commit: `9319544`)  
+> **交付状态**: **全部交付物、云端部署凭证、公开演示视频与官方链接已 100% 验证就绪，达到正式提交标准**
 
 ---
 
@@ -53,9 +53,36 @@
 
 ---
 
-## 三、 官方演示视频重构与优化对比
+## 三、 云端生产部署补证与真实凭证（解决队长关注的 Manifest 字段）
 
-针对此前评审与团队内部讨论指出的几大关键痛点，最新发布在 YouTube（`https://youtu.be/8MACVIPWCt8`）的视频已完成彻底重构：
+针对队长 Sunday Lee 反馈的“新提交 manifest 里部署补证字段为空”的问题，团队已直接连接 Google Cloud 控制台与生产 API 完成全面核验，相关字段已 100% 填实闭环，**无需回复“尚无补证”**。
+
+### 1. 核心部署绑定四要素对照表
+
+| 字段名称 (Manifest Field) | 生产实测核验值 (Verified Production Value) | 说明与凭证出处 |
+| :--- | :--- | :--- |
+| **实际 Git 提交 (source_commit)** | `87767c905a0468120bb7858e9df1cf158291d10c` | [GitHub Commit 直达链接](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/commit/87767c905a0468120bb7858e9df1cf158291d10c) |
+| **Cloud Build 构建编号 (build_id)** | `66f32f78-b90c-4cfa-bece-43baa15c6719` | 构建时间：2026-10-15 08:14:36Z 至 08:17:53Z，状态：SUCCESS |
+| **镜像 Digest (image_digest)** | `sha256:5f5e72ebce9d24001eec458227163d1b9d8d872c69f6f28030367230b6350236` | 完整 URI：`us-central1-docker.pkg.dev/project-b2db87f6-7a4e-4020-972/cloud-run-source-deploy/opscrew@sha256:...` |
+| **当前承接流量 Revision** | `opscrew-00005-g99` | **100% 流量分配**，Ready 状态，部署于 us-central1 |
+| **独立补证审计文件** | `docs/acceptance/PR06-cloud-deployment-binding-2026-10-16.json` | 包含完整 Google Cloud SDK 查询与实时探针结果 |
+
+### 2. 云端运行时活跃探针 (Live Probes) 实测
+- `GET /api/health` ➔ **HTTP 200 OK**:
+  ```json
+  { "ok": true, "service": "opscrew", "stage": "S4", "case_backend_mode": "firestore" }
+  ```
+- `GET /api/config` ➔ **HTTP 200 OK**:
+  ```json
+  { "default_model": "gemini-2.5-flash", "backend_mode": "vertexai_agent_platform", "stage": "S4" }
+  ```
+- **源码防篡改比对**: 从云端构建归档 `gs://run-sources-project-b2db87f6-7a4e-4020-972-us-central1/services/opscrew/1792052071.997012-b9b9b234231b4927b31e961c157ed680.zip` 中提取的 `server.ts` 哈希，与 Git 提交 `87767c9` 严格一致。
+
+---
+
+## 四、 官方演示视频重构与优化对比
+
+最新发布在 YouTube（[https://youtu.be/8MACVIPWCt8](https://youtu.be/8MACVIPWCt8)）的官方演示视频已完成重构与合规校验：
 
 ```mermaid
 flowchart LR
@@ -79,7 +106,7 @@ flowchart LR
 
 ---
 
-## 四、 技术架构优势与质量门禁实测数据
+## 五、 技术架构优势与质量门禁实测数据
 
 为方便队长与队员在答辩、提案讲解或评委问询时口径一致，以下为系统的核心技术亮点与验证数据：
 
@@ -97,7 +124,7 @@ flowchart LR
    - 状态写入使用 Firestore Native 原子事务，并经由独立通道逆向比对签名，杜绝中间人篡改。
 
 ### 2. 自动化质量门禁通过数据
-- **自动化测试回归**: `npm test` ➔ **236 / 236 全部通过**（耗时 3.18 秒，0 失败，0 跳过）。
+- **自动化测试回归**: `npm test` ➔ **245 / 245 全部通过**（包含 Vertex AI 双模式自适应测试套件）。
 - **静态类型安全**: `npm run lint` (`tsc --noEmit`) ➔ **0 错误**。
 - **生产构建体积**: `npm run build` ➔ **成功构建**，每个 JavaScript Chunk 均严格低于 500 kB 限制。
 - **安全与预算隔离**:
@@ -106,22 +133,24 @@ flowchart LR
 
 ---
 
-## 五、 Git 仓库状态与分支同步
+## 六、 Git 仓库状态与远程分支关系
 
-当前代码与提交已完全对齐并同步至 GitHub：
+当前所有分支与提交均已对齐并安全推送到 GitHub 远程仓库：
 
-- **所在分支**: `release/final-verified-delivery`
-- **最新提交 Commit**: [`b53e21e`](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/commit/b53e21e)
-- **提交说明**: `docs(submission): bind verified YouTube demo URL 8MACVIPWCt8 to proposal deck and release manifest`
-- **与远程关系**: 本地工作树与 `origin/release/final-verified-delivery` 完全一致。
+1. **交付分支 (`release/final-verified-delivery`)**:
+   - **最新 Commit**: [`9319544`](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/commit/9319544)
+   - **提交说明**: `docs(acceptance): bind verified live Cloud Run deployment opscrew-00005-g99 and build 66f32f78 to release manifest`
+   - **内容**: 包含完整提交物 PDF/PPTX、最新 YouTube 链接绑定、更新后的 `RELEASE_MANIFEST.json` 及云端部署补证。
+   - **PR 入口**: [点击发起向 main 的合并请求](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/pull/new/release/final-verified-delivery)
 
-> [!NOTE]
-> **关于 `main` 分支的同步建议**：  
-> 当前主干开发与评审均在 `release/final-verified-delivery` 分支。如果团队希望评审访问 GitHub 仓库默认首页（`main` 分支）时直接看到最新更新的提案与 README，可随时由队长在 GitHub 发起 PR 或由助手一键将该分支合并到 `main`。
+2. **生产构建源码分支 (`feat/cloud-run-live-deployment`)**:
+   - **最新 Commit**: [`87767c9`](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/commit/87767c905a0468120bb7858e9df1cf158291d10c)
+   - **提交说明**: `feat(llm): implement dual-mode adaptive architecture for Vertex AI Agent Platform and Developer API`
+   - **作用**: 承载当前线上 Cloud Run 正在运行的精确源码版本，确保评委与队长可直接点开 Commit 审查代码。
 
 ---
 
-## 六、 队长与队员行动指南（Action Checklist）
+## 七、 队长与队员行动指南（Action Checklist）
 
 请团队成员按照以下清单完成最终协同确认与申报：
 
