@@ -20,7 +20,7 @@
 | **队长公开署名 (Captain)** | `Sunday Lee` | 与提案、代码仓库、文档与签署记录完全一致 |
 | **公开代码仓库 (Repository)** | [https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew) | 包含完整开发记录、全量测试套件与回测验收报告 |
 | **在线产品体验 (Live Product)** | [https://opscrew-883881551915.us-central1.run.app](https://opscrew-883881551915.us-central1.run.app) | Google Cloud Run 原生在线容器部署，任何人免登录可测 |
-| **官方演示视频 (Demo Video)** | [https://youtu.be/8MACVIPWCt8](https://youtu.be/8MACVIPWCt8) | YouTube 官方认证发布（132.04秒，严格 `< 180s`） |
+| **官方演示视频 (Demo Video)** | [https://youtu.be/j94ffx_yrng](https://youtu.be/j94ffx_yrng) | YouTube 官方认证发布（103.94秒，严格 `< 180s`） |
 
 ---
 
@@ -31,8 +31,8 @@
 ### 1. 官方提案提交版 PDF (Official Submission PDF)
 - **本地绝对路径**: `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/OpsCrew_Proposal_Cloud_cloud-public-links-review-2026-10-14.pdf`
 - **GitHub 远程直达**: [查看 PDF 源码文件](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/blob/release/final-verified-delivery/submission/OpsCrew_Proposal_Cloud_cloud-public-links-review-2026-10-14.pdf)
-- **文件体积**: `2,235,729` 字节 (约 2.13 MB)
-- **SHA-256 指纹**: `0b43c7e7d73c3d6ba7b6c61ff5d7a847068e3cea3afae95840ca56130b0e7583`
+- **文件体积**: `2,234,153` 字节 (约 2.13 MB)
+- **SHA-256 指纹**: `ac89c4f69ad341b058c72294d1bedfb3759271bc652b315f38ae7145e21df649`
 - **关键技术细节**:
   - 13 页完整英文标准模板，遵循 Google 官方幻灯片规范。
   - 第 13 页重新高质量渲染，Roboto 字体无损矢量排版。
@@ -41,8 +41,8 @@
 ### 2. 官方提案可编辑源文件 PPTX (Editable Presentation Deck)
 - **本地绝对路径**: `/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/OpsCrew_Proposal_Cloud_cloud-public-links-review-2026-10-14.pptx`
 - **GitHub 远程直达**: [查看 PPTX 源码文件](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew/blob/release/final-verified-delivery/submission/OpsCrew_Proposal_Cloud_cloud-public-links-review-2026-10-14.pptx)
-- **文件体积**: `829,618` 字节
-- **SHA-256 指纹**: `81b483300bb50891b3948abe2a0ce8aac9193cefc96f23ac04c4410f4531f4e1`
+- **文件体积**: `829,636` 字节
+- **SHA-256 指纹**: `0d1f7b0352d885c51e69f100fe0e979612746690e0f88b02aafb5af76d6c7a88`
 
 ### 3. 验收证明与清单记录 (Audit Records & Manifest)
 - `RELEASE_MANIFEST.json`: 完整记录最新二进制哈希、代码版本绑定、线上部署补证与发布标记（`stage: VERIFIED_PUBLIC_LINKS_AND_MASTER_VIDEO_DELIVERY`）。
@@ -82,7 +82,7 @@
 
 ## 四、 官方演示视频重构与优化对比
 
-最新发布在 YouTube（[https://youtu.be/8MACVIPWCt8](https://youtu.be/8MACVIPWCt8)）的官方演示视频已完成重构与合规校验：
+最新发布在 YouTube（[https://youtu.be/j94ffx_yrng](https://youtu.be/j94ffx_yrng)）的官方演示视频已完成重构与合规校验：
 
 ```mermaid
 flowchart LR
@@ -101,7 +101,7 @@ flowchart LR
 | **章节节奏与分割** | 画面中仅浮动小标签，连续操作导致信息密度过载、无记忆点。 | **重构为 5 个独立的全屏章节号过渡转场页（Chapter 01 至 05）**，每段清晰标明操作主题，结构层次分明。 |
 | **旁白配音与节奏** | 语速与停顿欠佳，部分转折间隙过长。 | **升级为 ElevenLabs 广播级专业拟真声线（Brian）**，语速平稳、咬字清晰，彻底消除多余停顿。 |
 | **尾页卡片排版** | 卡片高度偏小（260px），整体靠上，页面中部大面积空白。 | **卡片垂直高度扩充至 380px**，视觉重心居中，三组核心卡片（代码、在线环境、合规亮点）饱满均衡。 |
-| **时长合规性** | 担心超时风险或余量不足。 | **实测总时长 132.04 秒（2分12秒）**，严格满足官方 `< 180 秒` 红线，留有约 48 秒的充裕安全余量。 |
+| **时长合规性** | 担心超时风险或余量不足。 | **实测总时长 103.94 秒（1分44秒）**，严格满足官方 `< 180 秒` 红线，留有约 76 秒的充裕安全余量。 |
 | **真实性保障** | 杜绝 PPT 拼凑假动画。 | 全程基于 Google Cloud Run 真实线上部署录制，包含真实的 DEV-04 缺票拦截推演、人工交互与 Firestore 读回。 |
 
 ---
@@ -162,12 +162,12 @@ flowchart LR
 3. **录入核心公共链接**:
    - 代码仓库: `https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew`
    - 产品原型: `https://opscrew-883881551915.us-central1.run.app`
-   - 演示视频: `https://youtu.be/8MACVIPWCt8`
+   - 演示视频: `https://youtu.be/j94ffx_yrng`
 4. **上传提案 PDF 附件**:
    - 从本地选择文件：`/Users/yao/Desktop/AI-Builder-Cup-2026-OpsCrew/submission/OpsCrew_Proposal_Cloud_cloud-public-links-review-2026-10-14.pdf`
 5. **保存提交回执**: 点击最终提交后，将系统生成的提交回执截图及编号在团队群内备份。
 
 ### 队员协同检查项 (Teammates)
 1. **外网连通性验证**: 在无梯子或普通浏览器无痕模式下打开 [Cloud Run 在线实例](https://opscrew-883881551915.us-central1.run.app) 与 [GitHub 仓库](https://github.com/sundaylee3100-ljl/AI-Builder-Cup-2026-OpsCrew)，确保公开访问畅通。
-2. **演示视频试看**: 打开 [YouTube 官方视频](https://youtu.be/8MACVIPWCt8)，确认 1080p 画质、ElevenLabs 英文旁白与英文字幕显示无误。
+2. **演示视频试看**: 打开 [YouTube 官方视频](https://youtu.be/j94ffx_yrng)，确认 1080p 画质、ElevenLabs 英文旁白与英文字幕显示无误。
 3. **提案交互测试**: 打开并翻阅提案 PDF 第 13 页，测试点击 3 个超链接是否均能准确跳转。

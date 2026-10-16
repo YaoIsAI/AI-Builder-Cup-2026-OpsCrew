@@ -10,7 +10,7 @@ The script uses the bundled Artifact Tool, not application runtime dependencies.
 
 ```powershell
 $env:OPSCREW_PUBLIC_CAPTAIN_NAME = 'Sunday Lee'
-$env:OPSCREW_PUBLIC_VIDEO_URL = 'https://youtu.be/8MACVIPWCt8'
+$env:OPSCREW_PUBLIC_VIDEO_URL = 'https://youtu.be/j94ffx_yrng'
 node submission/build-proposal.mjs docs/acceptance/PR04-build-integration-2026-10-12.json cloud-public-links-review-2026-10-14 docs/acceptance/DELIVERY-cloud-G3-2026-10-13.json docs/acceptance/DELIVERY-cloud-safety-and-fixtures-2026-10-13.json
 ```
 
@@ -21,13 +21,13 @@ Follow [the recording plan](RECORDING_PLAN.md), [cloud handoff](../docs/CLOUD_TE
 
 ## Unaccepted candidate footage
 
-The videos submitted in original PR head 51f99740fe488f74d8ef5de1b9368065ec1dadf1 are review inputs, not approved final deliverables. Their technical encoding is valid but their content does not match the claimed current cloud demo. Candidate media/source are excluded from the current submission index; no supplied local file was deleted. See [the video audit](../docs/acceptance/PR06-video-review-2026-10-14.md) and the owner archive. The official public YouTube demo video is published and verified at https://youtu.be/8MACVIPWCt8 (oEmbed HTTP 200).
+The videos submitted in original PR head 51f99740fe488f74d8ef5de1b9368065ec1dadf1 are review inputs, not approved final deliverables. Their technical encoding is valid but their content does not match the claimed current cloud demo. Candidate media/source are excluded from the current submission index; no supplied local file was deleted. See [the video audit](../docs/acceptance/PR06-video-review-2026-10-14.md) and the owner archive. The official public YouTube demo video is published and verified at https://youtu.be/j94ffx_yrng (oEmbed HTTP 200).
 
-## Final Accepted Master Demo Video (2026-10-15)
+## Final Accepted Master Demo Video (2026-10-16)
 
 - **Master Video Deliverable**: [`video_output/OpsCrew_Combined_Official_Demo_165s.mp4`](video_output/OpsCrew_Combined_Official_Demo_165s.mp4)
-- **Duration**: **132.04 seconds** (Strictly `< 180.00s` requirement: **PASS**, ~48s safety buffer).
-- **SHA-256**: `cb64b670e057709cdcb85aa55dde7e2f05fbc3eb3490042cd13eacd4c36a6772`
+- **Duration**: **103.94 seconds** (Strictly `< 180.00s` requirement: **PASS**, ~76s safety buffer).
+- **SHA-256**: `d486ba5170d1088b55c0848703bbd1a72a686d308a76e01360cca2c2eadf3042`
 - **Subtitles**: [`video_output/OpsCrew_Combined_Official_Demo_165s.srt`](video_output/OpsCrew_Combined_Official_Demo_165s.srt) and [`.vtt`](video_output/OpsCrew_Combined_Official_Demo_165s.vtt)
 - **Structure**: 12-segment pipeline with 5 standalone chapter intermission slides (`CHAPTER 01 OF 05` through `CHAPTER 05 OF 05`), clean subtitle capsules in Title-Safe zone, live Cloud Run recording, and vertically balanced Outro slide with direct links and verifiable metrics.
 - **Narration**: ElevenLabs Studio Voice `Brian` (`nPczCjzI2devNBz1zQrb`, `eleven_multilingual_v2`), engineered with executive pacing and studio cadence.
