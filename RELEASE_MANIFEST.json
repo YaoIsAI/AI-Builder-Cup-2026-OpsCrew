@@ -120,12 +120,13 @@
     }
   },
   "deployment": {
-    "source_commit": null,
-    "build_id": null,
-    "image_digest": null,
-    "cloud_run_revision": null,
+    "source_commit": "87767c905a0468120bb7858e9df1cf158291d10c",
+    "build_id": "66f32f78-b90c-4cfa-bece-43baa15c6719",
+    "image_digest": "sha256:5f5e72ebce9d24001eec458227163d1b9d8d872c69f6f28030367230b6350236",
+    "cloud_run_revision": "opscrew-00005-g99",
     "url": "https://opscrew-883881551915.us-central1.run.app",
-    "reason": "Public endpoint independently observed; reviewed-source/build/image/revision binding unverified. PR06 UI has not been proven deployed.",
+    "deployment_evidence": "docs/acceptance/PR06-cloud-deployment-binding-2026-10-16.json",
+    "reason": "Live Google Cloud Run service describe and Cloud Build verification confirms revision opscrew-00005-g99 at 100% traffic, built from source commit 87767c905a0468120bb7858e9df1cf158291d10c.",
     "reported_historical_url": "https://opscrew-883881551915.us-central1.run.app"
   },
   "submission": {
