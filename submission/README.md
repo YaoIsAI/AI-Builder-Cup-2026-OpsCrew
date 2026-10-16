@@ -10,7 +10,7 @@ The script uses the bundled Artifact Tool, not application runtime dependencies.
 
 ```powershell
 $env:OPSCREW_PUBLIC_CAPTAIN_NAME = 'Sunday Lee'
-$env:OPSCREW_PUBLIC_VIDEO_URL = 'https://youtu.be/h53-tucE7ig'
+$env:OPSCREW_PUBLIC_VIDEO_URL = 'https://youtu.be/8MACVIPWCt8'
 node submission/build-proposal.mjs docs/acceptance/PR04-build-integration-2026-10-12.json cloud-public-links-review-2026-10-14 docs/acceptance/DELIVERY-cloud-G3-2026-10-13.json docs/acceptance/DELIVERY-cloud-safety-and-fixtures-2026-10-13.json
 ```
 
@@ -21,7 +21,7 @@ Follow [the recording plan](RECORDING_PLAN.md), [cloud handoff](../docs/CLOUD_TE
 
 ## Unaccepted candidate footage
 
-The videos submitted in original PR head 51f99740fe488f74d8ef5de1b9368065ec1dadf1 are review inputs, not approved final deliverables. Their technical encoding is valid but their content does not match the claimed current cloud demo. Candidate media/source are excluded from the current submission index; no supplied local file was deleted. See [the video audit](../docs/acceptance/PR06-video-review-2026-10-14.md) and the owner archive. The current public YouTube link is supplied by the owner and has valid public page metadata, but footage correspondence and actual playback remain pending.
+The videos submitted in original PR head 51f99740fe488f74d8ef5de1b9368065ec1dadf1 are review inputs, not approved final deliverables. Their technical encoding is valid but their content does not match the claimed current cloud demo. Candidate media/source are excluded from the current submission index; no supplied local file was deleted. See [the video audit](../docs/acceptance/PR06-video-review-2026-10-14.md) and the owner archive. The official public YouTube demo video is published and verified at https://youtu.be/8MACVIPWCt8 (oEmbed HTTP 200).
 
 ## Final Accepted Master Demo Video (2026-10-15)
 
